@@ -1,0 +1,3484 @@
+ARM GAS  /tmp/ccZQTl50.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"si4463.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.SI446x_SPI_TransmitReceive,"ax",%progbits
+  18              		.align	1
+  19              		.global	SI446x_SPI_TransmitReceive
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	SI446x_SPI_TransmitReceive:
+  27              	.LVL0:
+  28              	.LFB134:
+  29              		.file 1 "Core/Src/si4463.c"
+   1:Core/Src/si4463.c **** #include "si4463.h"
+   2:Core/Src/si4463.c **** 
+   3:Core/Src/si4463.c **** const static uint8_t config_table[ ] = RADIO_CONFIGURATION_DATA_ARRAY;
+   4:Core/Src/si4463.c **** 
+   5:Core/Src/si4463.c **** 
+   6:Core/Src/si4463.c **** uint8_t SI446x_SPI_TransmitReceive( uint8_t txByte ){
+  30              		.loc 1 6 53 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 16
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		.loc 1 6 53 is_stmt 0 view .LVU1
+  35 0000 00B5     		push	{lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 4
+  38              		.cfi_offset 14, -4
+  39 0002 87B0     		sub	sp, sp, #28
+  40              	.LCFI1:
+  41              		.cfi_def_cfa_offset 32
+  42 0004 8DF80F00 		strb	r0, [sp, #15]
+   7:Core/Src/si4463.c **** 	uint8_t rxByte;
+  43              		.loc 1 7 2 is_stmt 1 view .LVU2
+   8:Core/Src/si4463.c **** 	HAL_SPI_TransmitReceive(&SI446X_SPI,&txByte,&rxByte,1,1000);
+  44              		.loc 1 8 2 view .LVU3
+  45 0008 4FF47A73 		mov	r3, #1000
+  46 000c 0093     		str	r3, [sp]
+  47 000e 0123     		movs	r3, #1
+  48 0010 0DF11702 		add	r2, sp, #23
+  49 0014 0DF10F01 		add	r1, sp, #15
+  50 0018 0348     		ldr	r0, .L3
+ARM GAS  /tmp/ccZQTl50.s 			page 2
+
+
+  51              	.LVL1:
+  52              		.loc 1 8 2 is_stmt 0 view .LVU4
+  53 001a FFF7FEFF 		bl	HAL_SPI_TransmitReceive
+  54              	.LVL2:
+   9:Core/Src/si4463.c **** 	return rxByte;
+  55              		.loc 1 9 2 is_stmt 1 view .LVU5
+  10:Core/Src/si4463.c **** }
+  56              		.loc 1 10 1 is_stmt 0 view .LVU6
+  57 001e 9DF81700 		ldrb	r0, [sp, #23]	@ zero_extendqisi2
+  58 0022 07B0     		add	sp, sp, #28
+  59              	.LCFI2:
+  60              		.cfi_def_cfa_offset 4
+  61              		@ sp needed
+  62 0024 5DF804FB 		ldr	pc, [sp], #4
+  63              	.L4:
+  64              		.align	2
+  65              	.L3:
+  66 0028 00000000 		.word	hspi1
+  67              		.cfi_endproc
+  68              	.LFE134:
+  70              		.section	.text.SI446x_NOP,"ax",%progbits
+  71              		.align	1
+  72              		.global	SI446x_NOP
+  73              		.syntax unified
+  74              		.thumb
+  75              		.thumb_func
+  76              		.fpu fpv4-sp-d16
+  78              	SI446x_NOP:
+  79              	.LFB139:
+  11:Core/Src/si4463.c **** 
+  12:Core/Src/si4463.c **** 
+  13:Core/Src/si4463.c **** /**
+  14:Core/Src/si4463.c ****   * @brief :SI446x等待CTS状态
+  15:Core/Src/si4463.c ****   * @param :无
+  16:Core/Src/si4463.c ****   * @note  :无
+  17:Core/Src/si4463.c ****   * @retval:无
+  18:Core/Src/si4463.c ****   */ 
+  19:Core/Src/si4463.c **** void SI446x_Wait_CTS( void )
+  20:Core/Src/si4463.c **** {
+  21:Core/Src/si4463.c ****     uint8_t l_Cts;
+  22:Core/Src/si4463.c **** 	uint16_t l_ReadCtsTimes = 0;
+  23:Core/Src/si4463.c **** 	
+  24:Core/Src/si4463.c ****     do
+  25:Core/Src/si4463.c ****     {
+  26:Core/Src/si4463.c ****         SI446X_CS_LOW;		//SPI片选
+  27:Core/Src/si4463.c **** 		
+  28:Core/Src/si4463.c **** 		//读CTS状态
+  29:Core/Src/si4463.c ****         SI446x_SPI_TransmitReceive( READ_CMD_BUFF );
+  30:Core/Src/si4463.c ****         l_Cts = SI446x_SPI_TransmitReceive( 0xFF );		
+  31:Core/Src/si4463.c **** 		
+  32:Core/Src/si4463.c ****         SI446X_CS_HIGH;		//取消SPI片选
+  33:Core/Src/si4463.c **** 		
+  34:Core/Src/si4463.c **** 		if( 1000 == l_ReadCtsTimes++ )
+  35:Core/Src/si4463.c **** 		{
+  36:Core/Src/si4463.c **** 			SI446x_Init( );
+  37:Core/Src/si4463.c **** 			break;
+  38:Core/Src/si4463.c **** 		}
+ARM GAS  /tmp/ccZQTl50.s 			page 3
+
+
+  39:Core/Src/si4463.c **** 		
+  40:Core/Src/si4463.c **** 	}while( l_Cts != 0xFF );	//直到读CTS的返回值等于0xFF
+  41:Core/Src/si4463.c **** }
+  42:Core/Src/si4463.c **** 
+  43:Core/Src/si4463.c **** /**
+  44:Core/Src/si4463.c ****   * @brief :SI446x写命令
+  45:Core/Src/si4463.c ****   * @param :
+  46:Core/Src/si4463.c ****   *			@pCmd:命令首地址
+  47:Core/Src/si4463.c ****   *			@CmdNumber：命令个数
+  48:Core/Src/si4463.c ****   * @note  :无
+  49:Core/Src/si4463.c ****   * @retval:无
+  50:Core/Src/si4463.c ****   */ 
+  51:Core/Src/si4463.c **** void SI446x_Write_Cmds( uint8_t *pCmd, uint8_t CmdNumber )
+  52:Core/Src/si4463.c **** {
+  53:Core/Src/si4463.c ****     SI446x_Wait_CTS( );			//查询CTS状态
+  54:Core/Src/si4463.c **** 	
+  55:Core/Src/si4463.c ****     SI446X_CS_LOW;			//SPI片选
+  56:Core/Src/si4463.c **** 	
+  57:Core/Src/si4463.c ****     while( CmdNumber -- )
+  58:Core/Src/si4463.c ****     {
+  59:Core/Src/si4463.c ****         SI446x_SPI_TransmitReceive( *pCmd );	//发送命令
+  60:Core/Src/si4463.c **** 		pCmd++;
+  61:Core/Src/si4463.c ****     }
+  62:Core/Src/si4463.c **** 	
+  63:Core/Src/si4463.c ****     SI446X_CS_HIGH;			//取消SPI片选
+  64:Core/Src/si4463.c **** }
+  65:Core/Src/si4463.c **** 
+  66:Core/Src/si4463.c **** /**
+  67:Core/Src/si4463.c ****   * @brief :SI446x POWER_UP
+  68:Core/Src/si4463.c ****   * @param :
+  69:Core/Src/si4463.c ****   *			@Xo_Freq:晶振频率
+  70:Core/Src/si4463.c ****   * @note  :SI446x复位之后需要调用
+  71:Core/Src/si4463.c ****   * @retval:无
+  72:Core/Src/si4463.c ****   */
+  73:Core/Src/si4463.c **** void SI446x_Power_Up( uint32_t Xo_Freq )
+  74:Core/Src/si4463.c **** {
+  75:Core/Src/si4463.c ****     uint8_t l_Cmd[7] = { 0 };
+  76:Core/Src/si4463.c **** 	
+  77:Core/Src/si4463.c ****     l_Cmd[0] = POWER_UP;		//Power_Up命令
+  78:Core/Src/si4463.c ****     l_Cmd[1] = 0x01;
+  79:Core/Src/si4463.c ****     l_Cmd[2] = 0x00;
+  80:Core/Src/si4463.c ****     l_Cmd[3] = Xo_Freq >> 24;
+  81:Core/Src/si4463.c ****     l_Cmd[4] = Xo_Freq >> 16;
+  82:Core/Src/si4463.c ****     l_Cmd[5] = Xo_Freq >> 8;
+  83:Core/Src/si4463.c ****     l_Cmd[6] = Xo_Freq;
+  84:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 7 );	//写命令
+  85:Core/Src/si4463.c **** }
+  86:Core/Src/si4463.c **** 
+  87:Core/Src/si4463.c **** /**
+  88:Core/Src/si4463.c ****   * @brief :SI446x读CTS和命令应答
+  89:Core/Src/si4463.c ****   * @param :
+  90:Core/Src/si4463.c ****   *			@pRead:返回数据首地址
+  91:Core/Src/si4463.c ****   *			@Length:长度
+  92:Core/Src/si4463.c ****   * @note  :无
+  93:Core/Src/si4463.c ****   * @retval:无
+  94:Core/Src/si4463.c ****   */
+  95:Core/Src/si4463.c **** void SI446x_Read_Response( uint8_t *pRead, uint8_t Length )
+ARM GAS  /tmp/ccZQTl50.s 			page 4
+
+
+  96:Core/Src/si4463.c **** {
+  97:Core/Src/si4463.c ****     SI446x_Wait_CTS( );		//查询CTS状态
+  98:Core/Src/si4463.c ****     SI446X_CS_LOW;		//SPI片选
+  99:Core/Src/si4463.c **** 	
+ 100:Core/Src/si4463.c **** 	SI446x_SPI_TransmitReceive( READ_CMD_BUFF );	//发送读命令
+ 101:Core/Src/si4463.c **** 	while( Length-- )
+ 102:Core/Src/si4463.c ****     {
+ 103:Core/Src/si4463.c ****         *pRead = SI446x_SPI_TransmitReceive( 0xFF );	//交换数据
+ 104:Core/Src/si4463.c **** 		pRead++;
+ 105:Core/Src/si4463.c ****     }
+ 106:Core/Src/si4463.c **** 	
+ 107:Core/Src/si4463.c ****     SI446X_CS_HIGH;		//SPI取消片选
+ 108:Core/Src/si4463.c **** 
+ 109:Core/Src/si4463.c **** }
+ 110:Core/Src/si4463.c **** 
+ 111:Core/Src/si4463.c **** /**
+ 112:Core/Src/si4463.c ****   * @brief :SI446x空操作
+ 113:Core/Src/si4463.c ****   * @param :无
+ 114:Core/Src/si4463.c ****   * @note  :无
+ 115:Core/Src/si4463.c ****   * @retval:无
+ 116:Core/Src/si4463.c ****   */
+ 117:Core/Src/si4463.c **** uint8_t SI446x_NOP( void )
+ 118:Core/Src/si4463.c **** {
+  80              		.loc 1 118 1 is_stmt 1 view -0
+  81              		.cfi_startproc
+  82              		@ args = 0, pretend = 0, frame = 0
+  83              		@ frame_needed = 0, uses_anonymous_args = 0
+  84 0000 38B5     		push	{r3, r4, r5, lr}
+  85              	.LCFI3:
+  86              		.cfi_def_cfa_offset 16
+  87              		.cfi_offset 3, -16
+  88              		.cfi_offset 4, -12
+  89              		.cfi_offset 5, -8
+  90              		.cfi_offset 14, -4
+ 119:Core/Src/si4463.c ****     uint8_t l_Cts;
+  91              		.loc 1 119 5 view .LVU8
+ 120:Core/Src/si4463.c **** 	
+ 121:Core/Src/si4463.c ****     SI446X_CS_LOW;		//SPI片选
+  92              		.loc 1 121 5 view .LVU9
+  93 0002 084D     		ldr	r5, .L7
+  94 0004 0022     		movs	r2, #0
+  95 0006 1021     		movs	r1, #16
+  96 0008 2846     		mov	r0, r5
+  97 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+  98              	.LVL3:
+ 122:Core/Src/si4463.c **** 	
+ 123:Core/Src/si4463.c ****     l_Cts = SI446x_SPI_TransmitReceive( NOP );	//空操作命令
+  99              		.loc 1 123 5 view .LVU10
+ 100              		.loc 1 123 13 is_stmt 0 view .LVU11
+ 101 000e 0020     		movs	r0, #0
+ 102 0010 FFF7FEFF 		bl	SI446x_SPI_TransmitReceive
+ 103              	.LVL4:
+ 104 0014 0446     		mov	r4, r0
+ 105              	.LVL5:
+ 124:Core/Src/si4463.c **** 	
+ 125:Core/Src/si4463.c ****     SI446X_CS_HIGH;		//SPI取消片选
+ 106              		.loc 1 125 5 is_stmt 1 view .LVU12
+ARM GAS  /tmp/ccZQTl50.s 			page 5
+
+
+ 107 0016 0122     		movs	r2, #1
+ 108 0018 1021     		movs	r1, #16
+ 109 001a 2846     		mov	r0, r5
+ 110 001c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 111              	.LVL6:
+ 126:Core/Src/si4463.c **** 	
+ 127:Core/Src/si4463.c **** 	return l_Cts;
+ 112              		.loc 1 127 2 view .LVU13
+ 128:Core/Src/si4463.c **** }
+ 113              		.loc 1 128 1 is_stmt 0 view .LVU14
+ 114 0020 2046     		mov	r0, r4
+ 115 0022 38BD     		pop	{r3, r4, r5, pc}
+ 116              	.LVL7:
+ 117              	.L8:
+ 118              		.loc 1 128 1 view .LVU15
+ 119              		.align	2
+ 120              	.L7:
+ 121 0024 00000240 		.word	1073872896
+ 122              		.cfi_endproc
+ 123              	.LFE139:
+ 125              		.section	.text.SI446x_Reset,"ax",%progbits
+ 126              		.align	1
+ 127              		.global	SI446x_Reset
+ 128              		.syntax unified
+ 129              		.thumb
+ 130              		.thumb_func
+ 131              		.fpu fpv4-sp-d16
+ 133              	SI446x_Reset:
+ 134              	.LFB147:
+ 129:Core/Src/si4463.c **** 
+ 130:Core/Src/si4463.c **** /**
+ 131:Core/Src/si4463.c ****   * @brief :SI446x读设备基本信息
+ 132:Core/Src/si4463.c ****   * @param :
+ 133:Core/Src/si4463.c ****   *			@pRead:返回数据首地址
+ 134:Core/Src/si4463.c ****   * @note  :无
+ 135:Core/Src/si4463.c ****   * @retval:无
+ 136:Core/Src/si4463.c ****   */
+ 137:Core/Src/si4463.c **** void SI446x_Get_Part_Informatoin( uint8_t *pRead )
+ 138:Core/Src/si4463.c **** {
+ 139:Core/Src/si4463.c ****     uint8_t l_Cmd = PART_INFO;
+ 140:Core/Src/si4463.c **** 
+ 141:Core/Src/si4463.c ****     SI446x_Write_Cmds( &l_Cmd, 1 );		//命令
+ 142:Core/Src/si4463.c ****     SI446x_Read_Response( pRead, 8 );	//读设备基本信息
+ 143:Core/Src/si4463.c **** 
+ 144:Core/Src/si4463.c **** }
+ 145:Core/Src/si4463.c **** 
+ 146:Core/Src/si4463.c **** /**
+ 147:Core/Src/si4463.c ****   * @brief :SI446x读设备功能版本信息
+ 148:Core/Src/si4463.c ****   * @param :
+ 149:Core/Src/si4463.c ****   *			@pRead:返回数据首地址
+ 150:Core/Src/si4463.c ****   * @note  :无
+ 151:Core/Src/si4463.c ****   * @retval:无
+ 152:Core/Src/si4463.c ****   */
+ 153:Core/Src/si4463.c **** void SI446x_Get_Fun_Informatoin( uint8_t *pRead )
+ 154:Core/Src/si4463.c **** {
+ 155:Core/Src/si4463.c ****     uint8_t l_Cmd = FUNC_INFO;
+ 156:Core/Src/si4463.c **** 
+ARM GAS  /tmp/ccZQTl50.s 			page 6
+
+
+ 157:Core/Src/si4463.c ****     SI446x_Write_Cmds( &l_Cmd, 1 );		//命令
+ 158:Core/Src/si4463.c ****     SI446x_Read_Response( pRead, 7 );	//读设备功能版本信息
+ 159:Core/Src/si4463.c **** }
+ 160:Core/Src/si4463.c **** 
+ 161:Core/Src/si4463.c **** /**
+ 162:Core/Src/si4463.c ****   * @brief :SI446x读中断状态
+ 163:Core/Src/si4463.c ****   * @param :
+ 164:Core/Src/si4463.c ****   *			@pRead:返回数据首地址
+ 165:Core/Src/si4463.c ****   * @note  :无
+ 166:Core/Src/si4463.c ****   * @retval:无
+ 167:Core/Src/si4463.c ****   */
+ 168:Core/Src/si4463.c **** void SI446x_Interrupt_Status( uint8_t *pRead )
+ 169:Core/Src/si4463.c **** {
+ 170:Core/Src/si4463.c ****     uint8_t l_Cmd[ 4 ] = { 0 };
+ 171:Core/Src/si4463.c **** 	
+ 172:Core/Src/si4463.c ****     l_Cmd[0] = GET_INT_STATUS;		
+ 173:Core/Src/si4463.c ****     l_Cmd[1] = 0;
+ 174:Core/Src/si4463.c ****     l_Cmd[2] = 0;
+ 175:Core/Src/si4463.c ****     l_Cmd[3] = 0;
+ 176:Core/Src/si4463.c **** 
+ 177:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 4 );		//发送中断读取命令
+ 178:Core/Src/si4463.c ****     SI446x_Read_Response( pRead, 9 );	//读取状态
+ 179:Core/Src/si4463.c **** }
+ 180:Core/Src/si4463.c **** 
+ 181:Core/Src/si4463.c **** /**
+ 182:Core/Src/si4463.c ****   * @brief :SI446x读取属性值
+ 183:Core/Src/si4463.c ****   * @param :
+ 184:Core/Src/si4463.c ****   *			@Group_Num:属性组(参考SI446X_PROPERTY)
+ 185:Core/Src/si4463.c ****   *			@Num_Props:读取的属性个数
+ 186:Core/Src/si4463.c ****   *			@pRead:返回数据首地址
+ 187:Core/Src/si4463.c ****   * @note  :无
+ 188:Core/Src/si4463.c ****   * @retval:无
+ 189:Core/Src/si4463.c ****   */
+ 190:Core/Src/si4463.c **** void SI446x_Get_Property( SI446X_PROPERTY Group_Num, uint8_t Num_Props, uint8_t *pRead  )
+ 191:Core/Src/si4463.c **** {
+ 192:Core/Src/si4463.c ****     uint8_t l_Cmd[ 4 ] = { 0 };
+ 193:Core/Src/si4463.c **** 
+ 194:Core/Src/si4463.c ****     l_Cmd[ 0 ] = GET_PROPERTY;
+ 195:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Group_Num >> 8;
+ 196:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Num_Props;
+ 197:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Group_Num;
+ 198:Core/Src/si4463.c **** 
+ 199:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 4 );		//发送读取属性命令
+ 200:Core/Src/si4463.c ****     SI446x_Read_Response( pRead, Num_Props + 1 );	//读属性
+ 201:Core/Src/si4463.c **** }
+ 202:Core/Src/si4463.c **** 
+ 203:Core/Src/si4463.c **** /**
+ 204:Core/Src/si4463.c ****   * @brief :SI446x设置属性
+ 205:Core/Src/si4463.c ****   * @param :
+ 206:Core/Src/si4463.c ****   *			@Group_Num:属性组(参考SI446X_PROPERTY)
+ 207:Core/Src/si4463.c ****   *			@Num_Props:设置的属性个数
+ 208:Core/Src/si4463.c ****   *			@pWrite:写地址设备
+ 209:Core/Src/si4463.c ****   * @note  :无
+ 210:Core/Src/si4463.c ****   * @retval:无
+ 211:Core/Src/si4463.c ****   */
+ 212:Core/Src/si4463.c **** void SI446x_Set_Property( SI446X_PROPERTY Group_Num, uint8_t Num_Props, uint8_t *pWrite )
+ 213:Core/Src/si4463.c **** {
+ARM GAS  /tmp/ccZQTl50.s 			page 7
+
+
+ 214:Core/Src/si4463.c ****     uint8_t l_Cmd[ 20 ] = { 0 }, i = 0;
+ 215:Core/Src/si4463.c **** 	
+ 216:Core/Src/si4463.c ****     if( Num_Props >= 16 )   
+ 217:Core/Src/si4463.c **** 	{ 
+ 218:Core/Src/si4463.c **** 		return; 	//数量不大于16
+ 219:Core/Src/si4463.c **** 	}
+ 220:Core/Src/si4463.c **** 	
+ 221:Core/Src/si4463.c ****     l_Cmd[ i++ ] = SET_PROPERTY;		//设置属性命令
+ 222:Core/Src/si4463.c ****     l_Cmd[ i++ ] = Group_Num >> 8;
+ 223:Core/Src/si4463.c ****     l_Cmd[ i++ ] = Num_Props;
+ 224:Core/Src/si4463.c ****     l_Cmd[ i++ ] = Group_Num;
+ 225:Core/Src/si4463.c **** 	
+ 226:Core/Src/si4463.c ****     while( Num_Props-- )
+ 227:Core/Src/si4463.c ****     {
+ 228:Core/Src/si4463.c ****         l_Cmd[ i++ ] = *pWrite;
+ 229:Core/Src/si4463.c **** 		pWrite++;
+ 230:Core/Src/si4463.c ****     }
+ 231:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, i );		//发送命令及数据
+ 232:Core/Src/si4463.c **** }
+ 233:Core/Src/si4463.c **** 
+ 234:Core/Src/si4463.c **** /**
+ 235:Core/Src/si4463.c ****   * @brief :SI446x设置属性组1属性
+ 236:Core/Src/si4463.c ****   * @param :
+ 237:Core/Src/si4463.c ****   *			@Group_Num:属性组
+ 238:Core/Src/si4463.c ****   *			@Start_Prop:开始设置的属性号(参考SI446X_PROPERTY)
+ 239:Core/Src/si4463.c ****   * @note  :无
+ 240:Core/Src/si4463.c ****   * @retval:无
+ 241:Core/Src/si4463.c ****   */
+ 242:Core/Src/si4463.c **** void SI446x_Set_Property_1( SI446X_PROPERTY Group_Num, uint8_t Start_Prop )
+ 243:Core/Src/si4463.c **** {
+ 244:Core/Src/si4463.c ****     uint8_t l_Cmd[ 5 ] = { 0 };
+ 245:Core/Src/si4463.c **** 
+ 246:Core/Src/si4463.c ****     l_Cmd[ 0 ] = SET_PROPERTY;		//命令
+ 247:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Group_Num >> 8;
+ 248:Core/Src/si4463.c ****     l_Cmd[ 2 ] = 1;
+ 249:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Group_Num;
+ 250:Core/Src/si4463.c ****     l_Cmd[ 4 ] = Start_Prop;
+ 251:Core/Src/si4463.c **** 	
+ 252:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 5 );	//发送命令设置属性
+ 253:Core/Src/si4463.c **** }
+ 254:Core/Src/si4463.c **** 
+ 255:Core/Src/si4463.c **** /**
+ 256:Core/Src/si4463.c ****   * @brief :SI446x读取属性组1属性
+ 257:Core/Src/si4463.c ****   * @param :
+ 258:Core/Src/si4463.c ****   *			@Group_Num:开始的属性号(参考SI446X_PROPERTY)
+ 259:Core/Src/si4463.c ****   * @note  :无
+ 260:Core/Src/si4463.c ****   * @retval:无
+ 261:Core/Src/si4463.c ****   */
+ 262:Core/Src/si4463.c **** uint8_t SI446x_Get_Property_1( SI446X_PROPERTY Group_Num )
+ 263:Core/Src/si4463.c **** {
+ 264:Core/Src/si4463.c ****     uint8_t l_Cmd[ 4 ] = { 0 };
+ 265:Core/Src/si4463.c **** 
+ 266:Core/Src/si4463.c ****     l_Cmd[ 0 ] = GET_PROPERTY;
+ 267:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Group_Num >> 8;
+ 268:Core/Src/si4463.c ****     l_Cmd[ 2 ] = 1;
+ 269:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Group_Num;
+ 270:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 4 );		//发送命令
+ARM GAS  /tmp/ccZQTl50.s 			page 8
+
+
+ 271:Core/Src/si4463.c **** 	
+ 272:Core/Src/si4463.c ****     SI446x_Read_Response( l_Cmd, 2 );	//读取属性
+ 273:Core/Src/si4463.c **** 	
+ 274:Core/Src/si4463.c ****     return l_Cmd[ 1 ];
+ 275:Core/Src/si4463.c **** }
+ 276:Core/Src/si4463.c **** 
+ 277:Core/Src/si4463.c **** /**
+ 278:Core/Src/si4463.c ****   * @brief :SI446x复位
+ 279:Core/Src/si4463.c ****   * @param :无
+ 280:Core/Src/si4463.c ****   * @note  :无
+ 281:Core/Src/si4463.c ****   * @retval:无
+ 282:Core/Src/si4463.c ****   */
+ 283:Core/Src/si4463.c **** void SI446x_Reset( void )
+ 284:Core/Src/si4463.c **** {
+ 135              		.loc 1 284 1 is_stmt 1 view -0
+ 136              		.cfi_startproc
+ 137              		@ args = 0, pretend = 0, frame = 0
+ 138              		@ frame_needed = 0, uses_anonymous_args = 0
+ 139 0000 10B5     		push	{r4, lr}
+ 140              	.LCFI4:
+ 141              		.cfi_def_cfa_offset 8
+ 142              		.cfi_offset 4, -8
+ 143              		.cfi_offset 14, -4
+ 285:Core/Src/si4463.c ****     SI446X_EN_HIGH;		//关设备
+ 144              		.loc 1 285 5 view .LVU17
+ 145 0002 0B4C     		ldr	r4, .L11
+ 146 0004 0122     		movs	r2, #1
+ 147 0006 4FF40061 		mov	r1, #2048
+ 148 000a 2046     		mov	r0, r4
+ 149 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 150              	.LVL8:
+ 286:Core/Src/si4463.c **** 		Delay_1ms;
+ 151              		.loc 1 286 3 view .LVU18
+ 152 0010 0120     		movs	r0, #1
+ 153 0012 FFF7FEFF 		bl	HAL_Delay
+ 154              	.LVL9:
+ 287:Core/Src/si4463.c ****     SI446X_EN_LOW;		//开设备
+ 155              		.loc 1 287 5 view .LVU19
+ 156 0016 0022     		movs	r2, #0
+ 157 0018 4FF40061 		mov	r1, #2048
+ 158 001c 2046     		mov	r0, r4
+ 159 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 160              	.LVL10:
+ 288:Core/Src/si4463.c ****     SI446X_CS_HIGH;		//取消SPI片选
+ 161              		.loc 1 288 5 view .LVU20
+ 162 0022 0122     		movs	r2, #1
+ 163 0024 1021     		movs	r1, #16
+ 164 0026 2046     		mov	r0, r4
+ 165 0028 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 166              	.LVL11:
+ 289:Core/Src/si4463.c **** //	drv_delay_us( 35 );
+ 290:Core/Src/si4463.c **** }
+ 167              		.loc 1 290 1 is_stmt 0 view .LVU21
+ 168 002c 10BD     		pop	{r4, pc}
+ 169              	.L12:
+ 170 002e 00BF     		.align	2
+ 171              	.L11:
+ARM GAS  /tmp/ccZQTl50.s 			page 9
+
+
+ 172 0030 00000240 		.word	1073872896
+ 173              		.cfi_endproc
+ 174              	.LFE147:
+ 176              		.section	.text.SI446x_Write_TxFifo,"ax",%progbits
+ 177              		.align	1
+ 178              		.global	SI446x_Write_TxFifo
+ 179              		.syntax unified
+ 180              		.thumb
+ 181              		.thumb_func
+ 182              		.fpu fpv4-sp-d16
+ 184              	SI446x_Write_TxFifo:
+ 185              	.LVL12:
+ 186              	.LFB150:
+ 291:Core/Src/si4463.c **** 
+ 292:Core/Src/si4463.c **** /**
+ 293:Core/Src/si4463.c ****   * @brief :SI446x配置GPIO
+ 294:Core/Src/si4463.c ****   * @param :无
+ 295:Core/Src/si4463.c ****   * @note  :无
+ 296:Core/Src/si4463.c ****   * @retval:无
+ 297:Core/Src/si4463.c ****   */
+ 298:Core/Src/si4463.c **** void SI446x_Config_Gpio( uint8_t Gpio_0, uint8_t Gpio_1, uint8_t Gpio_2, uint8_t Gpio_3, uint8_t Ir
+ 299:Core/Src/si4463.c **** {
+ 300:Core/Src/si4463.c ****     uint8_t l_Cmd[ 10] = { 0 };
+ 301:Core/Src/si4463.c **** 	
+ 302:Core/Src/si4463.c ****     l_Cmd[ 0 ] = GPIO_PIN_CFG;
+ 303:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Gpio_0;
+ 304:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Gpio_1;
+ 305:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Gpio_2;
+ 306:Core/Src/si4463.c ****     l_Cmd[ 4 ] = Gpio_3;
+ 307:Core/Src/si4463.c ****     l_Cmd[ 5 ] = Irq;
+ 308:Core/Src/si4463.c ****     l_Cmd[ 6 ] = Sdo;
+ 309:Core/Src/si4463.c ****     l_Cmd[ 7 ] = Gen_Config;
+ 310:Core/Src/si4463.c **** 	
+ 311:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 8 );		//写配置
+ 312:Core/Src/si4463.c ****     SI446x_Read_Response( l_Cmd, 8 );	//读配置
+ 313:Core/Src/si4463.c **** }
+ 314:Core/Src/si4463.c **** 
+ 315:Core/Src/si4463.c **** /**
+ 316:Core/Src/si4463.c ****   * @brief :SI446x模块配置
+ 317:Core/Src/si4463.c ****   * @param :无
+ 318:Core/Src/si4463.c ****   * @note  :无
+ 319:Core/Src/si4463.c ****   * @retval:无
+ 320:Core/Src/si4463.c ****   */
+ 321:Core/Src/si4463.c **** void SI446x_Config_Init( void )
+ 322:Core/Src/si4463.c **** {
+ 323:Core/Src/si4463.c ****     uint8_t i;
+ 324:Core/Src/si4463.c ****     uint16_t j = 0;
+ 325:Core/Src/si4463.c **** 
+ 326:Core/Src/si4463.c ****     while( ( i = config_table[j] ) != 0 )
+ 327:Core/Src/si4463.c ****     {
+ 328:Core/Src/si4463.c ****         j += 1;
+ 329:Core/Src/si4463.c ****         SI446x_Write_Cmds( (uint8_t *)config_table + j, i );
+ 330:Core/Src/si4463.c ****         j += i;
+ 331:Core/Src/si4463.c ****     }
+ 332:Core/Src/si4463.c **** #if PACKET_LENGTH > 0           //固定数据长度
+ 333:Core/Src/si4463.c **** 	
+ 334:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_1_LENGTH_7_0, PACKET_LENGTH );
+ARM GAS  /tmp/ccZQTl50.s 			page 10
+
+
+ 335:Core/Src/si4463.c **** 	
+ 336:Core/Src/si4463.c **** #else                           //动态数据长度
+ 337:Core/Src/si4463.c **** 	
+ 338:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_CONFIG1, 0x00 );
+ 339:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_CRC_CONFIG, 0x00 );
+ 340:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_LEN_FIELD_SOURCE, 0x01 );
+ 341:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_LEN, 0x2A );
+ 342:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_LEN_ADJUST, 0x00 );
+ 343:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_1_LENGTH_12_8, 0x00 );
+ 344:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_1_LENGTH_7_0, 0x01 );
+ 345:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_1_CONFIG, 0x00 );
+ 346:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_1_CRC_CONFIG, 0x00 );
+ 347:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_2_LENGTH_12_8, 0x00 );
+ 348:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_2_LENGTH_7_0, 0x20 );
+ 349:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_2_CONFIG, 0x00 );
+ 350:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_2_CRC_CONFIG, 0x00 );
+ 351:Core/Src/si4463.c **** 	
+ 352:Core/Src/si4463.c **** #endif 
+ 353:Core/Src/si4463.c **** 	
+ 354:Core/Src/si4463.c **** 	//4463 的GDO2 GDO3控制射频开关 33 32
+ 355:Core/Src/si4463.c **** 	// 发射：GDO2 = 0, GDO3 = 1
+ 356:Core/Src/si4463.c **** 	// 接收：GDO2 = 1, GDO3 = 0
+ 357:Core/Src/si4463.c ****     SI446x_Config_Gpio( 0, 0, 33|0x40, 32|0x40, 0, 0, 0 );    
+ 358:Core/Src/si4463.c **** }
+ 359:Core/Src/si4463.c **** 
+ 360:Core/Src/si4463.c **** /**
+ 361:Core/Src/si4463.c ****   * @brief :SI446x写TX FIFO
+ 362:Core/Src/si4463.c ****   * @param :
+ 363:Core/Src/si4463.c ****   *			@pWriteData：写数据首地址
+ 364:Core/Src/si4463.c ****   *			@Length：数据长度
+ 365:Core/Src/si4463.c ****   * @note  :无
+ 366:Core/Src/si4463.c ****   * @retval:无
+ 367:Core/Src/si4463.c ****   */
+ 368:Core/Src/si4463.c **** void SI446x_Write_TxFifo( uint8_t *pWriteData, uint8_t Length )
+ 369:Core/Src/si4463.c **** {
+ 187              		.loc 1 369 1 is_stmt 1 view -0
+ 188              		.cfi_startproc
+ 189              		@ args = 0, pretend = 0, frame = 0
+ 190              		@ frame_needed = 0, uses_anonymous_args = 0
+ 191              		.loc 1 369 1 is_stmt 0 view .LVU23
+ 192 0000 70B5     		push	{r4, r5, r6, lr}
+ 193              	.LCFI5:
+ 194              		.cfi_def_cfa_offset 16
+ 195              		.cfi_offset 4, -16
+ 196              		.cfi_offset 5, -12
+ 197              		.cfi_offset 6, -8
+ 198              		.cfi_offset 14, -4
+ 199 0002 0446     		mov	r4, r0
+ 200 0004 0E46     		mov	r6, r1
+ 370:Core/Src/si4463.c ****     SI446X_CS_LOW;
+ 201              		.loc 1 370 5 is_stmt 1 view .LVU24
+ 202 0006 0022     		movs	r2, #0
+ 203 0008 1021     		movs	r1, #16
+ 204              	.LVL13:
+ 205              		.loc 1 370 5 is_stmt 0 view .LVU25
+ 206 000a 0B48     		ldr	r0, .L17
+ 207              	.LVL14:
+ARM GAS  /tmp/ccZQTl50.s 			page 11
+
+
+ 208              		.loc 1 370 5 view .LVU26
+ 209 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 210              	.LVL15:
+ 371:Core/Src/si4463.c ****     SI446x_SPI_TransmitReceive( WRITE_TX_FIFO );		//写命令
+ 211              		.loc 1 371 5 is_stmt 1 view .LVU27
+ 212 0010 6620     		movs	r0, #102
+ 213 0012 FFF7FEFF 		bl	SI446x_SPI_TransmitReceive
+ 214              	.LVL16:
+ 372:Core/Src/si4463.c ****     while( Length-- )    
+ 215              		.loc 1 372 5 view .LVU28
+ 216              		.loc 1 372 10 is_stmt 0 view .LVU29
+ 217 0016 04E0     		b	.L14
+ 218              	.LVL17:
+ 219              	.L15:
+ 373:Core/Src/si4463.c **** 	{ 
+ 374:Core/Src/si4463.c **** 		SI446x_SPI_TransmitReceive( *pWriteData++ ); 	//写数据
+ 220              		.loc 1 374 3 is_stmt 1 view .LVU30
+ 221              		.loc 1 374 3 is_stmt 0 view .LVU31
+ 222 0018 14F8010B 		ldrb	r0, [r4], #1	@ zero_extendqisi2
+ 223              	.LVL18:
+ 224              		.loc 1 374 3 view .LVU32
+ 225 001c FFF7FEFF 		bl	SI446x_SPI_TransmitReceive
+ 226              	.LVL19:
+ 372:Core/Src/si4463.c ****     while( Length-- )    
+ 227              		.loc 1 372 18 view .LVU33
+ 228 0020 2E46     		mov	r6, r5
+ 229              	.LVL20:
+ 230              	.L14:
+ 372:Core/Src/si4463.c ****     while( Length-- )    
+ 231              		.loc 1 372 10 is_stmt 1 view .LVU34
+ 372:Core/Src/si4463.c ****     while( Length-- )    
+ 232              		.loc 1 372 18 is_stmt 0 view .LVU35
+ 233 0022 731E     		subs	r3, r6, #1
+ 234 0024 DDB2     		uxtb	r5, r3
+ 235              	.LVL21:
+ 372:Core/Src/si4463.c ****     while( Length-- )    
+ 236              		.loc 1 372 10 view .LVU36
+ 237 0026 002E     		cmp	r6, #0
+ 238 0028 F6D1     		bne	.L15
+ 375:Core/Src/si4463.c **** 	}
+ 376:Core/Src/si4463.c ****     SI446X_CS_HIGH;
+ 239              		.loc 1 376 5 is_stmt 1 view .LVU37
+ 240 002a 0122     		movs	r2, #1
+ 241 002c 1021     		movs	r1, #16
+ 242 002e 0248     		ldr	r0, .L17
+ 243 0030 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 244              	.LVL22:
+ 377:Core/Src/si4463.c **** }
+ 245              		.loc 1 377 1 is_stmt 0 view .LVU38
+ 246 0034 70BD     		pop	{r4, r5, r6, pc}
+ 247              	.LVL23:
+ 248              	.L18:
+ 249              		.loc 1 377 1 view .LVU39
+ 250 0036 00BF     		.align	2
+ 251              	.L17:
+ 252 0038 00000240 		.word	1073872896
+ 253              		.cfi_endproc
+ARM GAS  /tmp/ccZQTl50.s 			page 12
+
+
+ 254              	.LFE150:
+ 256              		.section	.text.SI446x_Init,"ax",%progbits
+ 257              		.align	1
+ 258              		.global	SI446x_Init
+ 259              		.syntax unified
+ 260              		.thumb
+ 261              		.thumb_func
+ 262              		.fpu fpv4-sp-d16
+ 264              	SI446x_Init:
+ 265              	.LFB162:
+ 378:Core/Src/si4463.c **** 
+ 379:Core/Src/si4463.c **** /**
+ 380:Core/Src/si4463.c ****   * @brief :SI446x 复位RX FIFO
+ 381:Core/Src/si4463.c ****   * @param :无
+ 382:Core/Src/si4463.c ****   * @note  :无
+ 383:Core/Src/si4463.c ****   * @retval:无
+ 384:Core/Src/si4463.c ****   */
+ 385:Core/Src/si4463.c **** void SI446x_Reset_RxFifo( void )
+ 386:Core/Src/si4463.c **** {
+ 387:Core/Src/si4463.c ****     uint8_t l_Cmd[ 2 ] = { 0 };
+ 388:Core/Src/si4463.c **** 
+ 389:Core/Src/si4463.c ****     l_Cmd[ 0 ] = FIFO_INFO;
+ 390:Core/Src/si4463.c ****     l_Cmd[ 1 ] = 0x02;
+ 391:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 2 );
+ 392:Core/Src/si4463.c **** }
+ 393:Core/Src/si4463.c **** 
+ 394:Core/Src/si4463.c **** /**
+ 395:Core/Src/si4463.c ****   * @brief :SI446x 复位TX FIFO
+ 396:Core/Src/si4463.c ****   * @param :无
+ 397:Core/Src/si4463.c ****   * @note  :无
+ 398:Core/Src/si4463.c ****   * @retval:无
+ 399:Core/Src/si4463.c ****   */
+ 400:Core/Src/si4463.c **** void SI446x_Reset_TxFifo( void )
+ 401:Core/Src/si4463.c **** {
+ 402:Core/Src/si4463.c ****     uint8_t l_Cmd[ 2 ] = { 0 };
+ 403:Core/Src/si4463.c **** 
+ 404:Core/Src/si4463.c ****     l_Cmd[0] = FIFO_INFO;
+ 405:Core/Src/si4463.c ****     l_Cmd[1] = 0x02;
+ 406:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 2 );
+ 407:Core/Src/si4463.c **** }
+ 408:Core/Src/si4463.c **** 
+ 409:Core/Src/si4463.c **** /**
+ 410:Core/Src/si4463.c ****   * @brief :SI446x发送数据包
+ 411:Core/Src/si4463.c ****   * @param :
+ 412:Core/Src/si4463.c ****   *			@pTxData：发送数据首地址
+ 413:Core/Src/si4463.c ****   *			@Length：数据长度
+ 414:Core/Src/si4463.c ****   *			@Channel：通道
+ 415:Core/Src/si4463.c ****   *			@Condition：发送状况选择
+ 416:Core/Src/si4463.c ****   * @note  :无
+ 417:Core/Src/si4463.c ****   * @retval:无
+ 418:Core/Src/si4463.c ****   */
+ 419:Core/Src/si4463.c **** void SI446x_Send_Packet( uint8_t *pTxData, uint8_t Length, uint8_t Channel, uint8_t Condition )
+ 420:Core/Src/si4463.c **** {
+ 421:Core/Src/si4463.c ****     uint8_t l_Cmd[ 5 ] = { 0 };
+ 422:Core/Src/si4463.c ****     uint8_t tx_len = Length;
+ 423:Core/Src/si4463.c **** 
+ 424:Core/Src/si4463.c ****     SI446x_Reset_TxFifo( );		//清空TX FIFO
+ARM GAS  /tmp/ccZQTl50.s 			page 13
+
+
+ 425:Core/Src/si4463.c **** 
+ 426:Core/Src/si4463.c ****     SI446X_CS_LOW;		
+ 427:Core/Src/si4463.c **** 	
+ 428:Core/Src/si4463.c ****     SI446x_SPI_TransmitReceive( WRITE_TX_FIFO );	//写TX FIFO命令
+ 429:Core/Src/si4463.c **** 	
+ 430:Core/Src/si4463.c **** #if PACKET_LENGTH == 0			//动态数据长度
+ 431:Core/Src/si4463.c **** 	
+ 432:Core/Src/si4463.c ****     tx_len ++;
+ 433:Core/Src/si4463.c ****     SI446x_SPI_TransmitReceive( Length );
+ 434:Core/Src/si4463.c **** 	
+ 435:Core/Src/si4463.c **** #endif
+ 436:Core/Src/si4463.c **** 	
+ 437:Core/Src/si4463.c ****     while( Length-- )    
+ 438:Core/Src/si4463.c **** 	{
+ 439:Core/Src/si4463.c **** 		SI446x_SPI_TransmitReceive( *pTxData++ ); 	//写数据到TX FIFO
+ 440:Core/Src/si4463.c **** 	}
+ 441:Core/Src/si4463.c **** 	
+ 442:Core/Src/si4463.c ****     SI446X_CS_HIGH;
+ 443:Core/Src/si4463.c **** 	
+ 444:Core/Src/si4463.c ****     l_Cmd[ 0 ] = START_TX;
+ 445:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Channel;
+ 446:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Condition;
+ 447:Core/Src/si4463.c ****     l_Cmd[ 3 ] = 0;
+ 448:Core/Src/si4463.c ****     l_Cmd[ 4 ] = tx_len;
+ 449:Core/Src/si4463.c **** 	
+ 450:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 5 );		//发送数据包
+ 451:Core/Src/si4463.c **** }
+ 452:Core/Src/si4463.c **** 
+ 453:Core/Src/si4463.c **** /**
+ 454:Core/Src/si4463.c ****   * @brief :SI446x启动发送
+ 455:Core/Src/si4463.c ****   * @param :
+ 456:Core/Src/si4463.c ****   *			@Length：数据长度
+ 457:Core/Src/si4463.c ****   *			@Channel：通道
+ 458:Core/Src/si4463.c ****   *			@Condition：发送状况选择
+ 459:Core/Src/si4463.c ****   * @note  :无
+ 460:Core/Src/si4463.c ****   * @retval:无
+ 461:Core/Src/si4463.c ****   */
+ 462:Core/Src/si4463.c **** void SI446x_Start_Tx( uint8_t Channel, uint8_t Condition, uint16_t Length )
+ 463:Core/Src/si4463.c **** {
+ 464:Core/Src/si4463.c ****     uint8_t l_Cmd[5] = { 0 };
+ 465:Core/Src/si4463.c **** 
+ 466:Core/Src/si4463.c ****     l_Cmd[ 0 ] = START_TX;		
+ 467:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Channel;
+ 468:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Condition;
+ 469:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Length >> 8;
+ 470:Core/Src/si4463.c ****     l_Cmd[ 4 ] = Length;
+ 471:Core/Src/si4463.c **** 	
+ 472:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 5 );
+ 473:Core/Src/si4463.c **** }
+ 474:Core/Src/si4463.c **** 
+ 475:Core/Src/si4463.c **** /**
+ 476:Core/Src/si4463.c ****   * @brief :SI446x读RX FIFO数据
+ 477:Core/Src/si4463.c ****   * @param :
+ 478:Core/Src/si4463.c ****   *			@pRxData：数据首地址
+ 479:Core/Src/si4463.c ****   * @note  :无
+ 480:Core/Src/si4463.c ****   * @retval:数据个数
+ 481:Core/Src/si4463.c ****   */
+ARM GAS  /tmp/ccZQTl50.s 			page 14
+
+
+ 482:Core/Src/si4463.c **** uint8_t SI446x_Read_Packet( uint8_t *pRxData )
+ 483:Core/Src/si4463.c **** {
+ 484:Core/Src/si4463.c ****     uint8_t length = 0, i = 0;
+ 485:Core/Src/si4463.c **** 	
+ 486:Core/Src/si4463.c ****     SI446x_Wait_CTS( );
+ 487:Core/Src/si4463.c ****     SI446X_CS_LOW;
+ 488:Core/Src/si4463.c **** 
+ 489:Core/Src/si4463.c ****     SI446x_SPI_TransmitReceive( READ_RX_FIFO );	//读FIFO命令
+ 490:Core/Src/si4463.c **** 	
+ 491:Core/Src/si4463.c **** #if PACKET_LENGTH == 0
+ 492:Core/Src/si4463.c **** 	
+ 493:Core/Src/si4463.c ****     length = SI446x_SPI_TransmitReceive( 0xFF );	//读数据长度
+ 494:Core/Src/si4463.c **** 	
+ 495:Core/Src/si4463.c **** #else
+ 496:Core/Src/si4463.c **** 	
+ 497:Core/Src/si4463.c ****     length = PACKET_LENGTH;
+ 498:Core/Src/si4463.c **** 	
+ 499:Core/Src/si4463.c **** #endif
+ 500:Core/Src/si4463.c ****     i = length;
+ 501:Core/Src/si4463.c **** 
+ 502:Core/Src/si4463.c ****     while( length -- )
+ 503:Core/Src/si4463.c ****     {
+ 504:Core/Src/si4463.c ****         *pRxData++ = SI446x_SPI_TransmitReceive( 0xFF );	//读数据
+ 505:Core/Src/si4463.c ****     }
+ 506:Core/Src/si4463.c **** 	
+ 507:Core/Src/si4463.c ****     SI446X_CS_HIGH;		//返回数据个数
+ 508:Core/Src/si4463.c **** 	
+ 509:Core/Src/si4463.c ****     return i;
+ 510:Core/Src/si4463.c **** }
+ 511:Core/Src/si4463.c **** 
+ 512:Core/Src/si4463.c **** /**
+ 513:Core/Src/si4463.c ****   * @brief :SI446x启动接收
+ 514:Core/Src/si4463.c ****   * @param :
+ 515:Core/Src/si4463.c ****   *			@Channel：通道
+ 516:Core/Src/si4463.c ****   *			@Condition：开始接收状态
+ 517:Core/Src/si4463.c ****   *			@Length：接收长度
+ 518:Core/Src/si4463.c ****   *			@Next_State1：下一个状态1
+ 519:Core/Src/si4463.c ****   *			@Next_State2：下一个状态2
+ 520:Core/Src/si4463.c ****   *			@Next_State3：下一个状态3
+ 521:Core/Src/si4463.c ****   * @note  :无
+ 522:Core/Src/si4463.c ****   * @retval:无
+ 523:Core/Src/si4463.c ****   */
+ 524:Core/Src/si4463.c **** void SI446x_Start_Rx( uint8_t Channel, uint8_t Condition, uint16_t Length, uint8_t Next_State1, uin
+ 525:Core/Src/si4463.c **** {
+ 526:Core/Src/si4463.c ****     uint8_t l_Cmd[ 8 ] = { 0 };
+ 527:Core/Src/si4463.c **** 	
+ 528:Core/Src/si4463.c ****     SI446x_Reset_RxFifo( );
+ 529:Core/Src/si4463.c ****     SI446x_Reset_TxFifo( );
+ 530:Core/Src/si4463.c **** 	
+ 531:Core/Src/si4463.c ****     l_Cmd[ 0 ] = START_RX;
+ 532:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Channel;
+ 533:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Condition;
+ 534:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Length >> 8;
+ 535:Core/Src/si4463.c ****     l_Cmd[ 4 ] = Length;
+ 536:Core/Src/si4463.c ****     l_Cmd[ 5 ] = Next_State1;
+ 537:Core/Src/si4463.c ****     l_Cmd[ 6 ] = Next_State2;
+ 538:Core/Src/si4463.c ****     l_Cmd[ 7 ] = Next_State3;
+ARM GAS  /tmp/ccZQTl50.s 			page 15
+
+
+ 539:Core/Src/si4463.c **** 	
+ 540:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 8 );
+ 541:Core/Src/si4463.c **** }
+ 542:Core/Src/si4463.c **** 
+ 543:Core/Src/si4463.c **** /**
+ 544:Core/Src/si4463.c ****   * @brief :SI446x读取当前数据包信息
+ 545:Core/Src/si4463.c ****   * @param :
+ 546:Core/Src/si4463.c ****   *			@pReadData：数据存放地址
+ 547:Core/Src/si4463.c ****   *			@FieldNumMask：掩码域
+ 548:Core/Src/si4463.c ****   *			@Length：长度
+ 549:Core/Src/si4463.c ****   *			@DiffLen：不同长度
+ 550:Core/Src/si4463.c ****   * @note  :无
+ 551:Core/Src/si4463.c ****   * @retval:无
+ 552:Core/Src/si4463.c ****   */
+ 553:Core/Src/si4463.c **** void SI446x_Get_Packet_Information( uint8_t *pReadData, uint8_t FieldNumMask, uint16_t Length, uint
+ 554:Core/Src/si4463.c **** {
+ 555:Core/Src/si4463.c ****     uint8_t l_Cmd[ 6 ] = { 0 };
+ 556:Core/Src/si4463.c **** 	
+ 557:Core/Src/si4463.c ****     l_Cmd[ 0 ] = PACKET_INFO;
+ 558:Core/Src/si4463.c ****     l_Cmd[ 1 ] = FieldNumMask;
+ 559:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Length >> 8;
+ 560:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Length;
+ 561:Core/Src/si4463.c ****     l_Cmd[ 4 ] = DiffLen >> 8;
+ 562:Core/Src/si4463.c ****     l_Cmd[ 5 ] = DiffLen;
+ 563:Core/Src/si4463.c **** 
+ 564:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 6 );
+ 565:Core/Src/si4463.c ****     SI446x_Read_Response( pReadData, 3 );
+ 566:Core/Src/si4463.c **** }
+ 567:Core/Src/si4463.c **** 
+ 568:Core/Src/si4463.c **** /**
+ 569:Core/Src/si4463.c ****   * @brief :SI446x读取FIFO状态
+ 570:Core/Src/si4463.c ****   * @param :
+ 571:Core/Src/si4463.c ****   *			@pReadData：数据存放地址
+ 572:Core/Src/si4463.c ****   * @note  :无
+ 573:Core/Src/si4463.c ****   * @retval:无
+ 574:Core/Src/si4463.c ****   */
+ 575:Core/Src/si4463.c **** void SI446x_Get_Fifo_Information( uint8_t *pReadData )
+ 576:Core/Src/si4463.c **** {
+ 577:Core/Src/si4463.c ****     uint8_t l_Cmd[ 2 ] = { 0 };
+ 578:Core/Src/si4463.c **** 	
+ 579:Core/Src/si4463.c ****     l_Cmd[ 0 ] = FIFO_INFO;
+ 580:Core/Src/si4463.c ****     l_Cmd[ 1 ] = 0x03;
+ 581:Core/Src/si4463.c **** 
+ 582:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 2 );
+ 583:Core/Src/si4463.c ****     SI446x_Read_Response( pReadData, 3 );
+ 584:Core/Src/si4463.c **** }
+ 585:Core/Src/si4463.c **** 
+ 586:Core/Src/si4463.c **** /**
+ 587:Core/Src/si4463.c ****   * @brief :SI446x状态切换
+ 588:Core/Src/si4463.c ****   * @param :
+ 589:Core/Src/si4463.c ****   *			@NextStatus：下一个状态
+ 590:Core/Src/si4463.c ****   * @note  :无
+ 591:Core/Src/si4463.c ****   * @retval:无
+ 592:Core/Src/si4463.c ****   */
+ 593:Core/Src/si4463.c **** void SI446x_Change_Status( uint8_t NextStatus )
+ 594:Core/Src/si4463.c **** {
+ 595:Core/Src/si4463.c ****     uint8_t l_Cmd[ 2 ] = { 0 };
+ARM GAS  /tmp/ccZQTl50.s 			page 16
+
+
+ 596:Core/Src/si4463.c **** 	
+ 597:Core/Src/si4463.c ****     l_Cmd[ 0 ] = CHANGE_STATE;
+ 598:Core/Src/si4463.c ****     l_Cmd[ 1 ] = NextStatus;
+ 599:Core/Src/si4463.c **** 	
+ 600:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 2 );
+ 601:Core/Src/si4463.c **** }
+ 602:Core/Src/si4463.c **** 
+ 603:Core/Src/si4463.c **** /**
+ 604:Core/Src/si4463.c ****   * @brief :SI446x获取设备当前状态
+ 605:Core/Src/si4463.c ****   * @param :
+ 606:Core/Src/si4463.c ****   * @note  :无
+ 607:Core/Src/si4463.c ****   * @retval:设备当前状态
+ 608:Core/Src/si4463.c ****   */
+ 609:Core/Src/si4463.c **** uint8_t SI446x_Get_Device_Status( void )
+ 610:Core/Src/si4463.c **** {
+ 611:Core/Src/si4463.c ****    uint8_t l_Cmd[ 3 ] = { 0 };
+ 612:Core/Src/si4463.c ****    
+ 613:Core/Src/si4463.c ****    l_Cmd [ 0 ] = REQUEST_DEVICE_STATE;
+ 614:Core/Src/si4463.c ****    
+ 615:Core/Src/si4463.c ****    SI446x_Write_Cmds( l_Cmd, 1 );
+ 616:Core/Src/si4463.c ****    SI446x_Read_Response( l_Cmd, 3 );
+ 617:Core/Src/si4463.c ****    
+ 618:Core/Src/si4463.c ****    return l_Cmd[ 1 ] & 0x0F;
+ 619:Core/Src/si4463.c **** }
+ 620:Core/Src/si4463.c **** 
+ 621:Core/Src/si4463.c **** /**
+ 622:Core/Src/si4463.c ****   * @brief :SI446x功率设置
+ 623:Core/Src/si4463.c ****   * @param :
+ 624:Core/Src/si4463.c ****   *			@PowerLevel：数据存放地址
+ 625:Core/Src/si4463.c ****   * @note  :无
+ 626:Core/Src/si4463.c ****   * @retval:设备当前状态
+ 627:Core/Src/si4463.c ****   */
+ 628:Core/Src/si4463.c **** void SI446x_Set_Power( uint8_t PowerLevel )
+ 629:Core/Src/si4463.c **** {
+ 630:Core/Src/si4463.c ****     SI446x_Set_Property_1( PA_PWR_LVL, PowerLevel );
+ 631:Core/Src/si4463.c **** }
+ 632:Core/Src/si4463.c **** 
+ 633:Core/Src/si4463.c **** /**
+ 634:Core/Src/si4463.c ****   * @brief :SI446x初始化
+ 635:Core/Src/si4463.c ****   * @param :无
+ 636:Core/Src/si4463.c ****   * @note  :无
+ 637:Core/Src/si4463.c ****   * @retval:无
+ 638:Core/Src/si4463.c ****   */
+ 639:Core/Src/si4463.c **** void SI446x_Init( void )
+ 640:Core/Src/si4463.c **** {
+ 266              		.loc 1 640 1 is_stmt 1 view -0
+ 267              		.cfi_startproc
+ 268              		@ args = 0, pretend = 0, frame = 0
+ 269              		@ frame_needed = 0, uses_anonymous_args = 0
+ 270 0000 00B5     		push	{lr}
+ 271              	.LCFI6:
+ 272              		.cfi_def_cfa_offset 4
+ 273              		.cfi_offset 14, -4
+ 274 0002 83B0     		sub	sp, sp, #12
+ 275              	.LCFI7:
+ 276              		.cfi_def_cfa_offset 16
+ 641:Core/Src/si4463.c **** 	SI446x_Reset( );			//SI4463复位
+ARM GAS  /tmp/ccZQTl50.s 			page 17
+
+
+ 277              		.loc 1 641 2 view .LVU41
+ 278 0004 FFF7FEFF 		bl	SI446x_Reset
+ 279              	.LVL24:
+ 642:Core/Src/si4463.c **** 	SI446x_Power_Up( 30000000 );//reset 后需要Power up设备 晶振30MHz
+ 280              		.loc 1 642 2 view .LVU42
+ 281 0008 0D48     		ldr	r0, .L22
+ 282 000a FFF7FEFF 		bl	SI446x_Power_Up
+ 283              	.LVL25:
+ 643:Core/Src/si4463.c **** 	SI446x_Config_Init( );		//SI4463模块初始化
+ 284              		.loc 1 643 2 view .LVU43
+ 285 000e FFF7FEFF 		bl	SI446x_Config_Init
+ 286              	.LVL26:
+ 644:Core/Src/si4463.c **** 	SI446x_Set_Power( 0x7F );	//功率设置
+ 287              		.loc 1 644 2 view .LVU44
+ 288 0012 7F20     		movs	r0, #127
+ 289 0014 FFF7FEFF 		bl	SI446x_Set_Power
+ 290              	.LVL27:
+ 645:Core/Src/si4463.c **** 	SI446x_Change_Status( 6 );	//切换到RX状态
+ 291              		.loc 1 645 2 view .LVU45
+ 292 0018 0620     		movs	r0, #6
+ 293 001a FFF7FEFF 		bl	SI446x_Change_Status
+ 294              	.LVL28:
+ 646:Core/Src/si4463.c **** 	while( 6 != SI446x_Get_Device_Status( ));
+ 295              		.loc 1 646 2 view .LVU46
+ 296              	.L20:
+ 297              		.loc 1 646 42 discriminator 1 view .LVU47
+ 298              		.loc 1 646 7 discriminator 1 view .LVU48
+ 299              		.loc 1 646 14 is_stmt 0 discriminator 1 view .LVU49
+ 300 001e FFF7FEFF 		bl	SI446x_Get_Device_Status
+ 301              	.LVL29:
+ 302              		.loc 1 646 7 discriminator 1 view .LVU50
+ 303 0022 0628     		cmp	r0, #6
+ 304 0024 FBD1     		bne	.L20
+ 647:Core/Src/si4463.c **** 	SI446x_Start_Rx( 0, 0, PACKET_LENGTH,0,0,3 );
+ 305              		.loc 1 647 2 is_stmt 1 view .LVU51
+ 306 0026 0323     		movs	r3, #3
+ 307 0028 0193     		str	r3, [sp, #4]
+ 308 002a 0020     		movs	r0, #0
+ 309 002c 0090     		str	r0, [sp]
+ 310 002e 0346     		mov	r3, r0
+ 311 0030 0246     		mov	r2, r0
+ 312 0032 0146     		mov	r1, r0
+ 313 0034 FFF7FEFF 		bl	SI446x_Start_Rx
+ 314              	.LVL30:
+ 648:Core/Src/si4463.c **** 
+ 649:Core/Src/si4463.c **** }...
+ 315              		.loc 1 649 1 is_stmt 0 view .LVU52
+ 316 0038 03B0     		add	sp, sp, #12
+ 317              	.LCFI8:
+ 318              		.cfi_def_cfa_offset 4
+ 319              		@ sp needed
+ 320 003a 5DF804FB 		ldr	pc, [sp], #4
+ 321              	.L23:
+ 322 003e 00BF     		.align	2
+ 323              	.L22:
+ 324 0040 80C3C901 		.word	30000000
+ 325              		.cfi_endproc
+ARM GAS  /tmp/ccZQTl50.s 			page 18
+
+
+ 326              	.LFE162:
+ 328              		.section	.text.SI446x_Wait_CTS,"ax",%progbits
+ 329              		.align	1
+ 330              		.global	SI446x_Wait_CTS
+ 331              		.syntax unified
+ 332              		.thumb
+ 333              		.thumb_func
+ 334              		.fpu fpv4-sp-d16
+ 336              	SI446x_Wait_CTS:
+ 337              	.LFB135:
+  20:Core/Src/si4463.c **** {
+ 338              		.loc 1 20 1 is_stmt 1 view -0
+ 339              		.cfi_startproc
+ 340              		@ args = 0, pretend = 0, frame = 0
+ 341              		@ frame_needed = 0, uses_anonymous_args = 0
+ 342 0000 70B5     		push	{r4, r5, r6, lr}
+ 343              	.LCFI9:
+ 344              		.cfi_def_cfa_offset 16
+ 345              		.cfi_offset 4, -16
+ 346              		.cfi_offset 5, -12
+ 347              		.cfi_offset 6, -8
+ 348              		.cfi_offset 14, -4
+  21:Core/Src/si4463.c ****     uint8_t l_Cts;
+ 349              		.loc 1 21 5 view .LVU54
+  22:Core/Src/si4463.c **** 	uint16_t l_ReadCtsTimes = 0;
+ 350              		.loc 1 22 2 view .LVU55
+ 351              	.LVL31:
+  22:Core/Src/si4463.c **** 	uint16_t l_ReadCtsTimes = 0;
+ 352              		.loc 1 22 11 is_stmt 0 view .LVU56
+ 353 0002 0024     		movs	r4, #0
+ 354              	.LVL32:
+ 355              	.L27:
+  24:Core/Src/si4463.c ****     do
+ 356              		.loc 1 24 5 is_stmt 1 view .LVU57
+  26:Core/Src/si4463.c ****         SI446X_CS_LOW;		//SPI片选
+ 357              		.loc 1 26 9 view .LVU58
+ 358 0004 0E4E     		ldr	r6, .L30
+ 359 0006 0022     		movs	r2, #0
+ 360 0008 1021     		movs	r1, #16
+ 361 000a 3046     		mov	r0, r6
+ 362 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 363              	.LVL33:
+  29:Core/Src/si4463.c ****         SI446x_SPI_TransmitReceive( READ_CMD_BUFF );
+ 364              		.loc 1 29 9 view .LVU59
+ 365 0010 4420     		movs	r0, #68
+ 366 0012 FFF7FEFF 		bl	SI446x_SPI_TransmitReceive
+ 367              	.LVL34:
+  30:Core/Src/si4463.c ****         l_Cts = SI446x_SPI_TransmitReceive( 0xFF );		
+ 368              		.loc 1 30 9 view .LVU60
+  30:Core/Src/si4463.c ****         l_Cts = SI446x_SPI_TransmitReceive( 0xFF );		
+ 369              		.loc 1 30 17 is_stmt 0 view .LVU61
+ 370 0016 FF20     		movs	r0, #255
+ 371 0018 FFF7FEFF 		bl	SI446x_SPI_TransmitReceive
+ 372              	.LVL35:
+ 373 001c 0546     		mov	r5, r0
+ 374              	.LVL36:
+  32:Core/Src/si4463.c ****         SI446X_CS_HIGH;		//取消SPI片选
+ARM GAS  /tmp/ccZQTl50.s 			page 19
+
+
+ 375              		.loc 1 32 9 is_stmt 1 view .LVU62
+ 376 001e 0122     		movs	r2, #1
+ 377 0020 1021     		movs	r1, #16
+ 378 0022 3046     		mov	r0, r6
+ 379 0024 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 380              	.LVL37:
+  34:Core/Src/si4463.c **** 		if( 1000 == l_ReadCtsTimes++ )
+ 381              		.loc 1 34 3 view .LVU63
+ 382 0028 2346     		mov	r3, r4
+  34:Core/Src/si4463.c **** 		if( 1000 == l_ReadCtsTimes++ )
+ 383              		.loc 1 34 29 is_stmt 0 view .LVU64
+ 384 002a 0134     		adds	r4, r4, #1
+ 385              	.LVL38:
+  34:Core/Src/si4463.c **** 		if( 1000 == l_ReadCtsTimes++ )
+ 386              		.loc 1 34 29 view .LVU65
+ 387 002c A4B2     		uxth	r4, r4
+ 388              	.LVL39:
+  34:Core/Src/si4463.c **** 		if( 1000 == l_ReadCtsTimes++ )
+ 389              		.loc 1 34 5 view .LVU66
+ 390 002e B3F57A7F 		cmp	r3, #1000
+ 391 0032 02D0     		beq	.L29
+  40:Core/Src/si4463.c **** 	}while( l_Cts != 0xFF );	//直到读CTS的返回值等于0xFF
+ 392              		.loc 1 40 8 is_stmt 1 view .LVU67
+  40:Core/Src/si4463.c **** 	}while( l_Cts != 0xFF );	//直到读CTS的返回值等于0xFF
+ 393              		.loc 1 40 2 is_stmt 0 view .LVU68
+ 394 0034 FF2D     		cmp	r5, #255
+ 395 0036 E5D1     		bne	.L27
+ 396              	.L24:
+  41:Core/Src/si4463.c **** }
+ 397              		.loc 1 41 1 view .LVU69
+ 398 0038 70BD     		pop	{r4, r5, r6, pc}
+ 399              	.LVL40:
+ 400              	.L29:
+  36:Core/Src/si4463.c **** 			SI446x_Init( );
+ 401              		.loc 1 36 4 is_stmt 1 view .LVU70
+ 402 003a FFF7FEFF 		bl	SI446x_Init
+ 403              	.LVL41:
+  37:Core/Src/si4463.c **** 			break;
+ 404              		.loc 1 37 4 view .LVU71
+ 405 003e FBE7     		b	.L24
+ 406              	.L31:
+ 407              		.align	2
+ 408              	.L30:
+ 409 0040 00000240 		.word	1073872896
+ 410              		.cfi_endproc
+ 411              	.LFE135:
+ 413              		.section	.text.SI446x_Write_Cmds,"ax",%progbits
+ 414              		.align	1
+ 415              		.global	SI446x_Write_Cmds
+ 416              		.syntax unified
+ 417              		.thumb
+ 418              		.thumb_func
+ 419              		.fpu fpv4-sp-d16
+ 421              	SI446x_Write_Cmds:
+ 422              	.LVL42:
+ 423              	.LFB136:
+  52:Core/Src/si4463.c **** {
+ARM GAS  /tmp/ccZQTl50.s 			page 20
+
+
+ 424              		.loc 1 52 1 view -0
+ 425              		.cfi_startproc
+ 426              		@ args = 0, pretend = 0, frame = 0
+ 427              		@ frame_needed = 0, uses_anonymous_args = 0
+  52:Core/Src/si4463.c **** {
+ 428              		.loc 1 52 1 is_stmt 0 view .LVU73
+ 429 0000 70B5     		push	{r4, r5, r6, lr}
+ 430              	.LCFI10:
+ 431              		.cfi_def_cfa_offset 16
+ 432              		.cfi_offset 4, -16
+ 433              		.cfi_offset 5, -12
+ 434              		.cfi_offset 6, -8
+ 435              		.cfi_offset 14, -4
+ 436 0002 0646     		mov	r6, r0
+ 437 0004 0D46     		mov	r5, r1
+  53:Core/Src/si4463.c ****     SI446x_Wait_CTS( );			//查询CTS状态
+ 438              		.loc 1 53 5 is_stmt 1 view .LVU74
+ 439 0006 FFF7FEFF 		bl	SI446x_Wait_CTS
+ 440              	.LVL43:
+  55:Core/Src/si4463.c ****     SI446X_CS_LOW;			//SPI片选
+ 441              		.loc 1 55 5 view .LVU75
+ 442 000a 0022     		movs	r2, #0
+ 443 000c 1021     		movs	r1, #16
+ 444 000e 0948     		ldr	r0, .L36
+ 445 0010 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 446              	.LVL44:
+  57:Core/Src/si4463.c ****     while( CmdNumber -- )
+ 447              		.loc 1 57 5 view .LVU76
+  57:Core/Src/si4463.c ****     while( CmdNumber -- )
+ 448              		.loc 1 57 10 is_stmt 0 view .LVU77
+ 449 0014 04E0     		b	.L33
+ 450              	.LVL45:
+ 451              	.L34:
+  59:Core/Src/si4463.c ****         SI446x_SPI_TransmitReceive( *pCmd );	//发送命令
+ 452              		.loc 1 59 9 is_stmt 1 view .LVU78
+ 453 0016 16F8010B 		ldrb	r0, [r6], #1	@ zero_extendqisi2
+ 454              	.LVL46:
+  59:Core/Src/si4463.c ****         SI446x_SPI_TransmitReceive( *pCmd );	//发送命令
+ 455              		.loc 1 59 9 is_stmt 0 view .LVU79
+ 456 001a FFF7FEFF 		bl	SI446x_SPI_TransmitReceive
+ 457              	.LVL47:
+  60:Core/Src/si4463.c **** 		pCmd++;
+ 458              		.loc 1 60 3 is_stmt 1 view .LVU80
+  57:Core/Src/si4463.c ****     while( CmdNumber -- )
+ 459              		.loc 1 57 22 is_stmt 0 view .LVU81
+ 460 001e 2546     		mov	r5, r4
+ 461              	.LVL48:
+ 462              	.L33:
+  57:Core/Src/si4463.c ****     while( CmdNumber -- )
+ 463              		.loc 1 57 10 is_stmt 1 view .LVU82
+  57:Core/Src/si4463.c ****     while( CmdNumber -- )
+ 464              		.loc 1 57 22 is_stmt 0 view .LVU83
+ 465 0020 6B1E     		subs	r3, r5, #1
+ 466 0022 DCB2     		uxtb	r4, r3
+ 467              	.LVL49:
+  57:Core/Src/si4463.c ****     while( CmdNumber -- )
+ 468              		.loc 1 57 10 view .LVU84
+ARM GAS  /tmp/ccZQTl50.s 			page 21
+
+
+ 469 0024 002D     		cmp	r5, #0
+ 470 0026 F6D1     		bne	.L34
+  63:Core/Src/si4463.c ****     SI446X_CS_HIGH;			//取消SPI片选
+ 471              		.loc 1 63 5 is_stmt 1 view .LVU85
+ 472 0028 0122     		movs	r2, #1
+ 473 002a 1021     		movs	r1, #16
+ 474 002c 0148     		ldr	r0, .L36
+ 475 002e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 476              	.LVL50:
+  64:Core/Src/si4463.c **** }
+ 477              		.loc 1 64 1 is_stmt 0 view .LVU86
+ 478 0032 70BD     		pop	{r4, r5, r6, pc}
+ 479              	.LVL51:
+ 480              	.L37:
+  64:Core/Src/si4463.c **** }
+ 481              		.loc 1 64 1 view .LVU87
+ 482              		.align	2
+ 483              	.L36:
+ 484 0034 00000240 		.word	1073872896
+ 485              		.cfi_endproc
+ 486              	.LFE136:
+ 488              		.section	.text.SI446x_Power_Up,"ax",%progbits
+ 489              		.align	1
+ 490              		.global	SI446x_Power_Up
+ 491              		.syntax unified
+ 492              		.thumb
+ 493              		.thumb_func
+ 494              		.fpu fpv4-sp-d16
+ 496              	SI446x_Power_Up:
+ 497              	.LVL52:
+ 498              	.LFB137:
+  74:Core/Src/si4463.c **** {
+ 499              		.loc 1 74 1 is_stmt 1 view -0
+ 500              		.cfi_startproc
+ 501              		@ args = 0, pretend = 0, frame = 8
+ 502              		@ frame_needed = 0, uses_anonymous_args = 0
+  74:Core/Src/si4463.c **** {
+ 503              		.loc 1 74 1 is_stmt 0 view .LVU89
+ 504 0000 00B5     		push	{lr}
+ 505              	.LCFI11:
+ 506              		.cfi_def_cfa_offset 4
+ 507              		.cfi_offset 14, -4
+ 508 0002 83B0     		sub	sp, sp, #12
+ 509              	.LCFI12:
+ 510              		.cfi_def_cfa_offset 16
+  75:Core/Src/si4463.c ****     uint8_t l_Cmd[7] = { 0 };
+ 511              		.loc 1 75 5 is_stmt 1 view .LVU90
+  75:Core/Src/si4463.c ****     uint8_t l_Cmd[7] = { 0 };
+ 512              		.loc 1 75 13 is_stmt 0 view .LVU91
+ 513 0004 0023     		movs	r3, #0
+ 514 0006 0093     		str	r3, [sp]
+ 515 0008 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 516 000c 8DF80630 		strb	r3, [sp, #6]
+  77:Core/Src/si4463.c ****     l_Cmd[0] = POWER_UP;		//Power_Up命令
+ 517              		.loc 1 77 5 is_stmt 1 view .LVU92
+  77:Core/Src/si4463.c ****     l_Cmd[0] = POWER_UP;		//Power_Up命令
+ 518              		.loc 1 77 14 is_stmt 0 view .LVU93
+ARM GAS  /tmp/ccZQTl50.s 			page 22
+
+
+ 519 0010 0223     		movs	r3, #2
+ 520 0012 8DF80030 		strb	r3, [sp]
+  78:Core/Src/si4463.c ****     l_Cmd[1] = 0x01;
+ 521              		.loc 1 78 5 is_stmt 1 view .LVU94
+  78:Core/Src/si4463.c ****     l_Cmd[1] = 0x01;
+ 522              		.loc 1 78 14 is_stmt 0 view .LVU95
+ 523 0016 0123     		movs	r3, #1
+ 524 0018 8DF80130 		strb	r3, [sp, #1]
+  79:Core/Src/si4463.c ****     l_Cmd[2] = 0x00;
+ 525              		.loc 1 79 5 is_stmt 1 view .LVU96
+  80:Core/Src/si4463.c ****     l_Cmd[3] = Xo_Freq >> 24;
+ 526              		.loc 1 80 5 view .LVU97
+  80:Core/Src/si4463.c ****     l_Cmd[3] = Xo_Freq >> 24;
+ 527              		.loc 1 80 24 is_stmt 0 view .LVU98
+ 528 001c 030E     		lsrs	r3, r0, #24
+  80:Core/Src/si4463.c ****     l_Cmd[3] = Xo_Freq >> 24;
+ 529              		.loc 1 80 14 view .LVU99
+ 530 001e 8DF80330 		strb	r3, [sp, #3]
+  81:Core/Src/si4463.c ****     l_Cmd[4] = Xo_Freq >> 16;
+ 531              		.loc 1 81 5 is_stmt 1 view .LVU100
+  81:Core/Src/si4463.c ****     l_Cmd[4] = Xo_Freq >> 16;
+ 532              		.loc 1 81 24 is_stmt 0 view .LVU101
+ 533 0022 030C     		lsrs	r3, r0, #16
+  81:Core/Src/si4463.c ****     l_Cmd[4] = Xo_Freq >> 16;
+ 534              		.loc 1 81 14 view .LVU102
+ 535 0024 8DF80430 		strb	r3, [sp, #4]
+  82:Core/Src/si4463.c ****     l_Cmd[5] = Xo_Freq >> 8;
+ 536              		.loc 1 82 5 is_stmt 1 view .LVU103
+  82:Core/Src/si4463.c ****     l_Cmd[5] = Xo_Freq >> 8;
+ 537              		.loc 1 82 24 is_stmt 0 view .LVU104
+ 538 0028 030A     		lsrs	r3, r0, #8
+  82:Core/Src/si4463.c ****     l_Cmd[5] = Xo_Freq >> 8;
+ 539              		.loc 1 82 14 view .LVU105
+ 540 002a 8DF80530 		strb	r3, [sp, #5]
+  83:Core/Src/si4463.c ****     l_Cmd[6] = Xo_Freq;
+ 541              		.loc 1 83 5 is_stmt 1 view .LVU106
+  83:Core/Src/si4463.c ****     l_Cmd[6] = Xo_Freq;
+ 542              		.loc 1 83 14 is_stmt 0 view .LVU107
+ 543 002e 8DF80600 		strb	r0, [sp, #6]
+  84:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 7 );	//写命令
+ 544              		.loc 1 84 5 is_stmt 1 view .LVU108
+ 545 0032 0721     		movs	r1, #7
+ 546 0034 6846     		mov	r0, sp
+ 547              	.LVL53:
+  84:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 7 );	//写命令
+ 548              		.loc 1 84 5 is_stmt 0 view .LVU109
+ 549 0036 FFF7FEFF 		bl	SI446x_Write_Cmds
+ 550              	.LVL54:
+  85:Core/Src/si4463.c **** }
+ 551              		.loc 1 85 1 view .LVU110
+ 552 003a 03B0     		add	sp, sp, #12
+ 553              	.LCFI13:
+ 554              		.cfi_def_cfa_offset 4
+ 555              		@ sp needed
+ 556 003c 5DF804FB 		ldr	pc, [sp], #4
+ 557              		.cfi_endproc
+ 558              	.LFE137:
+ARM GAS  /tmp/ccZQTl50.s 			page 23
+
+
+ 560              		.section	.text.SI446x_Set_Property,"ax",%progbits
+ 561              		.align	1
+ 562              		.global	SI446x_Set_Property
+ 563              		.syntax unified
+ 564              		.thumb
+ 565              		.thumb_func
+ 566              		.fpu fpv4-sp-d16
+ 568              	SI446x_Set_Property:
+ 569              	.LVL55:
+ 570              	.LFB144:
+ 213:Core/Src/si4463.c **** {
+ 571              		.loc 1 213 1 is_stmt 1 view -0
+ 572              		.cfi_startproc
+ 573              		@ args = 0, pretend = 0, frame = 24
+ 574              		@ frame_needed = 0, uses_anonymous_args = 0
+ 213:Core/Src/si4463.c **** {
+ 575              		.loc 1 213 1 is_stmt 0 view .LVU112
+ 576 0000 10B5     		push	{r4, lr}
+ 577              	.LCFI14:
+ 578              		.cfi_def_cfa_offset 8
+ 579              		.cfi_offset 4, -8
+ 580              		.cfi_offset 14, -4
+ 581 0002 86B0     		sub	sp, sp, #24
+ 582              	.LCFI15:
+ 583              		.cfi_def_cfa_offset 32
+ 214:Core/Src/si4463.c ****     uint8_t l_Cmd[ 20 ] = { 0 }, i = 0;
+ 584              		.loc 1 214 5 is_stmt 1 view .LVU113
+ 214:Core/Src/si4463.c ****     uint8_t l_Cmd[ 20 ] = { 0 }, i = 0;
+ 585              		.loc 1 214 13 is_stmt 0 view .LVU114
+ 586 0004 0023     		movs	r3, #0
+ 587 0006 0193     		str	r3, [sp, #4]
+ 588 0008 0293     		str	r3, [sp, #8]
+ 589 000a 0393     		str	r3, [sp, #12]
+ 590 000c 0493     		str	r3, [sp, #16]
+ 591 000e 0593     		str	r3, [sp, #20]
+ 592              	.LVL56:
+ 216:Core/Src/si4463.c ****     if( Num_Props >= 16 )   
+ 593              		.loc 1 216 5 is_stmt 1 view .LVU115
+ 216:Core/Src/si4463.c ****     if( Num_Props >= 16 )   
+ 594              		.loc 1 216 7 is_stmt 0 view .LVU116
+ 595 0010 0F29     		cmp	r1, #15
+ 596 0012 1CD8     		bhi	.L40
+ 597 0014 0C46     		mov	r4, r1
+ 221:Core/Src/si4463.c ****     l_Cmd[ i++ ] = SET_PROPERTY;		//设置属性命令
+ 598              		.loc 1 221 5 is_stmt 1 view .LVU117
+ 599              	.LVL57:
+ 221:Core/Src/si4463.c ****     l_Cmd[ i++ ] = SET_PROPERTY;		//设置属性命令
+ 600              		.loc 1 221 18 is_stmt 0 view .LVU118
+ 601 0016 1123     		movs	r3, #17
+ 602 0018 8DF80430 		strb	r3, [sp, #4]
+ 222:Core/Src/si4463.c ****     l_Cmd[ i++ ] = Group_Num >> 8;
+ 603              		.loc 1 222 5 is_stmt 1 view .LVU119
+ 604              	.LVL58:
+ 222:Core/Src/si4463.c ****     l_Cmd[ i++ ] = Group_Num >> 8;
+ 605              		.loc 1 222 18 is_stmt 0 view .LVU120
+ 606 001c 030A     		lsrs	r3, r0, #8
+ 607 001e 8DF80530 		strb	r3, [sp, #5]
+ARM GAS  /tmp/ccZQTl50.s 			page 24
+
+
+ 223:Core/Src/si4463.c ****     l_Cmd[ i++ ] = Num_Props;
+ 608              		.loc 1 223 5 is_stmt 1 view .LVU121
+ 609              	.LVL59:
+ 223:Core/Src/si4463.c ****     l_Cmd[ i++ ] = Num_Props;
+ 610              		.loc 1 223 18 is_stmt 0 view .LVU122
+ 611 0022 8DF80610 		strb	r1, [sp, #6]
+ 224:Core/Src/si4463.c ****     l_Cmd[ i++ ] = Group_Num;
+ 612              		.loc 1 224 5 is_stmt 1 view .LVU123
+ 613              	.LVL60:
+ 224:Core/Src/si4463.c ****     l_Cmd[ i++ ] = Group_Num;
+ 614              		.loc 1 224 18 is_stmt 0 view .LVU124
+ 615 0026 8DF80700 		strb	r0, [sp, #7]
+ 226:Core/Src/si4463.c ****     while( Num_Props-- )
+ 616              		.loc 1 226 5 is_stmt 1 view .LVU125
+ 224:Core/Src/si4463.c ****     l_Cmd[ i++ ] = Group_Num;
+ 617              		.loc 1 224 13 is_stmt 0 view .LVU126
+ 618 002a 0421     		movs	r1, #4
+ 619              	.LVL61:
+ 226:Core/Src/si4463.c ****     while( Num_Props-- )
+ 620              		.loc 1 226 10 view .LVU127
+ 621 002c 08E0     		b	.L43
+ 622              	.LVL62:
+ 623              	.L44:
+ 228:Core/Src/si4463.c ****         l_Cmd[ i++ ] = *pWrite;
+ 624              		.loc 1 228 9 is_stmt 1 view .LVU128
+ 228:Core/Src/si4463.c ****         l_Cmd[ i++ ] = *pWrite;
+ 625              		.loc 1 228 17 is_stmt 0 view .LVU129
+ 626 002e 481C     		adds	r0, r1, #1
+ 627              	.LVL63:
+ 228:Core/Src/si4463.c ****         l_Cmd[ i++ ] = *pWrite;
+ 628              		.loc 1 228 24 view .LVU130
+ 629 0030 12F8014B 		ldrb	r4, [r2], #1	@ zero_extendqisi2
+ 630              	.LVL64:
+ 228:Core/Src/si4463.c ****         l_Cmd[ i++ ] = *pWrite;
+ 631              		.loc 1 228 22 view .LVU131
+ 632 0034 1831     		adds	r1, r1, #24
+ 633 0036 6944     		add	r1, sp, r1
+ 634 0038 01F8144C 		strb	r4, [r1, #-20]
+ 229:Core/Src/si4463.c **** 		pWrite++;
+ 635              		.loc 1 229 3 is_stmt 1 view .LVU132
+ 636              	.LVL65:
+ 228:Core/Src/si4463.c ****         l_Cmd[ i++ ] = *pWrite;
+ 637              		.loc 1 228 17 is_stmt 0 view .LVU133
+ 638 003c C1B2     		uxtb	r1, r0
+ 226:Core/Src/si4463.c ****     while( Num_Props-- )
+ 639              		.loc 1 226 21 view .LVU134
+ 640 003e 1C46     		mov	r4, r3
+ 641              	.LVL66:
+ 642              	.L43:
+ 226:Core/Src/si4463.c ****     while( Num_Props-- )
+ 643              		.loc 1 226 10 is_stmt 1 view .LVU135
+ 226:Core/Src/si4463.c ****     while( Num_Props-- )
+ 644              		.loc 1 226 21 is_stmt 0 view .LVU136
+ 645 0040 631E     		subs	r3, r4, #1
+ 646 0042 DBB2     		uxtb	r3, r3
+ 647              	.LVL67:
+ 226:Core/Src/si4463.c ****     while( Num_Props-- )
+ARM GAS  /tmp/ccZQTl50.s 			page 25
+
+
+ 648              		.loc 1 226 10 view .LVU137
+ 649 0044 002C     		cmp	r4, #0
+ 650 0046 F2D1     		bne	.L44
+ 231:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, i );		//发送命令及数据
+ 651              		.loc 1 231 5 is_stmt 1 view .LVU138
+ 652 0048 01A8     		add	r0, sp, #4
+ 653 004a FFF7FEFF 		bl	SI446x_Write_Cmds
+ 654              	.LVL68:
+ 655              	.L40:
+ 232:Core/Src/si4463.c **** }
+ 656              		.loc 1 232 1 is_stmt 0 view .LVU139
+ 657 004e 06B0     		add	sp, sp, #24
+ 658              	.LCFI16:
+ 659              		.cfi_def_cfa_offset 8
+ 660              		@ sp needed
+ 661 0050 10BD     		pop	{r4, pc}
+ 662              		.cfi_endproc
+ 663              	.LFE144:
+ 665              		.section	.text.SI446x_Set_Property_1,"ax",%progbits
+ 666              		.align	1
+ 667              		.global	SI446x_Set_Property_1
+ 668              		.syntax unified
+ 669              		.thumb
+ 670              		.thumb_func
+ 671              		.fpu fpv4-sp-d16
+ 673              	SI446x_Set_Property_1:
+ 674              	.LVL69:
+ 675              	.LFB145:
+ 243:Core/Src/si4463.c **** {
+ 676              		.loc 1 243 1 is_stmt 1 view -0
+ 677              		.cfi_startproc
+ 678              		@ args = 0, pretend = 0, frame = 8
+ 679              		@ frame_needed = 0, uses_anonymous_args = 0
+ 243:Core/Src/si4463.c **** {
+ 680              		.loc 1 243 1 is_stmt 0 view .LVU141
+ 681 0000 00B5     		push	{lr}
+ 682              	.LCFI17:
+ 683              		.cfi_def_cfa_offset 4
+ 684              		.cfi_offset 14, -4
+ 685 0002 83B0     		sub	sp, sp, #12
+ 686              	.LCFI18:
+ 687              		.cfi_def_cfa_offset 16
+ 244:Core/Src/si4463.c ****     uint8_t l_Cmd[ 5 ] = { 0 };
+ 688              		.loc 1 244 5 is_stmt 1 view .LVU142
+ 244:Core/Src/si4463.c ****     uint8_t l_Cmd[ 5 ] = { 0 };
+ 689              		.loc 1 244 13 is_stmt 0 view .LVU143
+ 690 0004 0023     		movs	r3, #0
+ 691 0006 0093     		str	r3, [sp]
+ 692 0008 8DF80430 		strb	r3, [sp, #4]
+ 246:Core/Src/si4463.c ****     l_Cmd[ 0 ] = SET_PROPERTY;		//命令
+ 693              		.loc 1 246 5 is_stmt 1 view .LVU144
+ 246:Core/Src/si4463.c ****     l_Cmd[ 0 ] = SET_PROPERTY;		//命令
+ 694              		.loc 1 246 16 is_stmt 0 view .LVU145
+ 695 000c 1123     		movs	r3, #17
+ 696 000e 8DF80030 		strb	r3, [sp]
+ 247:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Group_Num >> 8;
+ 697              		.loc 1 247 5 is_stmt 1 view .LVU146
+ARM GAS  /tmp/ccZQTl50.s 			page 26
+
+
+ 247:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Group_Num >> 8;
+ 698              		.loc 1 247 16 is_stmt 0 view .LVU147
+ 699 0012 030A     		lsrs	r3, r0, #8
+ 700 0014 8DF80130 		strb	r3, [sp, #1]
+ 248:Core/Src/si4463.c ****     l_Cmd[ 2 ] = 1;
+ 701              		.loc 1 248 5 is_stmt 1 view .LVU148
+ 248:Core/Src/si4463.c ****     l_Cmd[ 2 ] = 1;
+ 702              		.loc 1 248 16 is_stmt 0 view .LVU149
+ 703 0018 0123     		movs	r3, #1
+ 704 001a 8DF80230 		strb	r3, [sp, #2]
+ 249:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Group_Num;
+ 705              		.loc 1 249 5 is_stmt 1 view .LVU150
+ 249:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Group_Num;
+ 706              		.loc 1 249 16 is_stmt 0 view .LVU151
+ 707 001e 8DF80300 		strb	r0, [sp, #3]
+ 250:Core/Src/si4463.c ****     l_Cmd[ 4 ] = Start_Prop;
+ 708              		.loc 1 250 5 is_stmt 1 view .LVU152
+ 250:Core/Src/si4463.c ****     l_Cmd[ 4 ] = Start_Prop;
+ 709              		.loc 1 250 16 is_stmt 0 view .LVU153
+ 710 0022 8DF80410 		strb	r1, [sp, #4]
+ 252:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 5 );	//发送命令设置属性
+ 711              		.loc 1 252 5 is_stmt 1 view .LVU154
+ 712 0026 0521     		movs	r1, #5
+ 713              	.LVL70:
+ 252:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 5 );	//发送命令设置属性
+ 714              		.loc 1 252 5 is_stmt 0 view .LVU155
+ 715 0028 6846     		mov	r0, sp
+ 716              	.LVL71:
+ 252:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 5 );	//发送命令设置属性
+ 717              		.loc 1 252 5 view .LVU156
+ 718 002a FFF7FEFF 		bl	SI446x_Write_Cmds
+ 719              	.LVL72:
+ 253:Core/Src/si4463.c **** }
+ 720              		.loc 1 253 1 view .LVU157
+ 721 002e 03B0     		add	sp, sp, #12
+ 722              	.LCFI19:
+ 723              		.cfi_def_cfa_offset 4
+ 724              		@ sp needed
+ 725 0030 5DF804FB 		ldr	pc, [sp], #4
+ 726              		.cfi_endproc
+ 727              	.LFE145:
+ 729              		.section	.text.SI446x_Set_Power,"ax",%progbits
+ 730              		.align	1
+ 731              		.global	SI446x_Set_Power
+ 732              		.syntax unified
+ 733              		.thumb
+ 734              		.thumb_func
+ 735              		.fpu fpv4-sp-d16
+ 737              	SI446x_Set_Power:
+ 738              	.LVL73:
+ 739              	.LFB161:
+ 629:Core/Src/si4463.c **** {
+ 740              		.loc 1 629 1 is_stmt 1 view -0
+ 741              		.cfi_startproc
+ 742              		@ args = 0, pretend = 0, frame = 0
+ 743              		@ frame_needed = 0, uses_anonymous_args = 0
+ 629:Core/Src/si4463.c **** {
+ARM GAS  /tmp/ccZQTl50.s 			page 27
+
+
+ 744              		.loc 1 629 1 is_stmt 0 view .LVU159
+ 745 0000 08B5     		push	{r3, lr}
+ 746              	.LCFI20:
+ 747              		.cfi_def_cfa_offset 8
+ 748              		.cfi_offset 3, -8
+ 749              		.cfi_offset 14, -4
+ 750 0002 0146     		mov	r1, r0
+ 630:Core/Src/si4463.c ****     SI446x_Set_Property_1( PA_PWR_LVL, PowerLevel );
+ 751              		.loc 1 630 5 is_stmt 1 view .LVU160
+ 752 0004 42F20120 		movw	r0, #8705
+ 753              	.LVL74:
+ 630:Core/Src/si4463.c ****     SI446x_Set_Property_1( PA_PWR_LVL, PowerLevel );
+ 754              		.loc 1 630 5 is_stmt 0 view .LVU161
+ 755 0008 FFF7FEFF 		bl	SI446x_Set_Property_1
+ 756              	.LVL75:
+ 631:Core/Src/si4463.c **** }
+ 757              		.loc 1 631 1 view .LVU162
+ 758 000c 08BD     		pop	{r3, pc}
+ 759              		.cfi_endproc
+ 760              	.LFE161:
+ 762              		.section	.text.SI446x_Reset_RxFifo,"ax",%progbits
+ 763              		.align	1
+ 764              		.global	SI446x_Reset_RxFifo
+ 765              		.syntax unified
+ 766              		.thumb
+ 767              		.thumb_func
+ 768              		.fpu fpv4-sp-d16
+ 770              	SI446x_Reset_RxFifo:
+ 771              	.LFB151:
+ 386:Core/Src/si4463.c **** {
+ 772              		.loc 1 386 1 is_stmt 1 view -0
+ 773              		.cfi_startproc
+ 774              		@ args = 0, pretend = 0, frame = 8
+ 775              		@ frame_needed = 0, uses_anonymous_args = 0
+ 776 0000 00B5     		push	{lr}
+ 777              	.LCFI21:
+ 778              		.cfi_def_cfa_offset 4
+ 779              		.cfi_offset 14, -4
+ 780 0002 83B0     		sub	sp, sp, #12
+ 781              	.LCFI22:
+ 782              		.cfi_def_cfa_offset 16
+ 387:Core/Src/si4463.c ****     uint8_t l_Cmd[ 2 ] = { 0 };
+ 783              		.loc 1 387 5 view .LVU164
+ 387:Core/Src/si4463.c ****     uint8_t l_Cmd[ 2 ] = { 0 };
+ 784              		.loc 1 387 13 is_stmt 0 view .LVU165
+ 785 0004 0023     		movs	r3, #0
+ 786 0006 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 389:Core/Src/si4463.c ****     l_Cmd[ 0 ] = FIFO_INFO;
+ 787              		.loc 1 389 5 is_stmt 1 view .LVU166
+ 389:Core/Src/si4463.c ****     l_Cmd[ 0 ] = FIFO_INFO;
+ 788              		.loc 1 389 16 is_stmt 0 view .LVU167
+ 789 000a 1523     		movs	r3, #21
+ 790 000c 8DF80430 		strb	r3, [sp, #4]
+ 390:Core/Src/si4463.c ****     l_Cmd[ 1 ] = 0x02;
+ 791              		.loc 1 390 5 is_stmt 1 view .LVU168
+ 390:Core/Src/si4463.c ****     l_Cmd[ 1 ] = 0x02;
+ 792              		.loc 1 390 16 is_stmt 0 view .LVU169
+ARM GAS  /tmp/ccZQTl50.s 			page 28
+
+
+ 793 0010 0221     		movs	r1, #2
+ 794 0012 8DF80510 		strb	r1, [sp, #5]
+ 391:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 2 );
+ 795              		.loc 1 391 5 is_stmt 1 view .LVU170
+ 796 0016 01A8     		add	r0, sp, #4
+ 797 0018 FFF7FEFF 		bl	SI446x_Write_Cmds
+ 798              	.LVL76:
+ 392:Core/Src/si4463.c **** }
+ 799              		.loc 1 392 1 is_stmt 0 view .LVU171
+ 800 001c 03B0     		add	sp, sp, #12
+ 801              	.LCFI23:
+ 802              		.cfi_def_cfa_offset 4
+ 803              		@ sp needed
+ 804 001e 5DF804FB 		ldr	pc, [sp], #4
+ 805              		.cfi_endproc
+ 806              	.LFE151:
+ 808              		.section	.text.SI446x_Reset_TxFifo,"ax",%progbits
+ 809              		.align	1
+ 810              		.global	SI446x_Reset_TxFifo
+ 811              		.syntax unified
+ 812              		.thumb
+ 813              		.thumb_func
+ 814              		.fpu fpv4-sp-d16
+ 816              	SI446x_Reset_TxFifo:
+ 817              	.LFB152:
+ 401:Core/Src/si4463.c **** {
+ 818              		.loc 1 401 1 is_stmt 1 view -0
+ 819              		.cfi_startproc
+ 820              		@ args = 0, pretend = 0, frame = 8
+ 821              		@ frame_needed = 0, uses_anonymous_args = 0
+ 822 0000 00B5     		push	{lr}
+ 823              	.LCFI24:
+ 824              		.cfi_def_cfa_offset 4
+ 825              		.cfi_offset 14, -4
+ 826 0002 83B0     		sub	sp, sp, #12
+ 827              	.LCFI25:
+ 828              		.cfi_def_cfa_offset 16
+ 402:Core/Src/si4463.c ****     uint8_t l_Cmd[ 2 ] = { 0 };
+ 829              		.loc 1 402 5 view .LVU173
+ 402:Core/Src/si4463.c ****     uint8_t l_Cmd[ 2 ] = { 0 };
+ 830              		.loc 1 402 13 is_stmt 0 view .LVU174
+ 831 0004 0023     		movs	r3, #0
+ 832 0006 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 404:Core/Src/si4463.c ****     l_Cmd[0] = FIFO_INFO;
+ 833              		.loc 1 404 5 is_stmt 1 view .LVU175
+ 404:Core/Src/si4463.c ****     l_Cmd[0] = FIFO_INFO;
+ 834              		.loc 1 404 14 is_stmt 0 view .LVU176
+ 835 000a 1523     		movs	r3, #21
+ 836 000c 8DF80430 		strb	r3, [sp, #4]
+ 405:Core/Src/si4463.c ****     l_Cmd[1] = 0x02;
+ 837              		.loc 1 405 5 is_stmt 1 view .LVU177
+ 405:Core/Src/si4463.c ****     l_Cmd[1] = 0x02;
+ 838              		.loc 1 405 14 is_stmt 0 view .LVU178
+ 839 0010 0221     		movs	r1, #2
+ 840 0012 8DF80510 		strb	r1, [sp, #5]
+ 406:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 2 );
+ 841              		.loc 1 406 5 is_stmt 1 view .LVU179
+ARM GAS  /tmp/ccZQTl50.s 			page 29
+
+
+ 842 0016 01A8     		add	r0, sp, #4
+ 843 0018 FFF7FEFF 		bl	SI446x_Write_Cmds
+ 844              	.LVL77:
+ 407:Core/Src/si4463.c **** }
+ 845              		.loc 1 407 1 is_stmt 0 view .LVU180
+ 846 001c 03B0     		add	sp, sp, #12
+ 847              	.LCFI26:
+ 848              		.cfi_def_cfa_offset 4
+ 849              		@ sp needed
+ 850 001e 5DF804FB 		ldr	pc, [sp], #4
+ 851              		.cfi_endproc
+ 852              	.LFE152:
+ 854              		.section	.text.SI446x_Send_Packet,"ax",%progbits
+ 855              		.align	1
+ 856              		.global	SI446x_Send_Packet
+ 857              		.syntax unified
+ 858              		.thumb
+ 859              		.thumb_func
+ 860              		.fpu fpv4-sp-d16
+ 862              	SI446x_Send_Packet:
+ 863              	.LVL78:
+ 864              	.LFB153:
+ 420:Core/Src/si4463.c **** {
+ 865              		.loc 1 420 1 is_stmt 1 view -0
+ 866              		.cfi_startproc
+ 867              		@ args = 0, pretend = 0, frame = 8
+ 868              		@ frame_needed = 0, uses_anonymous_args = 0
+ 420:Core/Src/si4463.c **** {
+ 869              		.loc 1 420 1 is_stmt 0 view .LVU182
+ 870 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 871              	.LCFI27:
+ 872              		.cfi_def_cfa_offset 28
+ 873              		.cfi_offset 4, -28
+ 874              		.cfi_offset 5, -24
+ 875              		.cfi_offset 6, -20
+ 876              		.cfi_offset 7, -16
+ 877              		.cfi_offset 8, -12
+ 878              		.cfi_offset 9, -8
+ 879              		.cfi_offset 14, -4
+ 880 0004 83B0     		sub	sp, sp, #12
+ 881              	.LCFI28:
+ 882              		.cfi_def_cfa_offset 40
+ 883 0006 0546     		mov	r5, r0
+ 884 0008 0E46     		mov	r6, r1
+ 885 000a 9146     		mov	r9, r2
+ 886 000c 9846     		mov	r8, r3
+ 421:Core/Src/si4463.c ****     uint8_t l_Cmd[ 5 ] = { 0 };
+ 887              		.loc 1 421 5 is_stmt 1 view .LVU183
+ 421:Core/Src/si4463.c ****     uint8_t l_Cmd[ 5 ] = { 0 };
+ 888              		.loc 1 421 13 is_stmt 0 view .LVU184
+ 889 000e 0024     		movs	r4, #0
+ 890 0010 0094     		str	r4, [sp]
+ 891 0012 8DF80440 		strb	r4, [sp, #4]
+ 422:Core/Src/si4463.c ****     uint8_t tx_len = Length;
+ 892              		.loc 1 422 5 is_stmt 1 view .LVU185
+ 893              	.LVL79:
+ 424:Core/Src/si4463.c ****     SI446x_Reset_TxFifo( );		//清空TX FIFO
+ARM GAS  /tmp/ccZQTl50.s 			page 30
+
+
+ 894              		.loc 1 424 5 view .LVU186
+ 895 0016 FFF7FEFF 		bl	SI446x_Reset_TxFifo
+ 896              	.LVL80:
+ 426:Core/Src/si4463.c ****     SI446X_CS_LOW;		
+ 897              		.loc 1 426 5 view .LVU187
+ 898 001a 2246     		mov	r2, r4
+ 899 001c 1021     		movs	r1, #16
+ 900 001e 1748     		ldr	r0, .L58
+ 901 0020 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 902              	.LVL81:
+ 428:Core/Src/si4463.c ****     SI446x_SPI_TransmitReceive( WRITE_TX_FIFO );	//写TX FIFO命令
+ 903              		.loc 1 428 5 view .LVU188
+ 904 0024 6620     		movs	r0, #102
+ 905 0026 FFF7FEFF 		bl	SI446x_SPI_TransmitReceive
+ 906              	.LVL82:
+ 432:Core/Src/si4463.c ****     tx_len ++;
+ 907              		.loc 1 432 5 view .LVU189
+ 432:Core/Src/si4463.c ****     tx_len ++;
+ 908              		.loc 1 432 12 is_stmt 0 view .LVU190
+ 909 002a 771C     		adds	r7, r6, #1
+ 910 002c FFB2     		uxtb	r7, r7
+ 911              	.LVL83:
+ 433:Core/Src/si4463.c ****     SI446x_SPI_TransmitReceive( Length );
+ 912              		.loc 1 433 5 is_stmt 1 view .LVU191
+ 913 002e 3046     		mov	r0, r6
+ 914 0030 FFF7FEFF 		bl	SI446x_SPI_TransmitReceive
+ 915              	.LVL84:
+ 437:Core/Src/si4463.c ****     while( Length-- )    
+ 916              		.loc 1 437 5 view .LVU192
+ 437:Core/Src/si4463.c ****     while( Length-- )    
+ 917              		.loc 1 437 10 is_stmt 0 view .LVU193
+ 918 0034 04E0     		b	.L55
+ 919              	.LVL85:
+ 920              	.L56:
+ 439:Core/Src/si4463.c **** 		SI446x_SPI_TransmitReceive( *pTxData++ ); 	//写数据到TX FIFO
+ 921              		.loc 1 439 3 is_stmt 1 view .LVU194
+ 439:Core/Src/si4463.c **** 		SI446x_SPI_TransmitReceive( *pTxData++ ); 	//写数据到TX FIFO
+ 922              		.loc 1 439 3 is_stmt 0 view .LVU195
+ 923 0036 15F8010B 		ldrb	r0, [r5], #1	@ zero_extendqisi2
+ 924              	.LVL86:
+ 439:Core/Src/si4463.c **** 		SI446x_SPI_TransmitReceive( *pTxData++ ); 	//写数据到TX FIFO
+ 925              		.loc 1 439 3 view .LVU196
+ 926 003a FFF7FEFF 		bl	SI446x_SPI_TransmitReceive
+ 927              	.LVL87:
+ 437:Core/Src/si4463.c ****     while( Length-- )    
+ 928              		.loc 1 437 18 view .LVU197
+ 929 003e 2646     		mov	r6, r4
+ 930              	.LVL88:
+ 931              	.L55:
+ 437:Core/Src/si4463.c ****     while( Length-- )    
+ 932              		.loc 1 437 10 is_stmt 1 view .LVU198
+ 437:Core/Src/si4463.c ****     while( Length-- )    
+ 933              		.loc 1 437 18 is_stmt 0 view .LVU199
+ 934 0040 06F1FF3C 		add	ip, r6, #-1
+ 935 0044 5FFA8CF4 		uxtb	r4, ip
+ 936              	.LVL89:
+ 437:Core/Src/si4463.c ****     while( Length-- )    
+ARM GAS  /tmp/ccZQTl50.s 			page 31
+
+
+ 937              		.loc 1 437 10 view .LVU200
+ 938 0048 002E     		cmp	r6, #0
+ 939 004a F4D1     		bne	.L56
+ 442:Core/Src/si4463.c ****     SI446X_CS_HIGH;
+ 940              		.loc 1 442 5 is_stmt 1 view .LVU201
+ 941 004c 0122     		movs	r2, #1
+ 942 004e 1021     		movs	r1, #16
+ 943 0050 0A48     		ldr	r0, .L58
+ 944 0052 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 945              	.LVL90:
+ 444:Core/Src/si4463.c ****     l_Cmd[ 0 ] = START_TX;
+ 946              		.loc 1 444 5 view .LVU202
+ 444:Core/Src/si4463.c ****     l_Cmd[ 0 ] = START_TX;
+ 947              		.loc 1 444 16 is_stmt 0 view .LVU203
+ 948 0056 3123     		movs	r3, #49
+ 949 0058 8DF80030 		strb	r3, [sp]
+ 445:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Channel;
+ 950              		.loc 1 445 5 is_stmt 1 view .LVU204
+ 445:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Channel;
+ 951              		.loc 1 445 16 is_stmt 0 view .LVU205
+ 952 005c 8DF80190 		strb	r9, [sp, #1]
+ 446:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Condition;
+ 953              		.loc 1 446 5 is_stmt 1 view .LVU206
+ 446:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Condition;
+ 954              		.loc 1 446 16 is_stmt 0 view .LVU207
+ 955 0060 8DF80280 		strb	r8, [sp, #2]
+ 447:Core/Src/si4463.c ****     l_Cmd[ 3 ] = 0;
+ 956              		.loc 1 447 5 is_stmt 1 view .LVU208
+ 447:Core/Src/si4463.c ****     l_Cmd[ 3 ] = 0;
+ 957              		.loc 1 447 16 is_stmt 0 view .LVU209
+ 958 0064 0023     		movs	r3, #0
+ 959 0066 8DF80330 		strb	r3, [sp, #3]
+ 448:Core/Src/si4463.c ****     l_Cmd[ 4 ] = tx_len;
+ 960              		.loc 1 448 5 is_stmt 1 view .LVU210
+ 448:Core/Src/si4463.c ****     l_Cmd[ 4 ] = tx_len;
+ 961              		.loc 1 448 16 is_stmt 0 view .LVU211
+ 962 006a 8DF80470 		strb	r7, [sp, #4]
+ 450:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 5 );		//发送数据包
+ 963              		.loc 1 450 5 is_stmt 1 view .LVU212
+ 964 006e 0521     		movs	r1, #5
+ 965 0070 6846     		mov	r0, sp
+ 966 0072 FFF7FEFF 		bl	SI446x_Write_Cmds
+ 967              	.LVL91:
+ 451:Core/Src/si4463.c **** }
+ 968              		.loc 1 451 1 is_stmt 0 view .LVU213
+ 969 0076 03B0     		add	sp, sp, #12
+ 970              	.LCFI29:
+ 971              		.cfi_def_cfa_offset 28
+ 972              		@ sp needed
+ 973 0078 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 974              	.LVL92:
+ 975              	.L59:
+ 451:Core/Src/si4463.c **** }
+ 976              		.loc 1 451 1 view .LVU214
+ 977              		.align	2
+ 978              	.L58:
+ 979 007c 00000240 		.word	1073872896
+ARM GAS  /tmp/ccZQTl50.s 			page 32
+
+
+ 980              		.cfi_endproc
+ 981              	.LFE153:
+ 983              		.section	.text.SI446x_Start_Tx,"ax",%progbits
+ 984              		.align	1
+ 985              		.global	SI446x_Start_Tx
+ 986              		.syntax unified
+ 987              		.thumb
+ 988              		.thumb_func
+ 989              		.fpu fpv4-sp-d16
+ 991              	SI446x_Start_Tx:
+ 992              	.LVL93:
+ 993              	.LFB154:
+ 463:Core/Src/si4463.c **** {
+ 994              		.loc 1 463 1 is_stmt 1 view -0
+ 995              		.cfi_startproc
+ 996              		@ args = 0, pretend = 0, frame = 8
+ 997              		@ frame_needed = 0, uses_anonymous_args = 0
+ 463:Core/Src/si4463.c **** {
+ 998              		.loc 1 463 1 is_stmt 0 view .LVU216
+ 999 0000 00B5     		push	{lr}
+ 1000              	.LCFI30:
+ 1001              		.cfi_def_cfa_offset 4
+ 1002              		.cfi_offset 14, -4
+ 1003 0002 83B0     		sub	sp, sp, #12
+ 1004              	.LCFI31:
+ 1005              		.cfi_def_cfa_offset 16
+ 464:Core/Src/si4463.c ****     uint8_t l_Cmd[5] = { 0 };
+ 1006              		.loc 1 464 5 is_stmt 1 view .LVU217
+ 464:Core/Src/si4463.c ****     uint8_t l_Cmd[5] = { 0 };
+ 1007              		.loc 1 464 13 is_stmt 0 view .LVU218
+ 1008 0004 0023     		movs	r3, #0
+ 1009 0006 0093     		str	r3, [sp]
+ 1010 0008 8DF80430 		strb	r3, [sp, #4]
+ 466:Core/Src/si4463.c ****     l_Cmd[ 0 ] = START_TX;		
+ 1011              		.loc 1 466 5 is_stmt 1 view .LVU219
+ 466:Core/Src/si4463.c ****     l_Cmd[ 0 ] = START_TX;		
+ 1012              		.loc 1 466 16 is_stmt 0 view .LVU220
+ 1013 000c 3123     		movs	r3, #49
+ 1014 000e 8DF80030 		strb	r3, [sp]
+ 467:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Channel;
+ 1015              		.loc 1 467 5 is_stmt 1 view .LVU221
+ 467:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Channel;
+ 1016              		.loc 1 467 16 is_stmt 0 view .LVU222
+ 1017 0012 8DF80100 		strb	r0, [sp, #1]
+ 468:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Condition;
+ 1018              		.loc 1 468 5 is_stmt 1 view .LVU223
+ 468:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Condition;
+ 1019              		.loc 1 468 16 is_stmt 0 view .LVU224
+ 1020 0016 8DF80210 		strb	r1, [sp, #2]
+ 469:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Length >> 8;
+ 1021              		.loc 1 469 5 is_stmt 1 view .LVU225
+ 469:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Length >> 8;
+ 1022              		.loc 1 469 16 is_stmt 0 view .LVU226
+ 1023 001a 130A     		lsrs	r3, r2, #8
+ 1024 001c 8DF80330 		strb	r3, [sp, #3]
+ 470:Core/Src/si4463.c ****     l_Cmd[ 4 ] = Length;
+ 1025              		.loc 1 470 5 is_stmt 1 view .LVU227
+ARM GAS  /tmp/ccZQTl50.s 			page 33
+
+
+ 470:Core/Src/si4463.c ****     l_Cmd[ 4 ] = Length;
+ 1026              		.loc 1 470 16 is_stmt 0 view .LVU228
+ 1027 0020 8DF80420 		strb	r2, [sp, #4]
+ 472:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 5 );
+ 1028              		.loc 1 472 5 is_stmt 1 view .LVU229
+ 1029 0024 0521     		movs	r1, #5
+ 1030              	.LVL94:
+ 472:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 5 );
+ 1031              		.loc 1 472 5 is_stmt 0 view .LVU230
+ 1032 0026 6846     		mov	r0, sp
+ 1033              	.LVL95:
+ 472:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 5 );
+ 1034              		.loc 1 472 5 view .LVU231
+ 1035 0028 FFF7FEFF 		bl	SI446x_Write_Cmds
+ 1036              	.LVL96:
+ 473:Core/Src/si4463.c **** }
+ 1037              		.loc 1 473 1 view .LVU232
+ 1038 002c 03B0     		add	sp, sp, #12
+ 1039              	.LCFI32:
+ 1040              		.cfi_def_cfa_offset 4
+ 1041              		@ sp needed
+ 1042 002e 5DF804FB 		ldr	pc, [sp], #4
+ 1043              		.cfi_endproc
+ 1044              	.LFE154:
+ 1046              		.section	.text.SI446x_Start_Rx,"ax",%progbits
+ 1047              		.align	1
+ 1048              		.global	SI446x_Start_Rx
+ 1049              		.syntax unified
+ 1050              		.thumb
+ 1051              		.thumb_func
+ 1052              		.fpu fpv4-sp-d16
+ 1054              	SI446x_Start_Rx:
+ 1055              	.LVL97:
+ 1056              	.LFB156:
+ 525:Core/Src/si4463.c **** {
+ 1057              		.loc 1 525 1 is_stmt 1 view -0
+ 1058              		.cfi_startproc
+ 1059              		@ args = 8, pretend = 0, frame = 8
+ 1060              		@ frame_needed = 0, uses_anonymous_args = 0
+ 525:Core/Src/si4463.c **** {
+ 1061              		.loc 1 525 1 is_stmt 0 view .LVU234
+ 1062 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 1063              	.LCFI33:
+ 1064              		.cfi_def_cfa_offset 20
+ 1065              		.cfi_offset 4, -20
+ 1066              		.cfi_offset 5, -16
+ 1067              		.cfi_offset 6, -12
+ 1068              		.cfi_offset 7, -8
+ 1069              		.cfi_offset 14, -4
+ 1070 0002 83B0     		sub	sp, sp, #12
+ 1071              	.LCFI34:
+ 1072              		.cfi_def_cfa_offset 32
+ 1073 0004 0746     		mov	r7, r0
+ 1074 0006 0E46     		mov	r6, r1
+ 1075 0008 1446     		mov	r4, r2
+ 1076 000a 1D46     		mov	r5, r3
+ 526:Core/Src/si4463.c ****     uint8_t l_Cmd[ 8 ] = { 0 };
+ARM GAS  /tmp/ccZQTl50.s 			page 34
+
+
+ 1077              		.loc 1 526 5 is_stmt 1 view .LVU235
+ 526:Core/Src/si4463.c ****     uint8_t l_Cmd[ 8 ] = { 0 };
+ 1078              		.loc 1 526 13 is_stmt 0 view .LVU236
+ 1079 000c 0023     		movs	r3, #0
+ 1080              	.LVL98:
+ 526:Core/Src/si4463.c ****     uint8_t l_Cmd[ 8 ] = { 0 };
+ 1081              		.loc 1 526 13 view .LVU237
+ 1082 000e 0093     		str	r3, [sp]
+ 1083 0010 0193     		str	r3, [sp, #4]
+ 528:Core/Src/si4463.c ****     SI446x_Reset_RxFifo( );
+ 1084              		.loc 1 528 5 is_stmt 1 view .LVU238
+ 1085 0012 FFF7FEFF 		bl	SI446x_Reset_RxFifo
+ 1086              	.LVL99:
+ 529:Core/Src/si4463.c ****     SI446x_Reset_TxFifo( );
+ 1087              		.loc 1 529 5 view .LVU239
+ 1088 0016 FFF7FEFF 		bl	SI446x_Reset_TxFifo
+ 1089              	.LVL100:
+ 531:Core/Src/si4463.c ****     l_Cmd[ 0 ] = START_RX;
+ 1090              		.loc 1 531 5 view .LVU240
+ 531:Core/Src/si4463.c ****     l_Cmd[ 0 ] = START_RX;
+ 1091              		.loc 1 531 16 is_stmt 0 view .LVU241
+ 1092 001a 3223     		movs	r3, #50
+ 1093 001c 8DF80030 		strb	r3, [sp]
+ 532:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Channel;
+ 1094              		.loc 1 532 5 is_stmt 1 view .LVU242
+ 532:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Channel;
+ 1095              		.loc 1 532 16 is_stmt 0 view .LVU243
+ 1096 0020 8DF80170 		strb	r7, [sp, #1]
+ 533:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Condition;
+ 1097              		.loc 1 533 5 is_stmt 1 view .LVU244
+ 533:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Condition;
+ 1098              		.loc 1 533 16 is_stmt 0 view .LVU245
+ 1099 0024 8DF80260 		strb	r6, [sp, #2]
+ 534:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Length >> 8;
+ 1100              		.loc 1 534 5 is_stmt 1 view .LVU246
+ 534:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Length >> 8;
+ 1101              		.loc 1 534 16 is_stmt 0 view .LVU247
+ 1102 0028 230A     		lsrs	r3, r4, #8
+ 1103 002a 8DF80330 		strb	r3, [sp, #3]
+ 535:Core/Src/si4463.c ****     l_Cmd[ 4 ] = Length;
+ 1104              		.loc 1 535 5 is_stmt 1 view .LVU248
+ 535:Core/Src/si4463.c ****     l_Cmd[ 4 ] = Length;
+ 1105              		.loc 1 535 16 is_stmt 0 view .LVU249
+ 1106 002e 8DF80440 		strb	r4, [sp, #4]
+ 536:Core/Src/si4463.c ****     l_Cmd[ 5 ] = Next_State1;
+ 1107              		.loc 1 536 5 is_stmt 1 view .LVU250
+ 536:Core/Src/si4463.c ****     l_Cmd[ 5 ] = Next_State1;
+ 1108              		.loc 1 536 16 is_stmt 0 view .LVU251
+ 1109 0032 8DF80550 		strb	r5, [sp, #5]
+ 537:Core/Src/si4463.c ****     l_Cmd[ 6 ] = Next_State2;
+ 1110              		.loc 1 537 5 is_stmt 1 view .LVU252
+ 537:Core/Src/si4463.c ****     l_Cmd[ 6 ] = Next_State2;
+ 1111              		.loc 1 537 16 is_stmt 0 view .LVU253
+ 1112 0036 9DF82030 		ldrb	r3, [sp, #32]	@ zero_extendqisi2
+ 1113 003a 8DF80630 		strb	r3, [sp, #6]
+ 538:Core/Src/si4463.c ****     l_Cmd[ 7 ] = Next_State3;
+ 1114              		.loc 1 538 5 is_stmt 1 view .LVU254
+ARM GAS  /tmp/ccZQTl50.s 			page 35
+
+
+ 538:Core/Src/si4463.c ****     l_Cmd[ 7 ] = Next_State3;
+ 1115              		.loc 1 538 16 is_stmt 0 view .LVU255
+ 1116 003e 9DF82430 		ldrb	r3, [sp, #36]	@ zero_extendqisi2
+ 1117 0042 8DF80730 		strb	r3, [sp, #7]
+ 540:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 8 );
+ 1118              		.loc 1 540 5 is_stmt 1 view .LVU256
+ 1119 0046 0821     		movs	r1, #8
+ 1120 0048 6846     		mov	r0, sp
+ 1121 004a FFF7FEFF 		bl	SI446x_Write_Cmds
+ 1122              	.LVL101:
+ 541:Core/Src/si4463.c **** }
+ 1123              		.loc 1 541 1 is_stmt 0 view .LVU257
+ 1124 004e 03B0     		add	sp, sp, #12
+ 1125              	.LCFI35:
+ 1126              		.cfi_def_cfa_offset 20
+ 1127              		@ sp needed
+ 1128 0050 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 541:Core/Src/si4463.c **** }
+ 1129              		.loc 1 541 1 view .LVU258
+ 1130              		.cfi_endproc
+ 1131              	.LFE156:
+ 1133              		.section	.text.SI446x_Change_Status,"ax",%progbits
+ 1134              		.align	1
+ 1135              		.global	SI446x_Change_Status
+ 1136              		.syntax unified
+ 1137              		.thumb
+ 1138              		.thumb_func
+ 1139              		.fpu fpv4-sp-d16
+ 1141              	SI446x_Change_Status:
+ 1142              	.LVL102:
+ 1143              	.LFB159:
+ 594:Core/Src/si4463.c **** {
+ 1144              		.loc 1 594 1 is_stmt 1 view -0
+ 1145              		.cfi_startproc
+ 1146              		@ args = 0, pretend = 0, frame = 8
+ 1147              		@ frame_needed = 0, uses_anonymous_args = 0
+ 594:Core/Src/si4463.c **** {
+ 1148              		.loc 1 594 1 is_stmt 0 view .LVU260
+ 1149 0000 00B5     		push	{lr}
+ 1150              	.LCFI36:
+ 1151              		.cfi_def_cfa_offset 4
+ 1152              		.cfi_offset 14, -4
+ 1153 0002 83B0     		sub	sp, sp, #12
+ 1154              	.LCFI37:
+ 1155              		.cfi_def_cfa_offset 16
+ 595:Core/Src/si4463.c ****     uint8_t l_Cmd[ 2 ] = { 0 };
+ 1156              		.loc 1 595 5 is_stmt 1 view .LVU261
+ 595:Core/Src/si4463.c ****     uint8_t l_Cmd[ 2 ] = { 0 };
+ 1157              		.loc 1 595 13 is_stmt 0 view .LVU262
+ 1158 0004 0023     		movs	r3, #0
+ 1159 0006 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 597:Core/Src/si4463.c ****     l_Cmd[ 0 ] = CHANGE_STATE;
+ 1160              		.loc 1 597 5 is_stmt 1 view .LVU263
+ 597:Core/Src/si4463.c ****     l_Cmd[ 0 ] = CHANGE_STATE;
+ 1161              		.loc 1 597 16 is_stmt 0 view .LVU264
+ 1162 000a 3423     		movs	r3, #52
+ 1163 000c 8DF80430 		strb	r3, [sp, #4]
+ARM GAS  /tmp/ccZQTl50.s 			page 36
+
+
+ 598:Core/Src/si4463.c ****     l_Cmd[ 1 ] = NextStatus;
+ 1164              		.loc 1 598 5 is_stmt 1 view .LVU265
+ 598:Core/Src/si4463.c ****     l_Cmd[ 1 ] = NextStatus;
+ 1165              		.loc 1 598 16 is_stmt 0 view .LVU266
+ 1166 0010 8DF80500 		strb	r0, [sp, #5]
+ 600:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 2 );
+ 1167              		.loc 1 600 5 is_stmt 1 view .LVU267
+ 1168 0014 0221     		movs	r1, #2
+ 1169 0016 01A8     		add	r0, sp, #4
+ 1170              	.LVL103:
+ 600:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 2 );
+ 1171              		.loc 1 600 5 is_stmt 0 view .LVU268
+ 1172 0018 FFF7FEFF 		bl	SI446x_Write_Cmds
+ 1173              	.LVL104:
+ 601:Core/Src/si4463.c **** }
+ 1174              		.loc 1 601 1 view .LVU269
+ 1175 001c 03B0     		add	sp, sp, #12
+ 1176              	.LCFI38:
+ 1177              		.cfi_def_cfa_offset 4
+ 1178              		@ sp needed
+ 1179 001e 5DF804FB 		ldr	pc, [sp], #4
+ 1180              		.cfi_endproc
+ 1181              	.LFE159:
+ 1183              		.section	.text.SI446x_Read_Response,"ax",%progbits
+ 1184              		.align	1
+ 1185              		.global	SI446x_Read_Response
+ 1186              		.syntax unified
+ 1187              		.thumb
+ 1188              		.thumb_func
+ 1189              		.fpu fpv4-sp-d16
+ 1191              	SI446x_Read_Response:
+ 1192              	.LVL105:
+ 1193              	.LFB138:
+  96:Core/Src/si4463.c **** {
+ 1194              		.loc 1 96 1 is_stmt 1 view -0
+ 1195              		.cfi_startproc
+ 1196              		@ args = 0, pretend = 0, frame = 0
+ 1197              		@ frame_needed = 0, uses_anonymous_args = 0
+  96:Core/Src/si4463.c **** {
+ 1198              		.loc 1 96 1 is_stmt 0 view .LVU271
+ 1199 0000 70B5     		push	{r4, r5, r6, lr}
+ 1200              	.LCFI39:
+ 1201              		.cfi_def_cfa_offset 16
+ 1202              		.cfi_offset 4, -16
+ 1203              		.cfi_offset 5, -12
+ 1204              		.cfi_offset 6, -8
+ 1205              		.cfi_offset 14, -4
+ 1206 0002 0646     		mov	r6, r0
+ 1207 0004 0D46     		mov	r5, r1
+  97:Core/Src/si4463.c ****     SI446x_Wait_CTS( );		//查询CTS状态
+ 1208              		.loc 1 97 5 is_stmt 1 view .LVU272
+ 1209 0006 FFF7FEFF 		bl	SI446x_Wait_CTS
+ 1210              	.LVL106:
+  98:Core/Src/si4463.c ****     SI446X_CS_LOW;		//SPI片选
+ 1211              		.loc 1 98 5 view .LVU273
+ 1212 000a 0022     		movs	r2, #0
+ 1213 000c 1021     		movs	r1, #16
+ARM GAS  /tmp/ccZQTl50.s 			page 37
+
+
+ 1214 000e 0B48     		ldr	r0, .L70
+ 1215 0010 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1216              	.LVL107:
+ 100:Core/Src/si4463.c **** 	SI446x_SPI_TransmitReceive( READ_CMD_BUFF );	//发送读命令
+ 1217              		.loc 1 100 2 view .LVU274
+ 1218 0014 4420     		movs	r0, #68
+ 1219 0016 FFF7FEFF 		bl	SI446x_SPI_TransmitReceive
+ 1220              	.LVL108:
+ 101:Core/Src/si4463.c **** 	while( Length-- )
+ 1221              		.loc 1 101 2 view .LVU275
+ 101:Core/Src/si4463.c **** 	while( Length-- )
+ 1222              		.loc 1 101 7 is_stmt 0 view .LVU276
+ 1223 001a 05E0     		b	.L67
+ 1224              	.LVL109:
+ 1225              	.L68:
+ 103:Core/Src/si4463.c ****         *pRead = SI446x_SPI_TransmitReceive( 0xFF );	//交换数据
+ 1226              		.loc 1 103 9 is_stmt 1 view .LVU277
+ 103:Core/Src/si4463.c ****         *pRead = SI446x_SPI_TransmitReceive( 0xFF );	//交换数据
+ 1227              		.loc 1 103 18 is_stmt 0 view .LVU278
+ 1228 001c FF20     		movs	r0, #255
+ 1229 001e FFF7FEFF 		bl	SI446x_SPI_TransmitReceive
+ 1230              	.LVL110:
+ 103:Core/Src/si4463.c ****         *pRead = SI446x_SPI_TransmitReceive( 0xFF );	//交换数据
+ 1231              		.loc 1 103 16 view .LVU279
+ 1232 0022 06F8010B 		strb	r0, [r6], #1
+ 1233              	.LVL111:
+ 104:Core/Src/si4463.c **** 		pRead++;
+ 1234              		.loc 1 104 3 is_stmt 1 view .LVU280
+ 101:Core/Src/si4463.c **** 	while( Length-- )
+ 1235              		.loc 1 101 15 is_stmt 0 view .LVU281
+ 1236 0026 2546     		mov	r5, r4
+ 1237              	.LVL112:
+ 1238              	.L67:
+ 101:Core/Src/si4463.c **** 	while( Length-- )
+ 1239              		.loc 1 101 7 is_stmt 1 view .LVU282
+ 101:Core/Src/si4463.c **** 	while( Length-- )
+ 1240              		.loc 1 101 15 is_stmt 0 view .LVU283
+ 1241 0028 6B1E     		subs	r3, r5, #1
+ 1242 002a DCB2     		uxtb	r4, r3
+ 1243              	.LVL113:
+ 101:Core/Src/si4463.c **** 	while( Length-- )
+ 1244              		.loc 1 101 7 view .LVU284
+ 1245 002c 002D     		cmp	r5, #0
+ 1246 002e F5D1     		bne	.L68
+ 107:Core/Src/si4463.c ****     SI446X_CS_HIGH;		//SPI取消片选
+ 1247              		.loc 1 107 5 is_stmt 1 view .LVU285
+ 1248 0030 0122     		movs	r2, #1
+ 1249 0032 1021     		movs	r1, #16
+ 1250 0034 0148     		ldr	r0, .L70
+ 1251 0036 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1252              	.LVL114:
+ 109:Core/Src/si4463.c **** }
+ 1253              		.loc 1 109 1 is_stmt 0 view .LVU286
+ 1254 003a 70BD     		pop	{r4, r5, r6, pc}
+ 1255              	.LVL115:
+ 1256              	.L71:
+ 109:Core/Src/si4463.c **** }
+ARM GAS  /tmp/ccZQTl50.s 			page 38
+
+
+ 1257              		.loc 1 109 1 view .LVU287
+ 1258              		.align	2
+ 1259              	.L70:
+ 1260 003c 00000240 		.word	1073872896
+ 1261              		.cfi_endproc
+ 1262              	.LFE138:
+ 1264              		.section	.text.SI446x_Get_Part_Informatoin,"ax",%progbits
+ 1265              		.align	1
+ 1266              		.global	SI446x_Get_Part_Informatoin
+ 1267              		.syntax unified
+ 1268              		.thumb
+ 1269              		.thumb_func
+ 1270              		.fpu fpv4-sp-d16
+ 1272              	SI446x_Get_Part_Informatoin:
+ 1273              	.LVL116:
+ 1274              	.LFB140:
+ 138:Core/Src/si4463.c **** {
+ 1275              		.loc 1 138 1 is_stmt 1 view -0
+ 1276              		.cfi_startproc
+ 1277              		@ args = 0, pretend = 0, frame = 8
+ 1278              		@ frame_needed = 0, uses_anonymous_args = 0
+ 138:Core/Src/si4463.c **** {
+ 1279              		.loc 1 138 1 is_stmt 0 view .LVU289
+ 1280 0000 10B5     		push	{r4, lr}
+ 1281              	.LCFI40:
+ 1282              		.cfi_def_cfa_offset 8
+ 1283              		.cfi_offset 4, -8
+ 1284              		.cfi_offset 14, -4
+ 1285 0002 82B0     		sub	sp, sp, #8
+ 1286              	.LCFI41:
+ 1287              		.cfi_def_cfa_offset 16
+ 1288 0004 0446     		mov	r4, r0
+ 139:Core/Src/si4463.c ****     uint8_t l_Cmd = PART_INFO;
+ 1289              		.loc 1 139 5 is_stmt 1 view .LVU290
+ 139:Core/Src/si4463.c ****     uint8_t l_Cmd = PART_INFO;
+ 1290              		.loc 1 139 13 is_stmt 0 view .LVU291
+ 1291 0006 0121     		movs	r1, #1
+ 1292 0008 8DF80710 		strb	r1, [sp, #7]
+ 141:Core/Src/si4463.c ****     SI446x_Write_Cmds( &l_Cmd, 1 );		//命令
+ 1293              		.loc 1 141 5 is_stmt 1 view .LVU292
+ 1294 000c 0DF10700 		add	r0, sp, #7
+ 1295              	.LVL117:
+ 141:Core/Src/si4463.c ****     SI446x_Write_Cmds( &l_Cmd, 1 );		//命令
+ 1296              		.loc 1 141 5 is_stmt 0 view .LVU293
+ 1297 0010 FFF7FEFF 		bl	SI446x_Write_Cmds
+ 1298              	.LVL118:
+ 142:Core/Src/si4463.c ****     SI446x_Read_Response( pRead, 8 );	//读设备基本信息
+ 1299              		.loc 1 142 5 is_stmt 1 view .LVU294
+ 1300 0014 0821     		movs	r1, #8
+ 1301 0016 2046     		mov	r0, r4
+ 1302 0018 FFF7FEFF 		bl	SI446x_Read_Response
+ 1303              	.LVL119:
+ 144:Core/Src/si4463.c **** }
+ 1304              		.loc 1 144 1 is_stmt 0 view .LVU295
+ 1305 001c 02B0     		add	sp, sp, #8
+ 1306              	.LCFI42:
+ 1307              		.cfi_def_cfa_offset 8
+ARM GAS  /tmp/ccZQTl50.s 			page 39
+
+
+ 1308              		@ sp needed
+ 1309 001e 10BD     		pop	{r4, pc}
+ 144:Core/Src/si4463.c **** }
+ 1310              		.loc 1 144 1 view .LVU296
+ 1311              		.cfi_endproc
+ 1312              	.LFE140:
+ 1314              		.section	.text.SI446x_Get_Fun_Informatoin,"ax",%progbits
+ 1315              		.align	1
+ 1316              		.global	SI446x_Get_Fun_Informatoin
+ 1317              		.syntax unified
+ 1318              		.thumb
+ 1319              		.thumb_func
+ 1320              		.fpu fpv4-sp-d16
+ 1322              	SI446x_Get_Fun_Informatoin:
+ 1323              	.LVL120:
+ 1324              	.LFB141:
+ 154:Core/Src/si4463.c **** {
+ 1325              		.loc 1 154 1 is_stmt 1 view -0
+ 1326              		.cfi_startproc
+ 1327              		@ args = 0, pretend = 0, frame = 8
+ 1328              		@ frame_needed = 0, uses_anonymous_args = 0
+ 154:Core/Src/si4463.c **** {
+ 1329              		.loc 1 154 1 is_stmt 0 view .LVU298
+ 1330 0000 10B5     		push	{r4, lr}
+ 1331              	.LCFI43:
+ 1332              		.cfi_def_cfa_offset 8
+ 1333              		.cfi_offset 4, -8
+ 1334              		.cfi_offset 14, -4
+ 1335 0002 82B0     		sub	sp, sp, #8
+ 1336              	.LCFI44:
+ 1337              		.cfi_def_cfa_offset 16
+ 1338 0004 0446     		mov	r4, r0
+ 155:Core/Src/si4463.c ****     uint8_t l_Cmd = FUNC_INFO;
+ 1339              		.loc 1 155 5 is_stmt 1 view .LVU299
+ 155:Core/Src/si4463.c ****     uint8_t l_Cmd = FUNC_INFO;
+ 1340              		.loc 1 155 13 is_stmt 0 view .LVU300
+ 1341 0006 1023     		movs	r3, #16
+ 1342 0008 8DF80730 		strb	r3, [sp, #7]
+ 157:Core/Src/si4463.c ****     SI446x_Write_Cmds( &l_Cmd, 1 );		//命令
+ 1343              		.loc 1 157 5 is_stmt 1 view .LVU301
+ 1344 000c 0121     		movs	r1, #1
+ 1345 000e 0DF10700 		add	r0, sp, #7
+ 1346              	.LVL121:
+ 157:Core/Src/si4463.c ****     SI446x_Write_Cmds( &l_Cmd, 1 );		//命令
+ 1347              		.loc 1 157 5 is_stmt 0 view .LVU302
+ 1348 0012 FFF7FEFF 		bl	SI446x_Write_Cmds
+ 1349              	.LVL122:
+ 158:Core/Src/si4463.c ****     SI446x_Read_Response( pRead, 7 );	//读设备功能版本信息
+ 1350              		.loc 1 158 5 is_stmt 1 view .LVU303
+ 1351 0016 0721     		movs	r1, #7
+ 1352 0018 2046     		mov	r0, r4
+ 1353 001a FFF7FEFF 		bl	SI446x_Read_Response
+ 1354              	.LVL123:
+ 159:Core/Src/si4463.c **** }
+ 1355              		.loc 1 159 1 is_stmt 0 view .LVU304
+ 1356 001e 02B0     		add	sp, sp, #8
+ 1357              	.LCFI45:
+ARM GAS  /tmp/ccZQTl50.s 			page 40
+
+
+ 1358              		.cfi_def_cfa_offset 8
+ 1359              		@ sp needed
+ 1360 0020 10BD     		pop	{r4, pc}
+ 159:Core/Src/si4463.c **** }
+ 1361              		.loc 1 159 1 view .LVU305
+ 1362              		.cfi_endproc
+ 1363              	.LFE141:
+ 1365              		.section	.text.SI446x_Interrupt_Status,"ax",%progbits
+ 1366              		.align	1
+ 1367              		.global	SI446x_Interrupt_Status
+ 1368              		.syntax unified
+ 1369              		.thumb
+ 1370              		.thumb_func
+ 1371              		.fpu fpv4-sp-d16
+ 1373              	SI446x_Interrupt_Status:
+ 1374              	.LVL124:
+ 1375              	.LFB142:
+ 169:Core/Src/si4463.c **** {
+ 1376              		.loc 1 169 1 is_stmt 1 view -0
+ 1377              		.cfi_startproc
+ 1378              		@ args = 0, pretend = 0, frame = 8
+ 1379              		@ frame_needed = 0, uses_anonymous_args = 0
+ 169:Core/Src/si4463.c **** {
+ 1380              		.loc 1 169 1 is_stmt 0 view .LVU307
+ 1381 0000 10B5     		push	{r4, lr}
+ 1382              	.LCFI46:
+ 1383              		.cfi_def_cfa_offset 8
+ 1384              		.cfi_offset 4, -8
+ 1385              		.cfi_offset 14, -4
+ 1386 0002 82B0     		sub	sp, sp, #8
+ 1387              	.LCFI47:
+ 1388              		.cfi_def_cfa_offset 16
+ 1389 0004 0446     		mov	r4, r0
+ 170:Core/Src/si4463.c ****     uint8_t l_Cmd[ 4 ] = { 0 };
+ 1390              		.loc 1 170 5 is_stmt 1 view .LVU308
+ 170:Core/Src/si4463.c ****     uint8_t l_Cmd[ 4 ] = { 0 };
+ 1391              		.loc 1 170 13 is_stmt 0 view .LVU309
+ 1392 0006 0023     		movs	r3, #0
+ 1393 0008 0193     		str	r3, [sp, #4]
+ 172:Core/Src/si4463.c ****     l_Cmd[0] = GET_INT_STATUS;		
+ 1394              		.loc 1 172 5 is_stmt 1 view .LVU310
+ 172:Core/Src/si4463.c ****     l_Cmd[0] = GET_INT_STATUS;		
+ 1395              		.loc 1 172 14 is_stmt 0 view .LVU311
+ 1396 000a 2023     		movs	r3, #32
+ 1397 000c 8DF80430 		strb	r3, [sp, #4]
+ 173:Core/Src/si4463.c ****     l_Cmd[1] = 0;
+ 1398              		.loc 1 173 5 is_stmt 1 view .LVU312
+ 174:Core/Src/si4463.c ****     l_Cmd[2] = 0;
+ 1399              		.loc 1 174 5 view .LVU313
+ 175:Core/Src/si4463.c ****     l_Cmd[3] = 0;
+ 1400              		.loc 1 175 5 view .LVU314
+ 177:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 4 );		//发送中断读取命令
+ 1401              		.loc 1 177 5 view .LVU315
+ 1402 0010 0421     		movs	r1, #4
+ 1403 0012 0DEB0100 		add	r0, sp, r1
+ 1404              	.LVL125:
+ 177:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 4 );		//发送中断读取命令
+ARM GAS  /tmp/ccZQTl50.s 			page 41
+
+
+ 1405              		.loc 1 177 5 is_stmt 0 view .LVU316
+ 1406 0016 FFF7FEFF 		bl	SI446x_Write_Cmds
+ 1407              	.LVL126:
+ 178:Core/Src/si4463.c ****     SI446x_Read_Response( pRead, 9 );	//读取状态
+ 1408              		.loc 1 178 5 is_stmt 1 view .LVU317
+ 1409 001a 0921     		movs	r1, #9
+ 1410 001c 2046     		mov	r0, r4
+ 1411 001e FFF7FEFF 		bl	SI446x_Read_Response
+ 1412              	.LVL127:
+ 179:Core/Src/si4463.c **** }
+ 1413              		.loc 1 179 1 is_stmt 0 view .LVU318
+ 1414 0022 02B0     		add	sp, sp, #8
+ 1415              	.LCFI48:
+ 1416              		.cfi_def_cfa_offset 8
+ 1417              		@ sp needed
+ 1418 0024 10BD     		pop	{r4, pc}
+ 179:Core/Src/si4463.c **** }
+ 1419              		.loc 1 179 1 view .LVU319
+ 1420              		.cfi_endproc
+ 1421              	.LFE142:
+ 1423              		.section	.text.SI446x_Get_Property,"ax",%progbits
+ 1424              		.align	1
+ 1425              		.global	SI446x_Get_Property
+ 1426              		.syntax unified
+ 1427              		.thumb
+ 1428              		.thumb_func
+ 1429              		.fpu fpv4-sp-d16
+ 1431              	SI446x_Get_Property:
+ 1432              	.LVL128:
+ 1433              	.LFB143:
+ 191:Core/Src/si4463.c **** {
+ 1434              		.loc 1 191 1 is_stmt 1 view -0
+ 1435              		.cfi_startproc
+ 1436              		@ args = 0, pretend = 0, frame = 8
+ 1437              		@ frame_needed = 0, uses_anonymous_args = 0
+ 191:Core/Src/si4463.c **** {
+ 1438              		.loc 1 191 1 is_stmt 0 view .LVU321
+ 1439 0000 30B5     		push	{r4, r5, lr}
+ 1440              	.LCFI49:
+ 1441              		.cfi_def_cfa_offset 12
+ 1442              		.cfi_offset 4, -12
+ 1443              		.cfi_offset 5, -8
+ 1444              		.cfi_offset 14, -4
+ 1445 0002 83B0     		sub	sp, sp, #12
+ 1446              	.LCFI50:
+ 1447              		.cfi_def_cfa_offset 24
+ 1448 0004 0C46     		mov	r4, r1
+ 1449 0006 1546     		mov	r5, r2
+ 192:Core/Src/si4463.c ****     uint8_t l_Cmd[ 4 ] = { 0 };
+ 1450              		.loc 1 192 5 is_stmt 1 view .LVU322
+ 192:Core/Src/si4463.c ****     uint8_t l_Cmd[ 4 ] = { 0 };
+ 1451              		.loc 1 192 13 is_stmt 0 view .LVU323
+ 1452 0008 0023     		movs	r3, #0
+ 1453 000a 0193     		str	r3, [sp, #4]
+ 194:Core/Src/si4463.c ****     l_Cmd[ 0 ] = GET_PROPERTY;
+ 1454              		.loc 1 194 5 is_stmt 1 view .LVU324
+ 194:Core/Src/si4463.c ****     l_Cmd[ 0 ] = GET_PROPERTY;
+ARM GAS  /tmp/ccZQTl50.s 			page 42
+
+
+ 1455              		.loc 1 194 16 is_stmt 0 view .LVU325
+ 1456 000c 1223     		movs	r3, #18
+ 1457 000e 8DF80430 		strb	r3, [sp, #4]
+ 195:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Group_Num >> 8;
+ 1458              		.loc 1 195 5 is_stmt 1 view .LVU326
+ 195:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Group_Num >> 8;
+ 1459              		.loc 1 195 16 is_stmt 0 view .LVU327
+ 1460 0012 030A     		lsrs	r3, r0, #8
+ 1461 0014 8DF80530 		strb	r3, [sp, #5]
+ 196:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Num_Props;
+ 1462              		.loc 1 196 5 is_stmt 1 view .LVU328
+ 196:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Num_Props;
+ 1463              		.loc 1 196 16 is_stmt 0 view .LVU329
+ 1464 0018 8DF80610 		strb	r1, [sp, #6]
+ 197:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Group_Num;
+ 1465              		.loc 1 197 5 is_stmt 1 view .LVU330
+ 197:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Group_Num;
+ 1466              		.loc 1 197 16 is_stmt 0 view .LVU331
+ 1467 001c 8DF80700 		strb	r0, [sp, #7]
+ 199:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 4 );		//发送读取属性命令
+ 1468              		.loc 1 199 5 is_stmt 1 view .LVU332
+ 1469 0020 0421     		movs	r1, #4
+ 1470              	.LVL129:
+ 199:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 4 );		//发送读取属性命令
+ 1471              		.loc 1 199 5 is_stmt 0 view .LVU333
+ 1472 0022 0DEB0100 		add	r0, sp, r1
+ 1473              	.LVL130:
+ 199:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 4 );		//发送读取属性命令
+ 1474              		.loc 1 199 5 view .LVU334
+ 1475 0026 FFF7FEFF 		bl	SI446x_Write_Cmds
+ 1476              	.LVL131:
+ 200:Core/Src/si4463.c ****     SI446x_Read_Response( pRead, Num_Props + 1 );	//读属性
+ 1477              		.loc 1 200 5 is_stmt 1 view .LVU335
+ 1478 002a 611C     		adds	r1, r4, #1
+ 1479 002c C9B2     		uxtb	r1, r1
+ 1480 002e 2846     		mov	r0, r5
+ 1481 0030 FFF7FEFF 		bl	SI446x_Read_Response
+ 1482              	.LVL132:
+ 201:Core/Src/si4463.c **** }
+ 1483              		.loc 1 201 1 is_stmt 0 view .LVU336
+ 1484 0034 03B0     		add	sp, sp, #12
+ 1485              	.LCFI51:
+ 1486              		.cfi_def_cfa_offset 12
+ 1487              		@ sp needed
+ 1488 0036 30BD     		pop	{r4, r5, pc}
+ 201:Core/Src/si4463.c **** }
+ 1489              		.loc 1 201 1 view .LVU337
+ 1490              		.cfi_endproc
+ 1491              	.LFE143:
+ 1493              		.section	.text.SI446x_Get_Property_1,"ax",%progbits
+ 1494              		.align	1
+ 1495              		.global	SI446x_Get_Property_1
+ 1496              		.syntax unified
+ 1497              		.thumb
+ 1498              		.thumb_func
+ 1499              		.fpu fpv4-sp-d16
+ 1501              	SI446x_Get_Property_1:
+ARM GAS  /tmp/ccZQTl50.s 			page 43
+
+
+ 1502              	.LVL133:
+ 1503              	.LFB146:
+ 263:Core/Src/si4463.c **** {
+ 1504              		.loc 1 263 1 is_stmt 1 view -0
+ 1505              		.cfi_startproc
+ 1506              		@ args = 0, pretend = 0, frame = 8
+ 1507              		@ frame_needed = 0, uses_anonymous_args = 0
+ 263:Core/Src/si4463.c **** {
+ 1508              		.loc 1 263 1 is_stmt 0 view .LVU339
+ 1509 0000 00B5     		push	{lr}
+ 1510              	.LCFI52:
+ 1511              		.cfi_def_cfa_offset 4
+ 1512              		.cfi_offset 14, -4
+ 1513 0002 83B0     		sub	sp, sp, #12
+ 1514              	.LCFI53:
+ 1515              		.cfi_def_cfa_offset 16
+ 264:Core/Src/si4463.c ****     uint8_t l_Cmd[ 4 ] = { 0 };
+ 1516              		.loc 1 264 5 is_stmt 1 view .LVU340
+ 264:Core/Src/si4463.c ****     uint8_t l_Cmd[ 4 ] = { 0 };
+ 1517              		.loc 1 264 13 is_stmt 0 view .LVU341
+ 1518 0004 0023     		movs	r3, #0
+ 1519 0006 0193     		str	r3, [sp, #4]
+ 266:Core/Src/si4463.c ****     l_Cmd[ 0 ] = GET_PROPERTY;
+ 1520              		.loc 1 266 5 is_stmt 1 view .LVU342
+ 266:Core/Src/si4463.c ****     l_Cmd[ 0 ] = GET_PROPERTY;
+ 1521              		.loc 1 266 16 is_stmt 0 view .LVU343
+ 1522 0008 1223     		movs	r3, #18
+ 1523 000a 8DF80430 		strb	r3, [sp, #4]
+ 267:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Group_Num >> 8;
+ 1524              		.loc 1 267 5 is_stmt 1 view .LVU344
+ 267:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Group_Num >> 8;
+ 1525              		.loc 1 267 16 is_stmt 0 view .LVU345
+ 1526 000e 030A     		lsrs	r3, r0, #8
+ 1527 0010 8DF80530 		strb	r3, [sp, #5]
+ 268:Core/Src/si4463.c ****     l_Cmd[ 2 ] = 1;
+ 1528              		.loc 1 268 5 is_stmt 1 view .LVU346
+ 268:Core/Src/si4463.c ****     l_Cmd[ 2 ] = 1;
+ 1529              		.loc 1 268 16 is_stmt 0 view .LVU347
+ 1530 0014 0123     		movs	r3, #1
+ 1531 0016 8DF80630 		strb	r3, [sp, #6]
+ 269:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Group_Num;
+ 1532              		.loc 1 269 5 is_stmt 1 view .LVU348
+ 269:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Group_Num;
+ 1533              		.loc 1 269 16 is_stmt 0 view .LVU349
+ 1534 001a 8DF80700 		strb	r0, [sp, #7]
+ 270:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 4 );		//发送命令
+ 1535              		.loc 1 270 5 is_stmt 1 view .LVU350
+ 1536 001e 0421     		movs	r1, #4
+ 1537 0020 0DEB0100 		add	r0, sp, r1
+ 1538              	.LVL134:
+ 270:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 4 );		//发送命令
+ 1539              		.loc 1 270 5 is_stmt 0 view .LVU351
+ 1540 0024 FFF7FEFF 		bl	SI446x_Write_Cmds
+ 1541              	.LVL135:
+ 272:Core/Src/si4463.c ****     SI446x_Read_Response( l_Cmd, 2 );	//读取属性
+ 1542              		.loc 1 272 5 is_stmt 1 view .LVU352
+ 1543 0028 0221     		movs	r1, #2
+ARM GAS  /tmp/ccZQTl50.s 			page 44
+
+
+ 1544 002a 01A8     		add	r0, sp, #4
+ 1545 002c FFF7FEFF 		bl	SI446x_Read_Response
+ 1546              	.LVL136:
+ 274:Core/Src/si4463.c ****     return l_Cmd[ 1 ];
+ 1547              		.loc 1 274 5 view .LVU353
+ 275:Core/Src/si4463.c **** }
+ 1548              		.loc 1 275 1 is_stmt 0 view .LVU354
+ 1549 0030 9DF80500 		ldrb	r0, [sp, #5]	@ zero_extendqisi2
+ 1550 0034 03B0     		add	sp, sp, #12
+ 1551              	.LCFI54:
+ 1552              		.cfi_def_cfa_offset 4
+ 1553              		@ sp needed
+ 1554 0036 5DF804FB 		ldr	pc, [sp], #4
+ 1555              		.cfi_endproc
+ 1556              	.LFE146:
+ 1558              		.section	.text.SI446x_Config_Gpio,"ax",%progbits
+ 1559              		.align	1
+ 1560              		.global	SI446x_Config_Gpio
+ 1561              		.syntax unified
+ 1562              		.thumb
+ 1563              		.thumb_func
+ 1564              		.fpu fpv4-sp-d16
+ 1566              	SI446x_Config_Gpio:
+ 1567              	.LVL137:
+ 1568              	.LFB148:
+ 299:Core/Src/si4463.c **** {
+ 1569              		.loc 1 299 1 is_stmt 1 view -0
+ 1570              		.cfi_startproc
+ 1571              		@ args = 12, pretend = 0, frame = 16
+ 1572              		@ frame_needed = 0, uses_anonymous_args = 0
+ 299:Core/Src/si4463.c **** {
+ 1573              		.loc 1 299 1 is_stmt 0 view .LVU356
+ 1574 0000 10B5     		push	{r4, lr}
+ 1575              	.LCFI55:
+ 1576              		.cfi_def_cfa_offset 8
+ 1577              		.cfi_offset 4, -8
+ 1578              		.cfi_offset 14, -4
+ 1579 0002 84B0     		sub	sp, sp, #16
+ 1580              	.LCFI56:
+ 1581              		.cfi_def_cfa_offset 24
+ 300:Core/Src/si4463.c ****     uint8_t l_Cmd[ 10] = { 0 };
+ 1582              		.loc 1 300 5 is_stmt 1 view .LVU357
+ 300:Core/Src/si4463.c ****     uint8_t l_Cmd[ 10] = { 0 };
+ 1583              		.loc 1 300 13 is_stmt 0 view .LVU358
+ 1584 0004 0024     		movs	r4, #0
+ 1585 0006 0194     		str	r4, [sp, #4]
+ 1586 0008 0294     		str	r4, [sp, #8]
+ 1587 000a ADF80C40 		strh	r4, [sp, #12]	@ movhi
+ 302:Core/Src/si4463.c ****     l_Cmd[ 0 ] = GPIO_PIN_CFG;
+ 1588              		.loc 1 302 5 is_stmt 1 view .LVU359
+ 302:Core/Src/si4463.c ****     l_Cmd[ 0 ] = GPIO_PIN_CFG;
+ 1589              		.loc 1 302 16 is_stmt 0 view .LVU360
+ 1590 000e 1324     		movs	r4, #19
+ 1591 0010 8DF80440 		strb	r4, [sp, #4]
+ 303:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Gpio_0;
+ 1592              		.loc 1 303 5 is_stmt 1 view .LVU361
+ 303:Core/Src/si4463.c ****     l_Cmd[ 1 ] = Gpio_0;
+ARM GAS  /tmp/ccZQTl50.s 			page 45
+
+
+ 1593              		.loc 1 303 16 is_stmt 0 view .LVU362
+ 1594 0014 8DF80500 		strb	r0, [sp, #5]
+ 304:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Gpio_1;
+ 1595              		.loc 1 304 5 is_stmt 1 view .LVU363
+ 304:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Gpio_1;
+ 1596              		.loc 1 304 16 is_stmt 0 view .LVU364
+ 1597 0018 8DF80610 		strb	r1, [sp, #6]
+ 305:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Gpio_2;
+ 1598              		.loc 1 305 5 is_stmt 1 view .LVU365
+ 305:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Gpio_2;
+ 1599              		.loc 1 305 16 is_stmt 0 view .LVU366
+ 1600 001c 8DF80720 		strb	r2, [sp, #7]
+ 306:Core/Src/si4463.c ****     l_Cmd[ 4 ] = Gpio_3;
+ 1601              		.loc 1 306 5 is_stmt 1 view .LVU367
+ 306:Core/Src/si4463.c ****     l_Cmd[ 4 ] = Gpio_3;
+ 1602              		.loc 1 306 16 is_stmt 0 view .LVU368
+ 1603 0020 8DF80830 		strb	r3, [sp, #8]
+ 307:Core/Src/si4463.c ****     l_Cmd[ 5 ] = Irq;
+ 1604              		.loc 1 307 5 is_stmt 1 view .LVU369
+ 307:Core/Src/si4463.c ****     l_Cmd[ 5 ] = Irq;
+ 1605              		.loc 1 307 16 is_stmt 0 view .LVU370
+ 1606 0024 9DF81830 		ldrb	r3, [sp, #24]	@ zero_extendqisi2
+ 1607              	.LVL138:
+ 307:Core/Src/si4463.c ****     l_Cmd[ 5 ] = Irq;
+ 1608              		.loc 1 307 16 view .LVU371
+ 1609 0028 8DF80930 		strb	r3, [sp, #9]
+ 308:Core/Src/si4463.c ****     l_Cmd[ 6 ] = Sdo;
+ 1610              		.loc 1 308 5 is_stmt 1 view .LVU372
+ 308:Core/Src/si4463.c ****     l_Cmd[ 6 ] = Sdo;
+ 1611              		.loc 1 308 16 is_stmt 0 view .LVU373
+ 1612 002c 9DF81C30 		ldrb	r3, [sp, #28]	@ zero_extendqisi2
+ 1613 0030 8DF80A30 		strb	r3, [sp, #10]
+ 309:Core/Src/si4463.c ****     l_Cmd[ 7 ] = Gen_Config;
+ 1614              		.loc 1 309 5 is_stmt 1 view .LVU374
+ 309:Core/Src/si4463.c ****     l_Cmd[ 7 ] = Gen_Config;
+ 1615              		.loc 1 309 16 is_stmt 0 view .LVU375
+ 1616 0034 9DF82030 		ldrb	r3, [sp, #32]	@ zero_extendqisi2
+ 1617 0038 8DF80B30 		strb	r3, [sp, #11]
+ 311:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 8 );		//写配置
+ 1618              		.loc 1 311 5 is_stmt 1 view .LVU376
+ 1619 003c 0821     		movs	r1, #8
+ 1620              	.LVL139:
+ 311:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 8 );		//写配置
+ 1621              		.loc 1 311 5 is_stmt 0 view .LVU377
+ 1622 003e 01A8     		add	r0, sp, #4
+ 1623              	.LVL140:
+ 311:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 8 );		//写配置
+ 1624              		.loc 1 311 5 view .LVU378
+ 1625 0040 FFF7FEFF 		bl	SI446x_Write_Cmds
+ 1626              	.LVL141:
+ 312:Core/Src/si4463.c ****     SI446x_Read_Response( l_Cmd, 8 );	//读配置
+ 1627              		.loc 1 312 5 is_stmt 1 view .LVU379
+ 1628 0044 0821     		movs	r1, #8
+ 1629 0046 01A8     		add	r0, sp, #4
+ 1630 0048 FFF7FEFF 		bl	SI446x_Read_Response
+ 1631              	.LVL142:
+ 313:Core/Src/si4463.c **** }
+ARM GAS  /tmp/ccZQTl50.s 			page 46
+
+
+ 1632              		.loc 1 313 1 is_stmt 0 view .LVU380
+ 1633 004c 04B0     		add	sp, sp, #16
+ 1634              	.LCFI57:
+ 1635              		.cfi_def_cfa_offset 8
+ 1636              		@ sp needed
+ 1637 004e 10BD     		pop	{r4, pc}
+ 313:Core/Src/si4463.c **** }
+ 1638              		.loc 1 313 1 view .LVU381
+ 1639              		.cfi_endproc
+ 1640              	.LFE148:
+ 1642              		.section	.text.SI446x_Config_Init,"ax",%progbits
+ 1643              		.align	1
+ 1644              		.global	SI446x_Config_Init
+ 1645              		.syntax unified
+ 1646              		.thumb
+ 1647              		.thumb_func
+ 1648              		.fpu fpv4-sp-d16
+ 1650              	SI446x_Config_Init:
+ 1651              	.LFB149:
+ 322:Core/Src/si4463.c **** {
+ 1652              		.loc 1 322 1 is_stmt 1 view -0
+ 1653              		.cfi_startproc
+ 1654              		@ args = 0, pretend = 0, frame = 0
+ 1655              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1656 0000 30B5     		push	{r4, r5, lr}
+ 1657              	.LCFI58:
+ 1658              		.cfi_def_cfa_offset 12
+ 1659              		.cfi_offset 4, -12
+ 1660              		.cfi_offset 5, -8
+ 1661              		.cfi_offset 14, -4
+ 1662 0002 85B0     		sub	sp, sp, #20
+ 1663              	.LCFI59:
+ 1664              		.cfi_def_cfa_offset 32
+ 323:Core/Src/si4463.c ****     uint8_t i;
+ 1665              		.loc 1 323 5 view .LVU383
+ 324:Core/Src/si4463.c ****     uint16_t j = 0;
+ 1666              		.loc 1 324 5 view .LVU384
+ 1667              	.LVL143:
+ 326:Core/Src/si4463.c ****     while( ( i = config_table[j] ) != 0 )
+ 1668              		.loc 1 326 5 view .LVU385
+ 324:Core/Src/si4463.c ****     uint16_t j = 0;
+ 1669              		.loc 1 324 14 is_stmt 0 view .LVU386
+ 1670 0004 0023     		movs	r3, #0
+ 326:Core/Src/si4463.c ****     while( ( i = config_table[j] ) != 0 )
+ 1671              		.loc 1 326 10 view .LVU387
+ 1672 0006 08E0     		b	.L85
+ 1673              	.LVL144:
+ 1674              	.L86:
+ 328:Core/Src/si4463.c ****         j += 1;
+ 1675              		.loc 1 328 9 is_stmt 1 view .LVU388
+ 328:Core/Src/si4463.c ****         j += 1;
+ 1676              		.loc 1 328 11 is_stmt 0 view .LVU389
+ 1677 0008 0133     		adds	r3, r3, #1
+ 1678              	.LVL145:
+ 328:Core/Src/si4463.c ****         j += 1;
+ 1679              		.loc 1 328 11 view .LVU390
+ 1680 000a 9CB2     		uxth	r4, r3
+ARM GAS  /tmp/ccZQTl50.s 			page 47
+
+
+ 1681              	.LVL146:
+ 329:Core/Src/si4463.c ****         SI446x_Write_Cmds( (uint8_t *)config_table + j, i );
+ 1682              		.loc 1 329 9 is_stmt 1 view .LVU391
+ 1683 000c 2946     		mov	r1, r5
+ 1684 000e 2B48     		ldr	r0, .L88
+ 1685 0010 2044     		add	r0, r0, r4
+ 1686 0012 FFF7FEFF 		bl	SI446x_Write_Cmds
+ 1687              	.LVL147:
+ 330:Core/Src/si4463.c ****         j += i;
+ 1688              		.loc 1 330 9 view .LVU392
+ 330:Core/Src/si4463.c ****         j += i;
+ 1689              		.loc 1 330 11 is_stmt 0 view .LVU393
+ 1690 0016 6319     		adds	r3, r4, r5
+ 1691 0018 9BB2     		uxth	r3, r3
+ 1692              	.LVL148:
+ 1693              	.L85:
+ 326:Core/Src/si4463.c ****     while( ( i = config_table[j] ) != 0 )
+ 1694              		.loc 1 326 10 is_stmt 1 view .LVU394
+ 326:Core/Src/si4463.c ****     while( ( i = config_table[j] ) != 0 )
+ 1695              		.loc 1 326 16 is_stmt 0 view .LVU395
+ 1696 001a 284A     		ldr	r2, .L88
+ 1697 001c D55C     		ldrb	r5, [r2, r3]	@ zero_extendqisi2
+ 1698              	.LVL149:
+ 326:Core/Src/si4463.c ****     while( ( i = config_table[j] ) != 0 )
+ 1699              		.loc 1 326 10 view .LVU396
+ 1700 001e 002D     		cmp	r5, #0
+ 1701 0020 F2D1     		bne	.L86
+ 338:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_CONFIG1, 0x00 );
+ 1702              		.loc 1 338 5 is_stmt 1 view .LVU397
+ 1703 0022 0021     		movs	r1, #0
+ 1704 0024 41F20620 		movw	r0, #4614
+ 1705 0028 FFF7FEFF 		bl	SI446x_Set_Property_1
+ 1706              	.LVL150:
+ 339:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_CRC_CONFIG, 0x00 );
+ 1707              		.loc 1 339 5 view .LVU398
+ 1708 002c 0021     		movs	r1, #0
+ 1709 002e 4FF49050 		mov	r0, #4608
+ 1710 0032 FFF7FEFF 		bl	SI446x_Set_Property_1
+ 1711              	.LVL151:
+ 340:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_LEN_FIELD_SOURCE, 0x01 );
+ 1712              		.loc 1 340 5 view .LVU399
+ 1713 0036 0121     		movs	r1, #1
+ 1714 0038 41F20920 		movw	r0, #4617
+ 1715 003c FFF7FEFF 		bl	SI446x_Set_Property_1
+ 1716              	.LVL152:
+ 341:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_LEN, 0x2A );
+ 1717              		.loc 1 341 5 view .LVU400
+ 1718 0040 2A21     		movs	r1, #42
+ 1719 0042 41F20820 		movw	r0, #4616
+ 1720 0046 FFF7FEFF 		bl	SI446x_Set_Property_1
+ 1721              	.LVL153:
+ 342:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_LEN_ADJUST, 0x00 );
+ 1722              		.loc 1 342 5 view .LVU401
+ 1723 004a 0021     		movs	r1, #0
+ 1724 004c 41F20A20 		movw	r0, #4618
+ 1725 0050 FFF7FEFF 		bl	SI446x_Set_Property_1
+ 1726              	.LVL154:
+ARM GAS  /tmp/ccZQTl50.s 			page 48
+
+
+ 343:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_1_LENGTH_12_8, 0x00 );
+ 1727              		.loc 1 343 5 view .LVU402
+ 1728 0054 0021     		movs	r1, #0
+ 1729 0056 41F20D20 		movw	r0, #4621
+ 1730 005a FFF7FEFF 		bl	SI446x_Set_Property_1
+ 1731              	.LVL155:
+ 344:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_1_LENGTH_7_0, 0x01 );
+ 1732              		.loc 1 344 5 view .LVU403
+ 1733 005e 0121     		movs	r1, #1
+ 1734 0060 41F20E20 		movw	r0, #4622
+ 1735 0064 FFF7FEFF 		bl	SI446x_Set_Property_1
+ 1736              	.LVL156:
+ 345:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_1_CONFIG, 0x00 );
+ 1737              		.loc 1 345 5 view .LVU404
+ 1738 0068 0021     		movs	r1, #0
+ 1739 006a 41F20F20 		movw	r0, #4623
+ 1740 006e FFF7FEFF 		bl	SI446x_Set_Property_1
+ 1741              	.LVL157:
+ 346:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_1_CRC_CONFIG, 0x00 );
+ 1742              		.loc 1 346 5 view .LVU405
+ 1743 0072 0021     		movs	r1, #0
+ 1744 0074 41F21020 		movw	r0, #4624
+ 1745 0078 FFF7FEFF 		bl	SI446x_Set_Property_1
+ 1746              	.LVL158:
+ 347:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_2_LENGTH_12_8, 0x00 );
+ 1747              		.loc 1 347 5 view .LVU406
+ 1748 007c 0021     		movs	r1, #0
+ 1749 007e 41F21120 		movw	r0, #4625
+ 1750 0082 FFF7FEFF 		bl	SI446x_Set_Property_1
+ 1751              	.LVL159:
+ 348:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_2_LENGTH_7_0, 0x20 );
+ 1752              		.loc 1 348 5 view .LVU407
+ 1753 0086 2021     		movs	r1, #32
+ 1754 0088 41F21220 		movw	r0, #4626
+ 1755 008c FFF7FEFF 		bl	SI446x_Set_Property_1
+ 1756              	.LVL160:
+ 349:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_2_CONFIG, 0x00 );
+ 1757              		.loc 1 349 5 view .LVU408
+ 1758 0090 0021     		movs	r1, #0
+ 1759 0092 41F21320 		movw	r0, #4627
+ 1760 0096 FFF7FEFF 		bl	SI446x_Set_Property_1
+ 1761              	.LVL161:
+ 350:Core/Src/si4463.c ****     SI446x_Set_Property_1( PKT_FIELD_2_CRC_CONFIG, 0x00 );
+ 1762              		.loc 1 350 5 view .LVU409
+ 1763 009a 0021     		movs	r1, #0
+ 1764 009c 41F21420 		movw	r0, #4628
+ 1765 00a0 FFF7FEFF 		bl	SI446x_Set_Property_1
+ 1766              	.LVL162:
+ 357:Core/Src/si4463.c ****     SI446x_Config_Gpio( 0, 0, 33|0x40, 32|0x40, 0, 0, 0 );    
+ 1767              		.loc 1 357 5 view .LVU410
+ 1768 00a4 0020     		movs	r0, #0
+ 1769 00a6 0290     		str	r0, [sp, #8]
+ 1770 00a8 0190     		str	r0, [sp, #4]
+ 1771 00aa 0090     		str	r0, [sp]
+ 1772 00ac 6023     		movs	r3, #96
+ 1773 00ae 6122     		movs	r2, #97
+ 1774 00b0 0146     		mov	r1, r0
+ARM GAS  /tmp/ccZQTl50.s 			page 49
+
+
+ 1775 00b2 FFF7FEFF 		bl	SI446x_Config_Gpio
+ 1776              	.LVL163:
+ 358:Core/Src/si4463.c **** }
+ 1777              		.loc 1 358 1 is_stmt 0 view .LVU411
+ 1778 00b6 05B0     		add	sp, sp, #20
+ 1779              	.LCFI60:
+ 1780              		.cfi_def_cfa_offset 12
+ 1781              		@ sp needed
+ 1782 00b8 30BD     		pop	{r4, r5, pc}
+ 1783              	.LVL164:
+ 1784              	.L89:
+ 358:Core/Src/si4463.c **** }
+ 1785              		.loc 1 358 1 view .LVU412
+ 1786 00ba 00BF     		.align	2
+ 1787              	.L88:
+ 1788 00bc 00000000 		.word	.LANCHOR0
+ 1789              		.cfi_endproc
+ 1790              	.LFE149:
+ 1792              		.section	.text.SI446x_Get_Packet_Information,"ax",%progbits
+ 1793              		.align	1
+ 1794              		.global	SI446x_Get_Packet_Information
+ 1795              		.syntax unified
+ 1796              		.thumb
+ 1797              		.thumb_func
+ 1798              		.fpu fpv4-sp-d16
+ 1800              	SI446x_Get_Packet_Information:
+ 1801              	.LVL165:
+ 1802              	.LFB157:
+ 554:Core/Src/si4463.c **** {
+ 1803              		.loc 1 554 1 is_stmt 1 view -0
+ 1804              		.cfi_startproc
+ 1805              		@ args = 0, pretend = 0, frame = 8
+ 1806              		@ frame_needed = 0, uses_anonymous_args = 0
+ 554:Core/Src/si4463.c **** {
+ 1807              		.loc 1 554 1 is_stmt 0 view .LVU414
+ 1808 0000 10B5     		push	{r4, lr}
+ 1809              	.LCFI61:
+ 1810              		.cfi_def_cfa_offset 8
+ 1811              		.cfi_offset 4, -8
+ 1812              		.cfi_offset 14, -4
+ 1813 0002 82B0     		sub	sp, sp, #8
+ 1814              	.LCFI62:
+ 1815              		.cfi_def_cfa_offset 16
+ 1816 0004 0446     		mov	r4, r0
+ 555:Core/Src/si4463.c ****     uint8_t l_Cmd[ 6 ] = { 0 };
+ 1817              		.loc 1 555 5 is_stmt 1 view .LVU415
+ 555:Core/Src/si4463.c ****     uint8_t l_Cmd[ 6 ] = { 0 };
+ 1818              		.loc 1 555 13 is_stmt 0 view .LVU416
+ 1819 0006 0020     		movs	r0, #0
+ 1820              	.LVL166:
+ 555:Core/Src/si4463.c ****     uint8_t l_Cmd[ 6 ] = { 0 };
+ 1821              		.loc 1 555 13 view .LVU417
+ 1822 0008 0090     		str	r0, [sp]
+ 1823 000a ADF80400 		strh	r0, [sp, #4]	@ movhi
+ 557:Core/Src/si4463.c ****     l_Cmd[ 0 ] = PACKET_INFO;
+ 1824              		.loc 1 557 5 is_stmt 1 view .LVU418
+ 557:Core/Src/si4463.c ****     l_Cmd[ 0 ] = PACKET_INFO;
+ARM GAS  /tmp/ccZQTl50.s 			page 50
+
+
+ 1825              		.loc 1 557 16 is_stmt 0 view .LVU419
+ 1826 000e 1620     		movs	r0, #22
+ 1827 0010 8DF80000 		strb	r0, [sp]
+ 558:Core/Src/si4463.c ****     l_Cmd[ 1 ] = FieldNumMask;
+ 1828              		.loc 1 558 5 is_stmt 1 view .LVU420
+ 558:Core/Src/si4463.c ****     l_Cmd[ 1 ] = FieldNumMask;
+ 1829              		.loc 1 558 16 is_stmt 0 view .LVU421
+ 1830 0014 8DF80110 		strb	r1, [sp, #1]
+ 559:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Length >> 8;
+ 1831              		.loc 1 559 5 is_stmt 1 view .LVU422
+ 559:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Length >> 8;
+ 1832              		.loc 1 559 16 is_stmt 0 view .LVU423
+ 1833 0018 110A     		lsrs	r1, r2, #8
+ 1834              	.LVL167:
+ 559:Core/Src/si4463.c ****     l_Cmd[ 2 ] = Length >> 8;
+ 1835              		.loc 1 559 16 view .LVU424
+ 1836 001a 8DF80210 		strb	r1, [sp, #2]
+ 560:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Length;
+ 1837              		.loc 1 560 5 is_stmt 1 view .LVU425
+ 560:Core/Src/si4463.c ****     l_Cmd[ 3 ] = Length;
+ 1838              		.loc 1 560 16 is_stmt 0 view .LVU426
+ 1839 001e 8DF80320 		strb	r2, [sp, #3]
+ 561:Core/Src/si4463.c ****     l_Cmd[ 4 ] = DiffLen >> 8;
+ 1840              		.loc 1 561 5 is_stmt 1 view .LVU427
+ 561:Core/Src/si4463.c ****     l_Cmd[ 4 ] = DiffLen >> 8;
+ 1841              		.loc 1 561 16 is_stmt 0 view .LVU428
+ 1842 0022 1A0A     		lsrs	r2, r3, #8
+ 1843              	.LVL168:
+ 561:Core/Src/si4463.c ****     l_Cmd[ 4 ] = DiffLen >> 8;
+ 1844              		.loc 1 561 16 view .LVU429
+ 1845 0024 8DF80420 		strb	r2, [sp, #4]
+ 562:Core/Src/si4463.c ****     l_Cmd[ 5 ] = DiffLen;
+ 1846              		.loc 1 562 5 is_stmt 1 view .LVU430
+ 562:Core/Src/si4463.c ****     l_Cmd[ 5 ] = DiffLen;
+ 1847              		.loc 1 562 16 is_stmt 0 view .LVU431
+ 1848 0028 8DF80530 		strb	r3, [sp, #5]
+ 564:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 6 );
+ 1849              		.loc 1 564 5 is_stmt 1 view .LVU432
+ 1850 002c 0621     		movs	r1, #6
+ 1851 002e 6846     		mov	r0, sp
+ 1852 0030 FFF7FEFF 		bl	SI446x_Write_Cmds
+ 1853              	.LVL169:
+ 565:Core/Src/si4463.c ****     SI446x_Read_Response( pReadData, 3 );
+ 1854              		.loc 1 565 5 view .LVU433
+ 1855 0034 0321     		movs	r1, #3
+ 1856 0036 2046     		mov	r0, r4
+ 1857 0038 FFF7FEFF 		bl	SI446x_Read_Response
+ 1858              	.LVL170:
+ 566:Core/Src/si4463.c **** }
+ 1859              		.loc 1 566 1 is_stmt 0 view .LVU434
+ 1860 003c 02B0     		add	sp, sp, #8
+ 1861              	.LCFI63:
+ 1862              		.cfi_def_cfa_offset 8
+ 1863              		@ sp needed
+ 1864 003e 10BD     		pop	{r4, pc}
+ 566:Core/Src/si4463.c **** }
+ 1865              		.loc 1 566 1 view .LVU435
+ARM GAS  /tmp/ccZQTl50.s 			page 51
+
+
+ 1866              		.cfi_endproc
+ 1867              	.LFE157:
+ 1869              		.section	.text.SI446x_Get_Fifo_Information,"ax",%progbits
+ 1870              		.align	1
+ 1871              		.global	SI446x_Get_Fifo_Information
+ 1872              		.syntax unified
+ 1873              		.thumb
+ 1874              		.thumb_func
+ 1875              		.fpu fpv4-sp-d16
+ 1877              	SI446x_Get_Fifo_Information:
+ 1878              	.LVL171:
+ 1879              	.LFB158:
+ 576:Core/Src/si4463.c **** {
+ 1880              		.loc 1 576 1 is_stmt 1 view -0
+ 1881              		.cfi_startproc
+ 1882              		@ args = 0, pretend = 0, frame = 8
+ 1883              		@ frame_needed = 0, uses_anonymous_args = 0
+ 576:Core/Src/si4463.c **** {
+ 1884              		.loc 1 576 1 is_stmt 0 view .LVU437
+ 1885 0000 30B5     		push	{r4, r5, lr}
+ 1886              	.LCFI64:
+ 1887              		.cfi_def_cfa_offset 12
+ 1888              		.cfi_offset 4, -12
+ 1889              		.cfi_offset 5, -8
+ 1890              		.cfi_offset 14, -4
+ 1891 0002 83B0     		sub	sp, sp, #12
+ 1892              	.LCFI65:
+ 1893              		.cfi_def_cfa_offset 24
+ 1894 0004 0446     		mov	r4, r0
+ 577:Core/Src/si4463.c ****     uint8_t l_Cmd[ 2 ] = { 0 };
+ 1895              		.loc 1 577 5 is_stmt 1 view .LVU438
+ 577:Core/Src/si4463.c ****     uint8_t l_Cmd[ 2 ] = { 0 };
+ 1896              		.loc 1 577 13 is_stmt 0 view .LVU439
+ 1897 0006 0023     		movs	r3, #0
+ 1898 0008 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 579:Core/Src/si4463.c ****     l_Cmd[ 0 ] = FIFO_INFO;
+ 1899              		.loc 1 579 5 is_stmt 1 view .LVU440
+ 579:Core/Src/si4463.c ****     l_Cmd[ 0 ] = FIFO_INFO;
+ 1900              		.loc 1 579 16 is_stmt 0 view .LVU441
+ 1901 000c 1523     		movs	r3, #21
+ 1902 000e 8DF80430 		strb	r3, [sp, #4]
+ 580:Core/Src/si4463.c ****     l_Cmd[ 1 ] = 0x03;
+ 1903              		.loc 1 580 5 is_stmt 1 view .LVU442
+ 580:Core/Src/si4463.c ****     l_Cmd[ 1 ] = 0x03;
+ 1904              		.loc 1 580 16 is_stmt 0 view .LVU443
+ 1905 0012 0325     		movs	r5, #3
+ 1906 0014 8DF80550 		strb	r5, [sp, #5]
+ 582:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 2 );
+ 1907              		.loc 1 582 5 is_stmt 1 view .LVU444
+ 1908 0018 0221     		movs	r1, #2
+ 1909 001a 01A8     		add	r0, sp, #4
+ 1910              	.LVL172:
+ 582:Core/Src/si4463.c ****     SI446x_Write_Cmds( l_Cmd, 2 );
+ 1911              		.loc 1 582 5 is_stmt 0 view .LVU445
+ 1912 001c FFF7FEFF 		bl	SI446x_Write_Cmds
+ 1913              	.LVL173:
+ 583:Core/Src/si4463.c ****     SI446x_Read_Response( pReadData, 3 );
+ARM GAS  /tmp/ccZQTl50.s 			page 52
+
+
+ 1914              		.loc 1 583 5 is_stmt 1 view .LVU446
+ 1915 0020 2946     		mov	r1, r5
+ 1916 0022 2046     		mov	r0, r4
+ 1917 0024 FFF7FEFF 		bl	SI446x_Read_Response
+ 1918              	.LVL174:
+ 584:Core/Src/si4463.c **** }
+ 1919              		.loc 1 584 1 is_stmt 0 view .LVU447
+ 1920 0028 03B0     		add	sp, sp, #12
+ 1921              	.LCFI66:
+ 1922              		.cfi_def_cfa_offset 12
+ 1923              		@ sp needed
+ 1924 002a 30BD     		pop	{r4, r5, pc}
+ 584:Core/Src/si4463.c **** }
+ 1925              		.loc 1 584 1 view .LVU448
+ 1926              		.cfi_endproc
+ 1927              	.LFE158:
+ 1929              		.section	.text.SI446x_Get_Device_Status,"ax",%progbits
+ 1930              		.align	1
+ 1931              		.global	SI446x_Get_Device_Status
+ 1932              		.syntax unified
+ 1933              		.thumb
+ 1934              		.thumb_func
+ 1935              		.fpu fpv4-sp-d16
+ 1937              	SI446x_Get_Device_Status:
+ 1938              	.LFB160:
+ 610:Core/Src/si4463.c **** {
+ 1939              		.loc 1 610 1 is_stmt 1 view -0
+ 1940              		.cfi_startproc
+ 1941              		@ args = 0, pretend = 0, frame = 8
+ 1942              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1943 0000 00B5     		push	{lr}
+ 1944              	.LCFI67:
+ 1945              		.cfi_def_cfa_offset 4
+ 1946              		.cfi_offset 14, -4
+ 1947 0002 83B0     		sub	sp, sp, #12
+ 1948              	.LCFI68:
+ 1949              		.cfi_def_cfa_offset 16
+ 611:Core/Src/si4463.c ****    uint8_t l_Cmd[ 3 ] = { 0 };
+ 1950              		.loc 1 611 4 view .LVU450
+ 611:Core/Src/si4463.c ****    uint8_t l_Cmd[ 3 ] = { 0 };
+ 1951              		.loc 1 611 12 is_stmt 0 view .LVU451
+ 1952 0004 0C4B     		ldr	r3, .L96
+ 1953 0006 1B88     		ldrh	r3, [r3]
+ 1954 0008 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 1955 000c 0023     		movs	r3, #0
+ 1956 000e 8DF80630 		strb	r3, [sp, #6]
+ 613:Core/Src/si4463.c ****    l_Cmd [ 0 ] = REQUEST_DEVICE_STATE;
+ 1957              		.loc 1 613 4 is_stmt 1 view .LVU452
+ 613:Core/Src/si4463.c ****    l_Cmd [ 0 ] = REQUEST_DEVICE_STATE;
+ 1958              		.loc 1 613 16 is_stmt 0 view .LVU453
+ 1959 0012 3323     		movs	r3, #51
+ 1960 0014 8DF80430 		strb	r3, [sp, #4]
+ 615:Core/Src/si4463.c ****    SI446x_Write_Cmds( l_Cmd, 1 );
+ 1961              		.loc 1 615 4 is_stmt 1 view .LVU454
+ 1962 0018 0121     		movs	r1, #1
+ 1963 001a 01A8     		add	r0, sp, #4
+ 1964 001c FFF7FEFF 		bl	SI446x_Write_Cmds
+ARM GAS  /tmp/ccZQTl50.s 			page 53
+
+
+ 1965              	.LVL175:
+ 616:Core/Src/si4463.c ****    SI446x_Read_Response( l_Cmd, 3 );
+ 1966              		.loc 1 616 4 view .LVU455
+ 1967 0020 0321     		movs	r1, #3
+ 1968 0022 01A8     		add	r0, sp, #4
+ 1969 0024 FFF7FEFF 		bl	SI446x_Read_Response
+ 1970              	.LVL176:
+ 618:Core/Src/si4463.c ****    return l_Cmd[ 1 ] & 0x0F;
+ 1971              		.loc 1 618 4 view .LVU456
+ 618:Core/Src/si4463.c ****    return l_Cmd[ 1 ] & 0x0F;
+ 1972              		.loc 1 618 16 is_stmt 0 view .LVU457
+ 1973 0028 9DF80500 		ldrb	r0, [sp, #5]	@ zero_extendqisi2
+ 619:Core/Src/si4463.c **** }
+ 1974              		.loc 1 619 1 view .LVU458
+ 1975 002c 00F00F00 		and	r0, r0, #15
+ 1976 0030 03B0     		add	sp, sp, #12
+ 1977              	.LCFI69:
+ 1978              		.cfi_def_cfa_offset 4
+ 1979              		@ sp needed
+ 1980 0032 5DF804FB 		ldr	pc, [sp], #4
+ 1981              	.L97:
+ 1982 0036 00BF     		.align	2
+ 1983              	.L96:
+ 1984 0038 00000000 		.word	.LANCHOR1
+ 1985              		.cfi_endproc
+ 1986              	.LFE160:
+ 1988              		.section	.text.SI446x_Read_Packet,"ax",%progbits
+ 1989              		.align	1
+ 1990              		.global	SI446x_Read_Packet
+ 1991              		.syntax unified
+ 1992              		.thumb
+ 1993              		.thumb_func
+ 1994              		.fpu fpv4-sp-d16
+ 1996              	SI446x_Read_Packet:
+ 1997              	.LVL177:
+ 1998              	.LFB155:
+ 483:Core/Src/si4463.c **** {
+ 1999              		.loc 1 483 1 is_stmt 1 view -0
+ 2000              		.cfi_startproc
+ 2001              		@ args = 0, pretend = 0, frame = 0
+ 2002              		@ frame_needed = 0, uses_anonymous_args = 0
+ 483:Core/Src/si4463.c **** {
+ 2003              		.loc 1 483 1 is_stmt 0 view .LVU460
+ 2004 0000 70B5     		push	{r4, r5, r6, lr}
+ 2005              	.LCFI70:
+ 2006              		.cfi_def_cfa_offset 16
+ 2007              		.cfi_offset 4, -16
+ 2008              		.cfi_offset 5, -12
+ 2009              		.cfi_offset 6, -8
+ 2010              		.cfi_offset 14, -4
+ 2011 0002 0446     		mov	r4, r0
+ 484:Core/Src/si4463.c ****     uint8_t length = 0, i = 0;
+ 2012              		.loc 1 484 5 is_stmt 1 view .LVU461
+ 2013              	.LVL178:
+ 486:Core/Src/si4463.c ****     SI446x_Wait_CTS( );
+ 2014              		.loc 1 486 5 view .LVU462
+ 2015 0004 FFF7FEFF 		bl	SI446x_Wait_CTS
+ARM GAS  /tmp/ccZQTl50.s 			page 54
+
+
+ 2016              	.LVL179:
+ 487:Core/Src/si4463.c ****     SI446X_CS_LOW;
+ 2017              		.loc 1 487 5 view .LVU463
+ 2018 0008 0022     		movs	r2, #0
+ 2019 000a 1021     		movs	r1, #16
+ 2020 000c 0E48     		ldr	r0, .L102
+ 2021 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2022              	.LVL180:
+ 489:Core/Src/si4463.c ****     SI446x_SPI_TransmitReceive( READ_RX_FIFO );	//读FIFO命令
+ 2023              		.loc 1 489 5 view .LVU464
+ 2024 0012 7720     		movs	r0, #119
+ 2025 0014 FFF7FEFF 		bl	SI446x_SPI_TransmitReceive
+ 2026              	.LVL181:
+ 493:Core/Src/si4463.c ****     length = SI446x_SPI_TransmitReceive( 0xFF );	//读数据长度
+ 2027              		.loc 1 493 5 view .LVU465
+ 493:Core/Src/si4463.c ****     length = SI446x_SPI_TransmitReceive( 0xFF );	//读数据长度
+ 2028              		.loc 1 493 14 is_stmt 0 view .LVU466
+ 2029 0018 FF20     		movs	r0, #255
+ 2030 001a FFF7FEFF 		bl	SI446x_SPI_TransmitReceive
+ 2031              	.LVL182:
+ 2032 001e 0646     		mov	r6, r0
+ 2033              	.LVL183:
+ 500:Core/Src/si4463.c ****     i = length;
+ 2034              		.loc 1 500 5 is_stmt 1 view .LVU467
+ 502:Core/Src/si4463.c ****     while( length -- )
+ 2035              		.loc 1 502 5 view .LVU468
+ 493:Core/Src/si4463.c ****     length = SI446x_SPI_TransmitReceive( 0xFF );	//读数据长度
+ 2036              		.loc 1 493 14 is_stmt 0 view .LVU469
+ 2037 0020 0246     		mov	r2, r0
+ 502:Core/Src/si4463.c ****     while( length -- )
+ 2038              		.loc 1 502 10 view .LVU470
+ 2039 0022 05E0     		b	.L99
+ 2040              	.LVL184:
+ 2041              	.L100:
+ 504:Core/Src/si4463.c ****         *pRxData++ = SI446x_SPI_TransmitReceive( 0xFF );	//读数据
+ 2042              		.loc 1 504 9 is_stmt 1 view .LVU471
+ 504:Core/Src/si4463.c ****         *pRxData++ = SI446x_SPI_TransmitReceive( 0xFF );	//读数据
+ 2043              		.loc 1 504 22 is_stmt 0 view .LVU472
+ 2044 0024 FF20     		movs	r0, #255
+ 2045 0026 FFF7FEFF 		bl	SI446x_SPI_TransmitReceive
+ 2046              	.LVL185:
+ 504:Core/Src/si4463.c ****         *pRxData++ = SI446x_SPI_TransmitReceive( 0xFF );	//读数据
+ 2047              		.loc 1 504 20 view .LVU473
+ 2048 002a 04F8010B 		strb	r0, [r4], #1
+ 2049              	.LVL186:
+ 502:Core/Src/si4463.c ****     while( length -- )
+ 2050              		.loc 1 502 19 view .LVU474
+ 2051 002e 2A46     		mov	r2, r5
+ 2052              	.LVL187:
+ 2053              	.L99:
+ 502:Core/Src/si4463.c ****     while( length -- )
+ 2054              		.loc 1 502 10 is_stmt 1 view .LVU475
+ 502:Core/Src/si4463.c ****     while( length -- )
+ 2055              		.loc 1 502 19 is_stmt 0 view .LVU476
+ 2056 0030 531E     		subs	r3, r2, #1
+ 2057 0032 DDB2     		uxtb	r5, r3
+ 2058              	.LVL188:
+ARM GAS  /tmp/ccZQTl50.s 			page 55
+
+
+ 502:Core/Src/si4463.c ****     while( length -- )
+ 2059              		.loc 1 502 10 view .LVU477
+ 2060 0034 002A     		cmp	r2, #0
+ 2061 0036 F5D1     		bne	.L100
+ 507:Core/Src/si4463.c ****     SI446X_CS_HIGH;		//返回数据个数
+ 2062              		.loc 1 507 5 is_stmt 1 view .LVU478
+ 2063 0038 0122     		movs	r2, #1
+ 2064 003a 1021     		movs	r1, #16
+ 2065 003c 0248     		ldr	r0, .L102
+ 2066 003e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2067              	.LVL189:
+ 509:Core/Src/si4463.c ****     return i;
+ 2068              		.loc 1 509 5 view .LVU479
+ 510:Core/Src/si4463.c **** }
+ 2069              		.loc 1 510 1 is_stmt 0 view .LVU480
+ 2070 0042 3046     		mov	r0, r6
+ 2071 0044 70BD     		pop	{r4, r5, r6, pc}
+ 2072              	.LVL190:
+ 2073              	.L103:
+ 510:Core/Src/si4463.c **** }
+ 2074              		.loc 1 510 1 view .LVU481
+ 2075 0046 00BF     		.align	2
+ 2076              	.L102:
+ 2077 0048 00000240 		.word	1073872896
+ 2078              		.cfi_endproc
+ 2079              	.LFE155:
+ 2081              		.section	.rodata
+ 2082              		.align	2
+ 2083              		.set	.LANCHOR1,. + 0
+ 2084              	.LC0:
+ 2085 0000 0000     		.ascii	"\000\000"
+ 2086 0002 00       		.space	1
+ 2087              		.section	.rodata.config_table,"a"
+ 2088              		.align	2
+ 2089              		.set	.LANCHOR0,. + 0
+ 2092              	config_table:
+ 2093 0000 07020100 		.ascii	"\007\002\001\000\001\311\303\200\010\023\000\000\000"
+ 2093      01C9C380 
+ 2093      08130000 
+ 2093      00
+ 2094 000d 00000000 		.ascii	"\000\000\000\000\006\021\000\002\000R\000\005\021\000"
+ 2094      06110002 
+ 2094      00520005 
+ 2094      1100
+ 2095 001b 01036005 		.ascii	"\001\003`\005\021\001\001\000\000\010\021\002\004\000"
+ 2095      11010100 
+ 2095      00081102 
+ 2095      0400
+ 2096 0029 00000000 		.ascii	"\000\000\000\000\015\021\020\011\000\220\177\000\017"
+ 2096      0D111009 
+ 2096      00907F00 
+ 2096      0F
+ 2097 0036 31000000 		.ascii	"1\000\000\000\000\011\021\021\005\000\003>K\250\033"
+ 2097      00091111 
+ 2097      0500033E 
+ 2097      4BA81B
+ 2098 0045 0B111207 		.ascii	"\013\021\022\007\000\204\001\010\377\377\000\002\020"
+ARM GAS  /tmp/ccZQTl50.s 			page 56
+
+
+ 2098      00840108 
+ 2098      FFFF0002 
+ 2098      10
+ 2099 0052 11120C08 		.ascii	"\021\022\014\010\000\000\00000\000@\004\200\000\000"
+ 2099      00000030 
+ 2099      30004004 
+ 2099      800000
+ 2100 0061 00101112 		.ascii	"\000\020\021\022\014\024\000\000\000\000\000\000\000"
+ 2100      0C140000 
+ 2100      00000000 
+ 2100      00
+ 2101 006e 00000000 		.ascii	"\000\000\000\000\000\020\021\022\014 \000\000\000\000"
+ 2101      00101112 
+ 2101      0C200000 
+ 2101      0000
+ 2102 007c 00000000 		.ascii	"\000\000\000\000\000\000\000\000\015\021\022\011,\000"
+ 2102      00000000 
+ 2102      0D111209 
+ 2102      2C00
+ 2103 008a 00000000 		.ascii	"\000\000\000\000\000\000\000\000\020\021 \014\000\002"
+ 2103      00000000 
+ 2103      1011200C 
+ 2103      0002
+ 2104 0098 0007002E 		.ascii	"\000\007\000.\340\001\311\303\200\000\003\005\021 \001"
+ 2104      E001C9C3 
+ 2104      80000305 
+ 2104      112001
+ 2105 00a7 0CB00C11 		.ascii	"\014\260\014\021 \010\030\001\200\010\002\200\000p "
+ 2105      20081801 
+ 2105      80080280 
+ 2105      007020
+ 2106 00b6 0D112009 		.ascii	"\015\021 \011\"\003\015\000\247\306\000T\002\302\013"
+ 2106      22030D00 
+ 2106      A7C60054 
+ 2106      02C20B
+ 2107 00c5 1120072C 		.ascii	"\021 \007,\0046\200\012'c\200\005\021 \0015\342\015"
+ 2107      0436800A 
+ 2107      27638005 
+ 2107      11200135 
+ 2107      E20D
+ 2108 00d7 11200938 		.ascii	"\021 \0118\021\253\253\000\002\377\377\000+\015\021"
+ 2108      11ABAB00 
+ 2108      02FFFF00 
+ 2108      2B0D11
+ 2109 00e6 200942A4 		.ascii	" \011B\244\002\326\203\001\004\001\200\377\005\021 "
+ 2109      02D68301 
+ 2109      040180FF 
+ 2109      051120
+ 2110 00f5 014C0005 		.ascii	"\001L\000\005\021 \001N@\005\021 \001Q\015\020\021!"
+ 2110      1120014E 
+ 2110      40051120 
+ 2110      01510D10 
+ 2110      1121
+ 2111 0107 0C00CCA1 		.ascii	"\014\000\314\2410\240!\321\271\311\352\005\022\021\020"
+ 2111      30A021D1 
+ 2111      B9C9EA05 
+ 2111      121110
+ARM GAS  /tmp/ccZQTl50.s 			page 57
+
+
+ 2112 0116 11210C0C 		.ascii	"\021!\014\014\012\004\025\374\003\000\314\2410\240!"
+ 2112      0A0415FC 
+ 2112      0300CCA1 
+ 2112      30A021
+ 2113 0125 D1101121 		.ascii	"\321\020\021!\014\030\271\311\352\005\022\021\012\004"
+ 2113      0C18B9C9 
+ 2113      EA051211 
+ 2113      0A04
+ 2114 0133 15FC0300 		.ascii	"\025\374\003\000\010\021\"\004\000\010\177\000=\013"
+ 2114      08112204 
+ 2114      00087F00 
+ 2114      3D0B
+ 2115 0141 11230700 		.ascii	"\021#\007\000,\016\013\004\014s\003\020\0210\014\000"
+ 2115      2C0E0B04 
+ 2115      0C730310 
+ 2115      11300C00 
+ 2116 0151 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\014"
+ 2116      00000000 
+ 2116      00000000 
+ 2116      0C
+ 2117 015e 11400800 		.ascii	"\021@\010\000:\016\217\\\314\315 \372\000"
+ 2117      3A0E8F5C 
+ 2117      CCCD20FA 
+ 2117      00
+ 2118              		.text
+ 2119              	.Letext0:
+ 2120              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 2121              		.file 3 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 2122              		.file 4 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 2123              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 2124              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 2125              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h"
+ 2126              		.file 8 "Core/Inc/si4463.h"
+ 2127              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ARM GAS  /tmp/ccZQTl50.s 			page 58
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 si4463.c
+     /tmp/ccZQTl50.s:18     .text.SI446x_SPI_TransmitReceive:0000000000000000 $t
+     /tmp/ccZQTl50.s:26     .text.SI446x_SPI_TransmitReceive:0000000000000000 SI446x_SPI_TransmitReceive
+     /tmp/ccZQTl50.s:66     .text.SI446x_SPI_TransmitReceive:0000000000000028 $d
+     /tmp/ccZQTl50.s:71     .text.SI446x_NOP:0000000000000000 $t
+     /tmp/ccZQTl50.s:78     .text.SI446x_NOP:0000000000000000 SI446x_NOP
+     /tmp/ccZQTl50.s:121    .text.SI446x_NOP:0000000000000024 $d
+     /tmp/ccZQTl50.s:126    .text.SI446x_Reset:0000000000000000 $t
+     /tmp/ccZQTl50.s:133    .text.SI446x_Reset:0000000000000000 SI446x_Reset
+     /tmp/ccZQTl50.s:172    .text.SI446x_Reset:0000000000000030 $d
+     /tmp/ccZQTl50.s:177    .text.SI446x_Write_TxFifo:0000000000000000 $t
+     /tmp/ccZQTl50.s:184    .text.SI446x_Write_TxFifo:0000000000000000 SI446x_Write_TxFifo
+     /tmp/ccZQTl50.s:252    .text.SI446x_Write_TxFifo:0000000000000038 $d
+     /tmp/ccZQTl50.s:257    .text.SI446x_Init:0000000000000000 $t
+     /tmp/ccZQTl50.s:264    .text.SI446x_Init:0000000000000000 SI446x_Init
+     /tmp/ccZQTl50.s:496    .text.SI446x_Power_Up:0000000000000000 SI446x_Power_Up
+     /tmp/ccZQTl50.s:1650   .text.SI446x_Config_Init:0000000000000000 SI446x_Config_Init
+     /tmp/ccZQTl50.s:737    .text.SI446x_Set_Power:0000000000000000 SI446x_Set_Power
+     /tmp/ccZQTl50.s:1141   .text.SI446x_Change_Status:0000000000000000 SI446x_Change_Status
+     /tmp/ccZQTl50.s:1937   .text.SI446x_Get_Device_Status:0000000000000000 SI446x_Get_Device_Status
+     /tmp/ccZQTl50.s:1054   .text.SI446x_Start_Rx:0000000000000000 SI446x_Start_Rx
+     /tmp/ccZQTl50.s:324    .text.SI446x_Init:0000000000000040 $d
+     /tmp/ccZQTl50.s:329    .text.SI446x_Wait_CTS:0000000000000000 $t
+     /tmp/ccZQTl50.s:336    .text.SI446x_Wait_CTS:0000000000000000 SI446x_Wait_CTS
+     /tmp/ccZQTl50.s:409    .text.SI446x_Wait_CTS:0000000000000040 $d
+     /tmp/ccZQTl50.s:414    .text.SI446x_Write_Cmds:0000000000000000 $t
+     /tmp/ccZQTl50.s:421    .text.SI446x_Write_Cmds:0000000000000000 SI446x_Write_Cmds
+     /tmp/ccZQTl50.s:484    .text.SI446x_Write_Cmds:0000000000000034 $d
+     /tmp/ccZQTl50.s:489    .text.SI446x_Power_Up:0000000000000000 $t
+     /tmp/ccZQTl50.s:561    .text.SI446x_Set_Property:0000000000000000 $t
+     /tmp/ccZQTl50.s:568    .text.SI446x_Set_Property:0000000000000000 SI446x_Set_Property
+     /tmp/ccZQTl50.s:666    .text.SI446x_Set_Property_1:0000000000000000 $t
+     /tmp/ccZQTl50.s:673    .text.SI446x_Set_Property_1:0000000000000000 SI446x_Set_Property_1
+     /tmp/ccZQTl50.s:730    .text.SI446x_Set_Power:0000000000000000 $t
+     /tmp/ccZQTl50.s:763    .text.SI446x_Reset_RxFifo:0000000000000000 $t
+     /tmp/ccZQTl50.s:770    .text.SI446x_Reset_RxFifo:0000000000000000 SI446x_Reset_RxFifo
+     /tmp/ccZQTl50.s:809    .text.SI446x_Reset_TxFifo:0000000000000000 $t
+     /tmp/ccZQTl50.s:816    .text.SI446x_Reset_TxFifo:0000000000000000 SI446x_Reset_TxFifo
+     /tmp/ccZQTl50.s:855    .text.SI446x_Send_Packet:0000000000000000 $t
+     /tmp/ccZQTl50.s:862    .text.SI446x_Send_Packet:0000000000000000 SI446x_Send_Packet
+     /tmp/ccZQTl50.s:979    .text.SI446x_Send_Packet:000000000000007c $d
+     /tmp/ccZQTl50.s:984    .text.SI446x_Start_Tx:0000000000000000 $t
+     /tmp/ccZQTl50.s:991    .text.SI446x_Start_Tx:0000000000000000 SI446x_Start_Tx
+     /tmp/ccZQTl50.s:1047   .text.SI446x_Start_Rx:0000000000000000 $t
+     /tmp/ccZQTl50.s:1134   .text.SI446x_Change_Status:0000000000000000 $t
+     /tmp/ccZQTl50.s:1184   .text.SI446x_Read_Response:0000000000000000 $t
+     /tmp/ccZQTl50.s:1191   .text.SI446x_Read_Response:0000000000000000 SI446x_Read_Response
+     /tmp/ccZQTl50.s:1260   .text.SI446x_Read_Response:000000000000003c $d
+     /tmp/ccZQTl50.s:1265   .text.SI446x_Get_Part_Informatoin:0000000000000000 $t
+     /tmp/ccZQTl50.s:1272   .text.SI446x_Get_Part_Informatoin:0000000000000000 SI446x_Get_Part_Informatoin
+     /tmp/ccZQTl50.s:1315   .text.SI446x_Get_Fun_Informatoin:0000000000000000 $t
+     /tmp/ccZQTl50.s:1322   .text.SI446x_Get_Fun_Informatoin:0000000000000000 SI446x_Get_Fun_Informatoin
+     /tmp/ccZQTl50.s:1366   .text.SI446x_Interrupt_Status:0000000000000000 $t
+     /tmp/ccZQTl50.s:1373   .text.SI446x_Interrupt_Status:0000000000000000 SI446x_Interrupt_Status
+     /tmp/ccZQTl50.s:1424   .text.SI446x_Get_Property:0000000000000000 $t
+     /tmp/ccZQTl50.s:1431   .text.SI446x_Get_Property:0000000000000000 SI446x_Get_Property
+ARM GAS  /tmp/ccZQTl50.s 			page 59
+
+
+     /tmp/ccZQTl50.s:1494   .text.SI446x_Get_Property_1:0000000000000000 $t
+     /tmp/ccZQTl50.s:1501   .text.SI446x_Get_Property_1:0000000000000000 SI446x_Get_Property_1
+     /tmp/ccZQTl50.s:1559   .text.SI446x_Config_Gpio:0000000000000000 $t
+     /tmp/ccZQTl50.s:1566   .text.SI446x_Config_Gpio:0000000000000000 SI446x_Config_Gpio
+     /tmp/ccZQTl50.s:1643   .text.SI446x_Config_Init:0000000000000000 $t
+     /tmp/ccZQTl50.s:1788   .text.SI446x_Config_Init:00000000000000bc $d
+     /tmp/ccZQTl50.s:1793   .text.SI446x_Get_Packet_Information:0000000000000000 $t
+     /tmp/ccZQTl50.s:1800   .text.SI446x_Get_Packet_Information:0000000000000000 SI446x_Get_Packet_Information
+     /tmp/ccZQTl50.s:1870   .text.SI446x_Get_Fifo_Information:0000000000000000 $t
+     /tmp/ccZQTl50.s:1877   .text.SI446x_Get_Fifo_Information:0000000000000000 SI446x_Get_Fifo_Information
+     /tmp/ccZQTl50.s:1930   .text.SI446x_Get_Device_Status:0000000000000000 $t
+     /tmp/ccZQTl50.s:1984   .text.SI446x_Get_Device_Status:0000000000000038 $d
+     /tmp/ccZQTl50.s:1989   .text.SI446x_Read_Packet:0000000000000000 $t
+     /tmp/ccZQTl50.s:1996   .text.SI446x_Read_Packet:0000000000000000 SI446x_Read_Packet
+     /tmp/ccZQTl50.s:2077   .text.SI446x_Read_Packet:0000000000000048 $d
+     /tmp/ccZQTl50.s:2082   .rodata:0000000000000000 $d
+     /tmp/ccZQTl50.s:2088   .rodata.config_table:0000000000000000 $d
+     /tmp/ccZQTl50.s:2092   .rodata.config_table:0000000000000000 config_table
+
+UNDEFINED SYMBOLS
+HAL_SPI_TransmitReceive
+hspi1
+HAL_GPIO_WritePin
+HAL_Delay

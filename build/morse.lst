@@ -1,0 +1,868 @@
+ARM GAS  /tmp/ccIiFPim.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"morse.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.character_to_code,"ax",%progbits
+  18              		.align	1
+  19              		.global	character_to_code
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	character_to_code:
+  27              	.LVL0:
+  28              	.LFB135:
+  29              		.file 1 "Core/Src/morse.c"
+   1:Core/Src/morse.c **** #include "morse.h"
+   2:Core/Src/morse.c **** 
+   3:Core/Src/morse.c **** 
+   4:Core/Src/morse.c **** 
+   5:Core/Src/morse.c **** const char alphameric[] =
+   6:Core/Src/morse.c **** {
+   7:Core/Src/morse.c ****   // Alphabets
+   8:Core/Src/morse.c ****   (char)0b01000010, // A, .-
+   9:Core/Src/morse.c ****   (char)0b10000001, // B, -...
+  10:Core/Src/morse.c ****   (char)0b10100001, // C, -.-.
+  11:Core/Src/morse.c ****   (char)0b10000110, // D, -..
+  12:Core/Src/morse.c ****   (char)0b00000100, // E, .
+  13:Core/Src/morse.c ****   (char)0b00100001, // F, ..-.
+  14:Core/Src/morse.c ****   (char)0b11000110, // G, --.
+  15:Core/Src/morse.c ****   (char)0b00000001, // H, ....
+  16:Core/Src/morse.c ****   (char)0b00000010, // I, ..
+  17:Core/Src/morse.c ****   (char)0b01111001, // J, .---
+  18:Core/Src/morse.c ****   (char)0b10100110, // K, -.-
+  19:Core/Src/morse.c ****   (char)0b01000001, // L, .-..
+  20:Core/Src/morse.c ****   (char)0b11000010, // M, --
+  21:Core/Src/morse.c ****   (char)0b10000010, // N, -.
+  22:Core/Src/morse.c ****   (char)0b11100110, // O, ---
+  23:Core/Src/morse.c ****   (char)0b01100001, // P, .--.
+  24:Core/Src/morse.c ****   (char)0b11010001, // Q, --.-
+  25:Core/Src/morse.c ****   (char)0b01000110, // R, .-.
+  26:Core/Src/morse.c ****   (char)0b00000110, // S, ...
+  27:Core/Src/morse.c ****   (char)0b10000100, // T, -
+  28:Core/Src/morse.c ****   (char)0b00100110, // U, ..-
+  29:Core/Src/morse.c ****   (char)0b00010001, // V, ...-
+ARM GAS  /tmp/ccIiFPim.s 			page 2
+
+
+  30:Core/Src/morse.c ****   (char)0b01100110, // W, .--
+  31:Core/Src/morse.c ****   (char)0b10010001, // X, -..-
+  32:Core/Src/morse.c ****   (char)0b10110001, // Y, -.--
+  33:Core/Src/morse.c ****   (char)0b11000001, // Z, --..
+  34:Core/Src/morse.c **** 
+  35:Core/Src/morse.c ****   // Numbers
+  36:Core/Src/morse.c ****   (char)0b11111101, // 0, -----
+  37:Core/Src/morse.c ****   (char)0b01111101, // 1, .----
+  38:Core/Src/morse.c ****   (char)0b00111101, // 2, ..---
+  39:Core/Src/morse.c ****   (char)0b00011101, // 3, ...--
+  40:Core/Src/morse.c ****   (char)0b00001101, // 4, ....-
+  41:Core/Src/morse.c ****   (char)0b00000101, // 5, .....
+  42:Core/Src/morse.c ****   (char)0b10000101, // 6, -....
+  43:Core/Src/morse.c ****   (char)0b11000101, // 7, --...
+  44:Core/Src/morse.c ****   (char)0b11100101, // 8, ---..
+  45:Core/Src/morse.c ****   (char)0b11110101, // 9, ----.
+  46:Core/Src/morse.c **** };
+  47:Core/Src/morse.c **** 
+  48:Core/Src/morse.c **** const struct PunctuationPair
+  49:Core/Src/morse.c **** {
+  50:Core/Src/morse.c ****   const char letter;
+  51:Core/Src/morse.c ****   const char code;
+  52:Core/Src/morse.c **** } punctuation[] =
+  53:Core/Src/morse.c **** {
+  54:Core/Src/morse.c ****   // Punctuations
+  55:Core/Src/morse.c ****   {',', (char)0b11001111}, // --..--
+  56:Core/Src/morse.c ****   {'.', (char)0b01010111}, // .-.-.-
+  57:Core/Src/morse.c ****   {'!', (char)0b10101111}, // -.-.--
+  58:Core/Src/morse.c ****   {':', (char)0b11100011}, // ---...
+  59:Core/Src/morse.c ****   {';', (char)0b10101011}, // -.-.-.
+  60:Core/Src/morse.c ****   {'(', (char)0b10110101}, // -.--.
+  61:Core/Src/morse.c ****   {')', (char)0b10110111}, // -.--.-
+  62:Core/Src/morse.c ****   {'"', (char)0b01001011}, // .-..-.
+  63:Core/Src/morse.c ****   {'@', (char)0b01101011}, // .--.-.
+  64:Core/Src/morse.c ****   {'&', (char)0b01000101}, // .-...
+  65:Core/Src/morse.c ****   {'?', (char)0b00110011}, // ..--..
+  66:Core/Src/morse.c ****   {'-', (char)0b10000111}, // -....-
+  67:Core/Src/morse.c ****   {'+', (char)0b01010101}, // .-.-.
+  68:Core/Src/morse.c ****   {'/', (char)0b10010101}, // -..-.
+  69:Core/Src/morse.c ****   {'=', (char)0b10001101}, // -...-
+  70:Core/Src/morse.c ****   {'*', (char)0b10010001}, // -..-
+  71:Core/Src/morse.c ****   {'\\', (char)0b01111011}, // .----.
+  72:Core/Src/morse.c **** };
+  73:Core/Src/morse.c **** 
+  74:Core/Src/morse.c **** void mini_morse_tx(const char* msg, const uint16_t len)
+  75:Core/Src/morse.c **** {
+  76:Core/Src/morse.c ****   for(uint16_t i = 0; i < len; i++)
+  77:Core/Src/morse.c ****   {
+  78:Core/Src/morse.c ****     mini_morse_encode_char(msg[i]);
+  79:Core/Src/morse.c ****   }
+  80:Core/Src/morse.c **** }
+  81:Core/Src/morse.c **** 
+  82:Core/Src/morse.c **** char character_to_code(const char x)
+  83:Core/Src/morse.c **** {
+  30              		.loc 1 83 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/ccIiFPim.s 			page 3
+
+
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  35              		.loc 1 83 1 is_stmt 0 view .LVU1
+  36 0000 0246     		mov	r2, r0
+  84:Core/Src/morse.c ****   char output = 0;
+  37              		.loc 1 84 3 is_stmt 1 view .LVU2
+  38              	.LVL1:
+  85:Core/Src/morse.c ****   if (x >= 'A' && x <= 'Z')
+  39              		.loc 1 85 3 view .LVU3
+  40              		.loc 1 85 16 is_stmt 0 view .LVU4
+  41 0002 A0F14103 		sub	r3, r0, #65
+  42 0006 DBB2     		uxtb	r3, r3
+  43              		.loc 1 85 6 view .LVU5
+  44 0008 192B     		cmp	r3, #25
+  45 000a 04D8     		bhi	.L2
+  86:Core/Src/morse.c ****   {
+  87:Core/Src/morse.c ****     output = alphameric[x - 'A'];
+  46              		.loc 1 87 5 is_stmt 1 view .LVU6
+  47              		.loc 1 87 27 is_stmt 0 view .LVU7
+  48 000c A0F14102 		sub	r2, r0, #65
+  49              		.loc 1 87 12 view .LVU8
+  50 0010 144B     		ldr	r3, .L10
+  51 0012 985C     		ldrb	r0, [r3, r2]	@ zero_extendqisi2
+  52              	.LVL2:
+  53              		.loc 1 87 12 view .LVU9
+  54 0014 7047     		bx	lr
+  55              	.LVL3:
+  56              	.L2:
+  88:Core/Src/morse.c ****   }
+  89:Core/Src/morse.c ****   else if (x >= 'a' && x <= 'z')
+  57              		.loc 1 89 8 is_stmt 1 view .LVU10
+  58              		.loc 1 89 21 is_stmt 0 view .LVU11
+  59 0016 A0F16103 		sub	r3, r0, #97
+  60 001a DBB2     		uxtb	r3, r3
+  61              		.loc 1 89 11 view .LVU12
+  62 001c 192B     		cmp	r3, #25
+  63 001e 04D8     		bhi	.L4
+  90:Core/Src/morse.c ****   {
+  91:Core/Src/morse.c ****     output = alphameric[x - 'a'];
+  64              		.loc 1 91 5 is_stmt 1 view .LVU13
+  65              		.loc 1 91 27 is_stmt 0 view .LVU14
+  66 0020 A0F16102 		sub	r2, r0, #97
+  67              		.loc 1 91 12 view .LVU15
+  68 0024 0F4B     		ldr	r3, .L10
+  69 0026 985C     		ldrb	r0, [r3, r2]	@ zero_extendqisi2
+  70              	.LVL4:
+  71              		.loc 1 91 12 view .LVU16
+  72 0028 7047     		bx	lr
+  73              	.LVL5:
+  74              	.L4:
+  92:Core/Src/morse.c ****   }
+  93:Core/Src/morse.c ****   else if (x >= '0' && x <= '9')
+  75              		.loc 1 93 8 is_stmt 1 view .LVU17
+  76              		.loc 1 93 21 is_stmt 0 view .LVU18
+  77 002a A0F13003 		sub	r3, r0, #48
+  78 002e DBB2     		uxtb	r3, r3
+  79              		.loc 1 93 11 view .LVU19
+ARM GAS  /tmp/ccIiFPim.s 			page 4
+
+
+  80 0030 092B     		cmp	r3, #9
+  81 0032 12D8     		bhi	.L8
+  94:Core/Src/morse.c ****   {
+  95:Core/Src/morse.c ****     output = alphameric[x - '0' + 26];
+  82              		.loc 1 95 5 is_stmt 1 view .LVU20
+  83              		.loc 1 95 33 is_stmt 0 view .LVU21
+  84 0034 A0F11602 		sub	r2, r0, #22
+  85              		.loc 1 95 12 view .LVU22
+  86 0038 0A4B     		ldr	r3, .L10
+  87 003a 985C     		ldrb	r0, [r3, r2]	@ zero_extendqisi2
+  88              	.LVL6:
+  89              		.loc 1 95 12 view .LVU23
+  90 003c 7047     		bx	lr
+  91              	.LVL7:
+  92              	.L6:
+  93              	.LBB2:
+  96:Core/Src/morse.c ****   }
+  97:Core/Src/morse.c ****   else
+  98:Core/Src/morse.c ****   {
+  99:Core/Src/morse.c ****     for (uint8_t i = 0; i < sizeof(punctuation) / 2; i++)
+  94              		.loc 1 99 54 is_stmt 1 discriminator 2 view .LVU24
+  95              		.loc 1 99 55 is_stmt 0 discriminator 2 view .LVU25
+  96 003e 0133     		adds	r3, r3, #1
+  97              	.LVL8:
+  98              		.loc 1 99 55 discriminator 2 view .LVU26
+  99 0040 DBB2     		uxtb	r3, r3
+ 100              	.LVL9:
+ 101              	.L5:
+ 102              		.loc 1 99 25 is_stmt 1 discriminator 1 view .LVU27
+ 103              		.loc 1 99 5 is_stmt 0 discriminator 1 view .LVU28
+ 104 0042 102B     		cmp	r3, #16
+ 105 0044 0CD8     		bhi	.L9
+ 100:Core/Src/morse.c ****     {
+ 101:Core/Src/morse.c ****       if (x == punctuation[i].letter)
+ 106              		.loc 1 101 7 is_stmt 1 view .LVU29
+ 107              		.loc 1 101 30 is_stmt 0 view .LVU30
+ 108 0046 0849     		ldr	r1, .L10+4
+ 109 0048 11F81310 		ldrb	r1, [r1, r3, lsl #1]	@ zero_extendqisi2
+ 110              		.loc 1 101 10 view .LVU31
+ 111 004c 9142     		cmp	r1, r2
+ 112 004e F6D1     		bne	.L6
+ 102:Core/Src/morse.c ****       {
+ 103:Core/Src/morse.c ****         output = punctuation[i].code;
+ 113              		.loc 1 103 9 is_stmt 1 view .LVU32
+ 114              		.loc 1 103 16 is_stmt 0 view .LVU33
+ 115 0050 0549     		ldr	r1, .L10+4
+ 116 0052 01EB4301 		add	r1, r1, r3, lsl #1
+ 117 0056 4878     		ldrb	r0, [r1, #1]	@ zero_extendqisi2
+ 118              	.LVL10:
+ 119              		.loc 1 103 16 view .LVU34
+ 120 0058 F1E7     		b	.L6
+ 121              	.LVL11:
+ 122              	.L8:
+  99:Core/Src/morse.c ****     {
+ 123              		.loc 1 99 18 view .LVU35
+ 124 005a 0023     		movs	r3, #0
+ 125              	.LBE2:
+ARM GAS  /tmp/ccIiFPim.s 			page 5
+
+
+  84:Core/Src/morse.c ****   if (x >= 'A' && x <= 'Z')
+ 126              		.loc 1 84 8 view .LVU36
+ 127 005c 1846     		mov	r0, r3
+ 128              	.LVL12:
+  84:Core/Src/morse.c ****   if (x >= 'A' && x <= 'Z')
+ 129              		.loc 1 84 8 view .LVU37
+ 130 005e F0E7     		b	.L5
+ 131              	.LVL13:
+ 132              	.L9:
+ 104:Core/Src/morse.c ****       }
+ 105:Core/Src/morse.c ****     }
+ 106:Core/Src/morse.c ****   }
+ 107:Core/Src/morse.c ****   return output;
+ 133              		.loc 1 107 3 is_stmt 1 view .LVU38
+ 108:Core/Src/morse.c **** }
+ 134              		.loc 1 108 1 is_stmt 0 view .LVU39
+ 135 0060 7047     		bx	lr
+ 136              	.L11:
+ 137 0062 00BF     		.align	2
+ 138              	.L10:
+ 139 0064 00000000 		.word	.LANCHOR0
+ 140 0068 00000000 		.word	.LANCHOR1
+ 141              		.cfi_endproc
+ 142              	.LFE135:
+ 144              		.section	.text.radio_init_morse,"ax",%progbits
+ 145              		.align	1
+ 146              		.global	radio_init_morse
+ 147              		.syntax unified
+ 148              		.thumb
+ 149              		.thumb_func
+ 150              		.fpu fpv4-sp-d16
+ 152              	radio_init_morse:
+ 153              	.LFB137:
+ 109:Core/Src/morse.c **** 
+ 110:Core/Src/morse.c **** void mini_morse_encode_char(const char x)
+ 111:Core/Src/morse.c **** {
+ 112:Core/Src/morse.c ****   if (x == ' ')
+ 113:Core/Src/morse.c ****   {
+ 114:Core/Src/morse.c ****     mini_morse_delay(7 * MINI_MORSE_DIT_TIME);
+ 115:Core/Src/morse.c ****   }
+ 116:Core/Src/morse.c ****   else
+ 117:Core/Src/morse.c ****   {
+ 118:Core/Src/morse.c ****     const char code = character_to_code(x);
+ 119:Core/Src/morse.c ****     const char length = ((code >> 2) & 1) | (code & 2) | ((code << 2) & 4);
+ 120:Core/Src/morse.c ****     const char stop = 7 - length + (length > 6);
+ 121:Core/Src/morse.c ****     for (int i = 7; i > stop; i--)
+ 122:Core/Src/morse.c ****     {
+ 123:Core/Src/morse.c ****       if ((code >> i) & 1)
+ 124:Core/Src/morse.c ****       {
+ 125:Core/Src/morse.c ****         mini_morse_start_tx(DAH);
+ 126:Core/Src/morse.c ****         mini_morse_delay(3 * MINI_MORSE_DIT_TIME);
+ 127:Core/Src/morse.c ****         mini_morse_stop_tx(DAH);
+ 128:Core/Src/morse.c ****       }
+ 129:Core/Src/morse.c ****       else
+ 130:Core/Src/morse.c ****       {
+ 131:Core/Src/morse.c ****         mini_morse_start_tx(DIT);
+ 132:Core/Src/morse.c ****         mini_morse_delay(MINI_MORSE_DIT_TIME);
+ARM GAS  /tmp/ccIiFPim.s 			page 6
+
+
+ 133:Core/Src/morse.c ****         mini_morse_stop_tx(DIT);
+ 134:Core/Src/morse.c ****       }
+ 135:Core/Src/morse.c ****       mini_morse_delay(MINI_MORSE_DIT_TIME);
+ 136:Core/Src/morse.c ****     }
+ 137:Core/Src/morse.c ****     mini_morse_delay(2 * MINI_MORSE_DIT_TIME );
+ 138:Core/Src/morse.c ****   }
+ 139:Core/Src/morse.c **** }
+ 140:Core/Src/morse.c **** 
+ 141:Core/Src/morse.c **** 
+ 142:Core/Src/morse.c **** 
+ 143:Core/Src/morse.c **** void radio_init_morse(void)
+ 144:Core/Src/morse.c **** {
+ 154              		.loc 1 144 1 is_stmt 1 view -0
+ 155              		.cfi_startproc
+ 156              		@ args = 0, pretend = 0, frame = 8
+ 157              		@ frame_needed = 0, uses_anonymous_args = 0
+ 158 0000 00B5     		push	{lr}
+ 159              	.LCFI0:
+ 160              		.cfi_def_cfa_offset 4
+ 161              		.cfi_offset 14, -4
+ 162 0002 83B0     		sub	sp, sp, #12
+ 163              	.LCFI1:
+ 164              		.cfi_def_cfa_offset 16
+ 145:Core/Src/morse.c ****   const uint8_t modem_config[] = {0x0,0x1,0x1,0x00};
+ 165              		.loc 1 145 3 view .LVU41
+ 166              		.loc 1 145 17 is_stmt 0 view .LVU42
+ 167 0004 084B     		ldr	r3, .L14
+ 168 0006 0193     		str	r3, [sp, #4]
+ 146:Core/Src/morse.c ****   set_properties(Si446x_PROP_MODEM_MOD_TYPE, modem_config, sizeof(modem_config));
+ 169              		.loc 1 146 3 is_stmt 1 view .LVU43
+ 170 0008 0422     		movs	r2, #4
+ 171 000a 0DEB0201 		add	r1, sp, r2
+ 172 000e 4FF40050 		mov	r0, #8192
+ 173 0012 FFF7FEFF 		bl	set_properties
+ 174              	.LVL14:
+ 147:Core/Src/morse.c **** 
+ 148:Core/Src/morse.c ****   setFrequency(426.3, 0);
+ 175              		.loc 1 148 3 view .LVU44
+ 176 0016 DFED050A 		vldr.32	s1, .L14+4
+ 177 001a 9FED050A 		vldr.32	s0, .L14+8
+ 178 001e FFF7FEFF 		bl	setFrequency
+ 179              	.LVL15:
+ 149:Core/Src/morse.c **** 
+ 150:Core/Src/morse.c **** }
+ 180              		.loc 1 150 1 is_stmt 0 view .LVU45
+ 181 0022 03B0     		add	sp, sp, #12
+ 182              	.LCFI2:
+ 183              		.cfi_def_cfa_offset 4
+ 184              		@ sp needed
+ 185 0024 5DF804FB 		ldr	pc, [sp], #4
+ 186              	.L15:
+ 187              		.align	2
+ 188              	.L14:
+ 189 0028 00010100 		.word	65792
+ 190 002c 00000000 		.word	0
+ 191 0030 6626D543 		.word	1138042470
+ 192              		.cfi_endproc
+ARM GAS  /tmp/ccIiFPim.s 			page 7
+
+
+ 193              	.LFE137:
+ 195              		.section	.text.mini_morse_start_tx,"ax",%progbits
+ 196              		.align	1
+ 197              		.global	mini_morse_start_tx
+ 198              		.syntax unified
+ 199              		.thumb
+ 200              		.thumb_func
+ 201              		.fpu fpv4-sp-d16
+ 203              	mini_morse_start_tx:
+ 204              	.LVL16:
+ 205              	.LFB138:
+ 151:Core/Src/morse.c **** 
+ 152:Core/Src/morse.c **** 
+ 153:Core/Src/morse.c **** 
+ 154:Core/Src/morse.c ****  void mini_morse_start_tx(const MorseLetter m)
+ 155:Core/Src/morse.c **** {
+ 206              		.loc 1 155 1 is_stmt 1 view -0
+ 207              		.cfi_startproc
+ 208              		@ args = 0, pretend = 0, frame = 0
+ 209              		@ frame_needed = 0, uses_anonymous_args = 0
+ 210              		.loc 1 155 1 is_stmt 0 view .LVU47
+ 211 0000 08B5     		push	{r3, lr}
+ 212              	.LCFI3:
+ 213              		.cfi_def_cfa_offset 8
+ 214              		.cfi_offset 3, -8
+ 215              		.cfi_offset 14, -4
+ 156:Core/Src/morse.c ****   radio_set_state(START_TX);
+ 216              		.loc 1 156 3 is_stmt 1 view .LVU48
+ 217 0002 0720     		movs	r0, #7
+ 218              	.LVL17:
+ 219              		.loc 1 156 3 is_stmt 0 view .LVU49
+ 220 0004 FFF7FEFF 		bl	radio_set_state
+ 221              	.LVL18:
+ 157:Core/Src/morse.c ****   // si446x_morse_high();
+ 158:Core/Src/morse.c ****   HAL_GPIO_WritePin(GPIO_MORSE_GPIO_Port,GPIO_MORSE_Pin,SET);
+ 222              		.loc 1 158 3 is_stmt 1 view .LVU50
+ 223 0008 0122     		movs	r2, #1
+ 224 000a 1146     		mov	r1, r2
+ 225 000c 0148     		ldr	r0, .L18
+ 226 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 227              	.LVL19:
+ 159:Core/Src/morse.c **** 
+ 160:Core/Src/morse.c **** }
+ 228              		.loc 1 160 1 is_stmt 0 view .LVU51
+ 229 0012 08BD     		pop	{r3, pc}
+ 230              	.L19:
+ 231              		.align	2
+ 232              	.L18:
+ 233 0014 00040240 		.word	1073873920
+ 234              		.cfi_endproc
+ 235              	.LFE138:
+ 237              		.section	.text.mini_morse_stop_tx,"ax",%progbits
+ 238              		.align	1
+ 239              		.global	mini_morse_stop_tx
+ 240              		.syntax unified
+ 241              		.thumb
+ 242              		.thumb_func
+ARM GAS  /tmp/ccIiFPim.s 			page 8
+
+
+ 243              		.fpu fpv4-sp-d16
+ 245              	mini_morse_stop_tx:
+ 246              	.LVL20:
+ 247              	.LFB139:
+ 161:Core/Src/morse.c **** 
+ 162:Core/Src/morse.c **** void mini_morse_stop_tx(const MorseLetter m)
+ 163:Core/Src/morse.c **** {
+ 248              		.loc 1 163 1 is_stmt 1 view -0
+ 249              		.cfi_startproc
+ 250              		@ args = 0, pretend = 0, frame = 0
+ 251              		@ frame_needed = 0, uses_anonymous_args = 0
+ 252              		.loc 1 163 1 is_stmt 0 view .LVU53
+ 253 0000 08B5     		push	{r3, lr}
+ 254              	.LCFI4:
+ 255              		.cfi_def_cfa_offset 8
+ 256              		.cfi_offset 3, -8
+ 257              		.cfi_offset 14, -4
+ 164:Core/Src/morse.c ****   // si446x_morse_low();
+ 165:Core/Src/morse.c ****   HAL_GPIO_WritePin(GPIO_MORSE_GPIO_Port,GPIO_MORSE_Pin,RESET);
+ 258              		.loc 1 165 3 is_stmt 1 view .LVU54
+ 259 0002 0022     		movs	r2, #0
+ 260 0004 0121     		movs	r1, #1
+ 261 0006 0348     		ldr	r0, .L22
+ 262              	.LVL21:
+ 263              		.loc 1 165 3 is_stmt 0 view .LVU55
+ 264 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 265              	.LVL22:
+ 166:Core/Src/morse.c ****   radio_set_state(READY);
+ 266              		.loc 1 166 3 is_stmt 1 view .LVU56
+ 267 000c 0320     		movs	r0, #3
+ 268 000e FFF7FEFF 		bl	radio_set_state
+ 269              	.LVL23:
+ 167:Core/Src/morse.c **** }
+ 270              		.loc 1 167 1 is_stmt 0 view .LVU57
+ 271 0012 08BD     		pop	{r3, pc}
+ 272              	.L23:
+ 273              		.align	2
+ 274              	.L22:
+ 275 0014 00040240 		.word	1073873920
+ 276              		.cfi_endproc
+ 277              	.LFE139:
+ 279              		.section	.text.mini_morse_delay,"ax",%progbits
+ 280              		.align	1
+ 281              		.global	mini_morse_delay
+ 282              		.syntax unified
+ 283              		.thumb
+ 284              		.thumb_func
+ 285              		.fpu fpv4-sp-d16
+ 287              	mini_morse_delay:
+ 288              	.LVL24:
+ 289              	.LFB140:
+ 168:Core/Src/morse.c **** 
+ 169:Core/Src/morse.c **** void mini_morse_delay(const uint16_t delay)
+ 170:Core/Src/morse.c **** {
+ 290              		.loc 1 170 1 is_stmt 1 view -0
+ 291              		.cfi_startproc
+ 292              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/ccIiFPim.s 			page 9
+
+
+ 293              		@ frame_needed = 0, uses_anonymous_args = 0
+ 294              		.loc 1 170 1 is_stmt 0 view .LVU59
+ 295 0000 08B5     		push	{r3, lr}
+ 296              	.LCFI5:
+ 297              		.cfi_def_cfa_offset 8
+ 298              		.cfi_offset 3, -8
+ 299              		.cfi_offset 14, -4
+ 171:Core/Src/morse.c ****   HAL_Delay(delay);
+ 300              		.loc 1 171 3 is_stmt 1 view .LVU60
+ 301 0002 FFF7FEFF 		bl	HAL_Delay
+ 302              	.LVL25:
+ 172:Core/Src/morse.c **** }...
+ 303              		.loc 1 172 1 is_stmt 0 view .LVU61
+ 304 0006 08BD     		pop	{r3, pc}
+ 305              		.cfi_endproc
+ 306              	.LFE140:
+ 308              		.section	.text.mini_morse_encode_char,"ax",%progbits
+ 309              		.align	1
+ 310              		.global	mini_morse_encode_char
+ 311              		.syntax unified
+ 312              		.thumb
+ 313              		.thumb_func
+ 314              		.fpu fpv4-sp-d16
+ 316              	mini_morse_encode_char:
+ 317              	.LVL26:
+ 318              	.LFB136:
+ 111:Core/Src/morse.c **** {
+ 319              		.loc 1 111 1 is_stmt 1 view -0
+ 320              		.cfi_startproc
+ 321              		@ args = 0, pretend = 0, frame = 0
+ 322              		@ frame_needed = 0, uses_anonymous_args = 0
+ 111:Core/Src/morse.c **** {
+ 323              		.loc 1 111 1 is_stmt 0 view .LVU63
+ 324 0000 70B5     		push	{r4, r5, r6, lr}
+ 325              	.LCFI6:
+ 326              		.cfi_def_cfa_offset 16
+ 327              		.cfi_offset 4, -16
+ 328              		.cfi_offset 5, -12
+ 329              		.cfi_offset 6, -8
+ 330              		.cfi_offset 14, -4
+ 112:Core/Src/morse.c ****   if (x == ' ')
+ 331              		.loc 1 112 3 is_stmt 1 view .LVU64
+ 112:Core/Src/morse.c ****   if (x == ' ')
+ 332              		.loc 1 112 6 is_stmt 0 view .LVU65
+ 333 0002 2028     		cmp	r0, #32
+ 334 0004 15D0     		beq	.L34
+ 335              	.LBB3:
+ 118:Core/Src/morse.c ****     const char code = character_to_code(x);
+ 336              		.loc 1 118 5 is_stmt 1 view .LVU66
+ 118:Core/Src/morse.c ****     const char code = character_to_code(x);
+ 337              		.loc 1 118 23 is_stmt 0 view .LVU67
+ 338 0006 FFF7FEFF 		bl	character_to_code
+ 339              	.LVL27:
+ 118:Core/Src/morse.c ****     const char code = character_to_code(x);
+ 340              		.loc 1 118 23 view .LVU68
+ 341 000a 0646     		mov	r6, r0
+ 342              	.LVL28:
+ARM GAS  /tmp/ccIiFPim.s 			page 10
+
+
+ 119:Core/Src/morse.c ****     const char length = ((code >> 2) & 1) | (code & 2) | ((code << 2) & 4);
+ 343              		.loc 1 119 5 is_stmt 1 view .LVU69
+ 119:Core/Src/morse.c ****     const char length = ((code >> 2) & 1) | (code & 2) | ((code << 2) & 4);
+ 344              		.loc 1 119 38 is_stmt 0 view .LVU70
+ 345 000c C0F38005 		ubfx	r5, r0, #2, #1
+ 119:Core/Src/morse.c ****     const char length = ((code >> 2) & 1) | (code & 2) | ((code << 2) & 4);
+ 346              		.loc 1 119 51 view .LVU71
+ 347 0010 00F00203 		and	r3, r0, #2
+ 119:Core/Src/morse.c ****     const char length = ((code >> 2) & 1) | (code & 2) | ((code << 2) & 4);
+ 348              		.loc 1 119 43 view .LVU72
+ 349 0014 1D43     		orrs	r5, r5, r3
+ 119:Core/Src/morse.c ****     const char length = ((code >> 2) & 1) | (code & 2) | ((code << 2) & 4);
+ 350              		.loc 1 119 65 view .LVU73
+ 351 0016 8300     		lsls	r3, r0, #2
+ 119:Core/Src/morse.c ****     const char length = ((code >> 2) & 1) | (code & 2) | ((code << 2) & 4);
+ 352              		.loc 1 119 71 view .LVU74
+ 353 0018 03F00403 		and	r3, r3, #4
+ 119:Core/Src/morse.c ****     const char length = ((code >> 2) & 1) | (code & 2) | ((code << 2) & 4);
+ 354              		.loc 1 119 16 view .LVU75
+ 355 001c 1D43     		orrs	r5, r5, r3
+ 356              	.LVL29:
+ 120:Core/Src/morse.c ****     const char stop = 7 - length + (length > 6);
+ 357              		.loc 1 120 5 is_stmt 1 view .LVU76
+ 120:Core/Src/morse.c ****     const char stop = 7 - length + (length > 6);
+ 358              		.loc 1 120 34 is_stmt 0 view .LVU77
+ 359 001e 062D     		cmp	r5, #6
+ 360 0020 94BF     		ite	ls
+ 361 0022 6D42     		rsbls	r5, r5, #0
+ 362 0024 C5F10105 		rsbhi	r5, r5, #1
+ 363              	.LVL30:
+ 120:Core/Src/morse.c ****     const char stop = 7 - length + (length > 6);
+ 364              		.loc 1 120 34 view .LVU78
+ 365 0028 EDB2     		uxtb	r5, r5
+ 120:Core/Src/morse.c ****     const char stop = 7 - length + (length > 6);
+ 366              		.loc 1 120 16 view .LVU79
+ 367 002a 0735     		adds	r5, r5, #7
+ 368 002c EDB2     		uxtb	r5, r5
+ 369              	.LVL31:
+ 121:Core/Src/morse.c ****     for (int i = 7; i > stop; i--)
+ 370              		.loc 1 121 5 is_stmt 1 view .LVU80
+ 371              	.LBB4:
+ 121:Core/Src/morse.c ****     for (int i = 7; i > stop; i--)
+ 372              		.loc 1 121 10 view .LVU81
+ 121:Core/Src/morse.c ****     for (int i = 7; i > stop; i--)
+ 373              		.loc 1 121 14 is_stmt 0 view .LVU82
+ 374 002e 0724     		movs	r4, #7
+ 121:Core/Src/morse.c ****     for (int i = 7; i > stop; i--)
+ 375              		.loc 1 121 5 view .LVU83
+ 376 0030 11E0     		b	.L29
+ 377              	.LVL32:
+ 378              	.L34:
+ 121:Core/Src/morse.c ****     for (int i = 7; i > stop; i--)
+ 379              		.loc 1 121 5 view .LVU84
+ 380              	.LBE4:
+ 381              	.LBE3:
+ 114:Core/Src/morse.c ****     mini_morse_delay(7 * MINI_MORSE_DIT_TIME);
+ 382              		.loc 1 114 5 is_stmt 1 view .LVU85
+ARM GAS  /tmp/ccIiFPim.s 			page 11
+
+
+ 383 0032 4FF4D270 		mov	r0, #420
+ 384              	.LVL33:
+ 114:Core/Src/morse.c ****     mini_morse_delay(7 * MINI_MORSE_DIT_TIME);
+ 385              		.loc 1 114 5 is_stmt 0 view .LVU86
+ 386 0036 FFF7FEFF 		bl	mini_morse_delay
+ 387              	.LVL34:
+ 388 003a 20E0     		b	.L26
+ 389              	.LVL35:
+ 390              	.L30:
+ 391              	.LBB6:
+ 392              	.LBB5:
+ 131:Core/Src/morse.c ****         mini_morse_start_tx(DIT);
+ 393              		.loc 1 131 9 is_stmt 1 view .LVU87
+ 394 003c 0020     		movs	r0, #0
+ 395 003e FFF7FEFF 		bl	mini_morse_start_tx
+ 396              	.LVL36:
+ 132:Core/Src/morse.c ****         mini_morse_delay(MINI_MORSE_DIT_TIME);
+ 397              		.loc 1 132 9 view .LVU88
+ 398 0042 3C20     		movs	r0, #60
+ 399 0044 FFF7FEFF 		bl	mini_morse_delay
+ 400              	.LVL37:
+ 133:Core/Src/morse.c ****         mini_morse_stop_tx(DIT);
+ 401              		.loc 1 133 9 view .LVU89
+ 402 0048 0020     		movs	r0, #0
+ 403 004a FFF7FEFF 		bl	mini_morse_stop_tx
+ 404              	.LVL38:
+ 405              	.L31:
+ 135:Core/Src/morse.c ****       mini_morse_delay(MINI_MORSE_DIT_TIME);
+ 406              		.loc 1 135 7 discriminator 2 view .LVU90
+ 407 004e 3C20     		movs	r0, #60
+ 408 0050 FFF7FEFF 		bl	mini_morse_delay
+ 409              	.LVL39:
+ 121:Core/Src/morse.c ****     for (int i = 7; i > stop; i--)
+ 410              		.loc 1 121 31 discriminator 2 view .LVU91
+ 121:Core/Src/morse.c ****     for (int i = 7; i > stop; i--)
+ 411              		.loc 1 121 32 is_stmt 0 discriminator 2 view .LVU92
+ 412 0054 013C     		subs	r4, r4, #1
+ 413              	.LVL40:
+ 414              	.L29:
+ 121:Core/Src/morse.c ****     for (int i = 7; i > stop; i--)
+ 415              		.loc 1 121 21 is_stmt 1 discriminator 1 view .LVU93
+ 121:Core/Src/morse.c ****     for (int i = 7; i > stop; i--)
+ 416              		.loc 1 121 5 is_stmt 0 discriminator 1 view .LVU94
+ 417 0056 A542     		cmp	r5, r4
+ 418 0058 0EDA     		bge	.L35
+ 123:Core/Src/morse.c ****       if ((code >> i) & 1)
+ 419              		.loc 1 123 7 is_stmt 1 view .LVU95
+ 123:Core/Src/morse.c ****       if ((code >> i) & 1)
+ 420              		.loc 1 123 17 is_stmt 0 view .LVU96
+ 421 005a 46FA04F3 		asr	r3, r6, r4
+ 123:Core/Src/morse.c ****       if ((code >> i) & 1)
+ 422              		.loc 1 123 10 view .LVU97
+ 423 005e 13F0010F 		tst	r3, #1
+ 424 0062 EBD0     		beq	.L30
+ 125:Core/Src/morse.c ****         mini_morse_start_tx(DAH);
+ 425              		.loc 1 125 9 is_stmt 1 view .LVU98
+ 426 0064 0120     		movs	r0, #1
+ARM GAS  /tmp/ccIiFPim.s 			page 12
+
+
+ 427 0066 FFF7FEFF 		bl	mini_morse_start_tx
+ 428              	.LVL41:
+ 126:Core/Src/morse.c ****         mini_morse_delay(3 * MINI_MORSE_DIT_TIME);
+ 429              		.loc 1 126 9 view .LVU99
+ 430 006a B420     		movs	r0, #180
+ 431 006c FFF7FEFF 		bl	mini_morse_delay
+ 432              	.LVL42:
+ 127:Core/Src/morse.c ****         mini_morse_stop_tx(DAH);
+ 433              		.loc 1 127 9 view .LVU100
+ 434 0070 0120     		movs	r0, #1
+ 435 0072 FFF7FEFF 		bl	mini_morse_stop_tx
+ 436              	.LVL43:
+ 437 0076 EAE7     		b	.L31
+ 438              	.L35:
+ 127:Core/Src/morse.c ****         mini_morse_stop_tx(DAH);
+ 439              		.loc 1 127 9 is_stmt 0 view .LVU101
+ 440              	.LBE5:
+ 137:Core/Src/morse.c ****     mini_morse_delay(2 * MINI_MORSE_DIT_TIME );
+ 441              		.loc 1 137 5 is_stmt 1 view .LVU102
+ 442 0078 7820     		movs	r0, #120
+ 443 007a FFF7FEFF 		bl	mini_morse_delay
+ 444              	.LVL44:
+ 445              	.L26:
+ 137:Core/Src/morse.c ****     mini_morse_delay(2 * MINI_MORSE_DIT_TIME );
+ 446              		.loc 1 137 5 is_stmt 0 view .LVU103
+ 447              	.LBE6:
+ 139:Core/Src/morse.c **** }
+ 448              		.loc 1 139 1 view .LVU104
+ 449 007e 70BD     		pop	{r4, r5, r6, pc}
+ 450              		.cfi_endproc
+ 451              	.LFE136:
+ 453              		.section	.text.mini_morse_tx,"ax",%progbits
+ 454              		.align	1
+ 455              		.global	mini_morse_tx
+ 456              		.syntax unified
+ 457              		.thumb
+ 458              		.thumb_func
+ 459              		.fpu fpv4-sp-d16
+ 461              	mini_morse_tx:
+ 462              	.LVL45:
+ 463              	.LFB134:
+  75:Core/Src/morse.c **** {
+ 464              		.loc 1 75 1 is_stmt 1 view -0
+ 465              		.cfi_startproc
+ 466              		@ args = 0, pretend = 0, frame = 0
+ 467              		@ frame_needed = 0, uses_anonymous_args = 0
+  75:Core/Src/morse.c **** {
+ 468              		.loc 1 75 1 is_stmt 0 view .LVU106
+ 469 0000 70B5     		push	{r4, r5, r6, lr}
+ 470              	.LCFI7:
+ 471              		.cfi_def_cfa_offset 16
+ 472              		.cfi_offset 4, -16
+ 473              		.cfi_offset 5, -12
+ 474              		.cfi_offset 6, -8
+ 475              		.cfi_offset 14, -4
+ 476 0002 0646     		mov	r6, r0
+ 477 0004 0D46     		mov	r5, r1
+ARM GAS  /tmp/ccIiFPim.s 			page 13
+
+
+  76:Core/Src/morse.c ****   for(uint16_t i = 0; i < len; i++)
+ 478              		.loc 1 76 3 is_stmt 1 view .LVU107
+ 479              	.LBB7:
+  76:Core/Src/morse.c ****   for(uint16_t i = 0; i < len; i++)
+ 480              		.loc 1 76 7 view .LVU108
+ 481              	.LVL46:
+  76:Core/Src/morse.c ****   for(uint16_t i = 0; i < len; i++)
+ 482              		.loc 1 76 16 is_stmt 0 view .LVU109
+ 483 0006 0024     		movs	r4, #0
+  76:Core/Src/morse.c ****   for(uint16_t i = 0; i < len; i++)
+ 484              		.loc 1 76 3 view .LVU110
+ 485 0008 04E0     		b	.L37
+ 486              	.LVL47:
+ 487              	.L38:
+  78:Core/Src/morse.c ****     mini_morse_encode_char(msg[i]);
+ 488              		.loc 1 78 5 is_stmt 1 discriminator 3 view .LVU111
+ 489 000a 305D     		ldrb	r0, [r6, r4]	@ zero_extendqisi2
+ 490 000c FFF7FEFF 		bl	mini_morse_encode_char
+ 491              	.LVL48:
+  76:Core/Src/morse.c ****   for(uint16_t i = 0; i < len; i++)
+ 492              		.loc 1 76 32 discriminator 3 view .LVU112
+  76:Core/Src/morse.c ****   for(uint16_t i = 0; i < len; i++)
+ 493              		.loc 1 76 33 is_stmt 0 discriminator 3 view .LVU113
+ 494 0010 0134     		adds	r4, r4, #1
+ 495              	.LVL49:
+  76:Core/Src/morse.c ****   for(uint16_t i = 0; i < len; i++)
+ 496              		.loc 1 76 33 discriminator 3 view .LVU114
+ 497 0012 A4B2     		uxth	r4, r4
+ 498              	.LVL50:
+ 499              	.L37:
+  76:Core/Src/morse.c ****   for(uint16_t i = 0; i < len; i++)
+ 500              		.loc 1 76 23 is_stmt 1 discriminator 1 view .LVU115
+  76:Core/Src/morse.c ****   for(uint16_t i = 0; i < len; i++)
+ 501              		.loc 1 76 3 is_stmt 0 discriminator 1 view .LVU116
+ 502 0014 AC42     		cmp	r4, r5
+ 503 0016 F8D3     		bcc	.L38
+ 504              	.LBE7:
+  80:Core/Src/morse.c **** }
+ 505              		.loc 1 80 1 view .LVU117
+ 506 0018 70BD     		pop	{r4, r5, r6, pc}
+  80:Core/Src/morse.c **** }
+ 507              		.loc 1 80 1 view .LVU118
+ 508              		.cfi_endproc
+ 509              	.LFE134:
+ 511              		.global	punctuation
+ 512              		.global	alphameric
+ 513              		.section	.rodata.alphameric,"a"
+ 514              		.align	2
+ 515              		.set	.LANCHOR0,. + 0
+ 518              	alphameric:
+ 519 0000 4281A186 		.ascii	"B\201\241\206\004!\306\001\002y\246A\302\202\346a\321"
+ 519      0421C601 
+ 519      0279A641 
+ 519      C282E661 
+ 519      D1
+ 520 0011 46068426 		.ascii	"F\006\204&\021f\221\261\301\375}=\035\015\005\205\305"
+ 520      116691B1 
+ARM GAS  /tmp/ccIiFPim.s 			page 14
+
+
+ 520      C1FD7D3D 
+ 520      1D0D0585 
+ 520      C5
+ 521 0022 E5F5     		.ascii	"\345\365"
+ 522              		.section	.rodata.punctuation,"a"
+ 523              		.align	2
+ 524              		.set	.LANCHOR1,. + 0
+ 527              	punctuation:
+ 528 0000 2C       		.byte	44
+ 529 0001 CF       		.byte	-49
+ 530 0002 2E       		.byte	46
+ 531 0003 57       		.byte	87
+ 532 0004 21       		.byte	33
+ 533 0005 AF       		.byte	-81
+ 534 0006 3A       		.byte	58
+ 535 0007 E3       		.byte	-29
+ 536 0008 3B       		.byte	59
+ 537 0009 AB       		.byte	-85
+ 538 000a 28       		.byte	40
+ 539 000b B5       		.byte	-75
+ 540 000c 29       		.byte	41
+ 541 000d B7       		.byte	-73
+ 542 000e 22       		.byte	34
+ 543 000f 4B       		.byte	75
+ 544 0010 40       		.byte	64
+ 545 0011 6B       		.byte	107
+ 546 0012 26       		.byte	38
+ 547 0013 45       		.byte	69
+ 548 0014 3F       		.byte	63
+ 549 0015 33       		.byte	51
+ 550 0016 2D       		.byte	45
+ 551 0017 87       		.byte	-121
+ 552 0018 2B       		.byte	43
+ 553 0019 55       		.byte	85
+ 554 001a 2F       		.byte	47
+ 555 001b 95       		.byte	-107
+ 556 001c 3D       		.byte	61
+ 557 001d 8D       		.byte	-115
+ 558 001e 2A       		.byte	42
+ 559 001f 91       		.byte	-111
+ 560 0020 5C       		.byte	92
+ 561 0021 7B       		.byte	123
+ 562              		.text
+ 563              	.Letext0:
+ 564              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 565              		.file 3 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 566              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 567              		.file 5 "Core/Inc/RH_RF24.h"
+ 568              		.file 6 "Core/Inc/morse.h"
+ 569              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 570              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ARM GAS  /tmp/ccIiFPim.s 			page 15
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 morse.c
+     /tmp/ccIiFPim.s:18     .text.character_to_code:0000000000000000 $t
+     /tmp/ccIiFPim.s:26     .text.character_to_code:0000000000000000 character_to_code
+     /tmp/ccIiFPim.s:139    .text.character_to_code:0000000000000064 $d
+     /tmp/ccIiFPim.s:145    .text.radio_init_morse:0000000000000000 $t
+     /tmp/ccIiFPim.s:152    .text.radio_init_morse:0000000000000000 radio_init_morse
+     /tmp/ccIiFPim.s:189    .text.radio_init_morse:0000000000000028 $d
+     /tmp/ccIiFPim.s:196    .text.mini_morse_start_tx:0000000000000000 $t
+     /tmp/ccIiFPim.s:203    .text.mini_morse_start_tx:0000000000000000 mini_morse_start_tx
+     /tmp/ccIiFPim.s:233    .text.mini_morse_start_tx:0000000000000014 $d
+     /tmp/ccIiFPim.s:238    .text.mini_morse_stop_tx:0000000000000000 $t
+     /tmp/ccIiFPim.s:245    .text.mini_morse_stop_tx:0000000000000000 mini_morse_stop_tx
+     /tmp/ccIiFPim.s:275    .text.mini_morse_stop_tx:0000000000000014 $d
+     /tmp/ccIiFPim.s:280    .text.mini_morse_delay:0000000000000000 $t
+     /tmp/ccIiFPim.s:287    .text.mini_morse_delay:0000000000000000 mini_morse_delay
+     /tmp/ccIiFPim.s:309    .text.mini_morse_encode_char:0000000000000000 $t
+     /tmp/ccIiFPim.s:316    .text.mini_morse_encode_char:0000000000000000 mini_morse_encode_char
+     /tmp/ccIiFPim.s:454    .text.mini_morse_tx:0000000000000000 $t
+     /tmp/ccIiFPim.s:461    .text.mini_morse_tx:0000000000000000 mini_morse_tx
+     /tmp/ccIiFPim.s:527    .rodata.punctuation:0000000000000000 punctuation
+     /tmp/ccIiFPim.s:518    .rodata.alphameric:0000000000000000 alphameric
+     /tmp/ccIiFPim.s:514    .rodata.alphameric:0000000000000000 $d
+     /tmp/ccIiFPim.s:523    .rodata.punctuation:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+set_properties
+setFrequency
+radio_set_state
+HAL_GPIO_WritePin
+HAL_Delay

@@ -4,6 +4,9 @@
     "cctype": "c",
     "stm32f4xx_hal.h": "c",
     "si4463.h": "c",
-    "main.h": "c"
+    "main.h": "c",
+    "rh_rf24.h": "c",
+    "inttypes.h": "c",
+    "morse.h": "c"
   }
 }

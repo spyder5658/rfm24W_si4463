@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccDlYcYM.s 			page 1
+ARM GAS  /tmp/cckjdso8.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -17,11 +17,1795 @@ ARM GAS  /tmp/ccDlYcYM.s 			page 1
   14              		.text
   15              	.Ltext0:
   16              		.cfi_sections	.debug_frame
-  17              	.Letext0:
-ARM GAS  /tmp/ccDlYcYM.s 			page 2
+  17              		.section	.text.si446x_hal_sdn_high,"ax",%progbits
+  18              		.align	1
+  19              		.global	si446x_hal_sdn_high
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	si446x_hal_sdn_high:
+  27              	.LFB145:
+  28              		.file 1 "Core/Src/RH_RF24.c"
+   1:Core/Src/RH_RF24.c **** #include "RH_RF24.h"
+   2:Core/Src/RH_RF24.c **** 
+   3:Core/Src/RH_RF24.c **** extern SPI_HandleTypeDef hspi1;
+   4:Core/Src/RH_RF24.c **** 
+   5:Core/Src/RH_RF24.c **** 
+   6:Core/Src/RH_RF24.c **** 
+   7:Core/Src/RH_RF24.c **** 
+   8:Core/Src/RH_RF24.c **** /*-----------radio library------------*/
+   9:Core/Src/RH_RF24.c **** 
+  10:Core/Src/RH_RF24.c **** 
+  11:Core/Src/RH_RF24.c **** void radio_reset(void)
+  12:Core/Src/RH_RF24.c **** {
+  13:Core/Src/RH_RF24.c ****   si446x_hal_sdn_high();
+  14:Core/Src/RH_RF24.c ****   HAL_Delay(150);
+  15:Core/Src/RH_RF24.c ****   si446x_hal_sdn_low();
+  16:Core/Src/RH_RF24.c ****   HAL_Delay(150);
+  17:Core/Src/RH_RF24.c **** }
+  18:Core/Src/RH_RF24.c **** 
+  19:Core/Src/RH_RF24.c **** 
+  20:Core/Src/RH_RF24.c **** uint8_t set_properties(const uint16_t id, const uint8_t *buff, const uint8_t len)
+  21:Core/Src/RH_RF24.c **** {
+  22:Core/Src/RH_RF24.c ****   uint8_t cmd[15] = {0};
+  23:Core/Src/RH_RF24.c ****   cmd[0] = id >> 8;
+  24:Core/Src/RH_RF24.c ****   cmd[1] = len;
+  25:Core/Src/RH_RF24.c ****   cmd[2] = id & 0xff;
+  26:Core/Src/RH_RF24.c **** 
+  27:Core/Src/RH_RF24.c ****   for (uint8_t i = 0; i < len; i++)
+  28:Core/Src/RH_RF24.c ****   {
+  29:Core/Src/RH_RF24.c ****     cmd[i + 3] = buff[i];
+  30:Core/Src/RH_RF24.c ****   }
+ARM GAS  /tmp/cckjdso8.s 			page 2
+
+
+  31:Core/Src/RH_RF24.c **** 
+  32:Core/Src/RH_RF24.c ****   si446x_ctrl_send_cmd_stream(Si446x_CMD_SET_PROPERTY, cmd, len + 3);
+  33:Core/Src/RH_RF24.c ****   return si446x_ctrl_wait_cts();
+  34:Core/Src/RH_RF24.c **** }
+  35:Core/Src/RH_RF24.c **** 
+  36:Core/Src/RH_RF24.c **** 
+  37:Core/Src/RH_RF24.c **** void radio_set_power(uint8_t power)
+  38:Core/Src/RH_RF24.c **** {
+  39:Core/Src/RH_RF24.c ****   if (power > 0x7F)
+  40:Core/Src/RH_RF24.c ****   {
+  41:Core/Src/RH_RF24.c ****     power = 0x7F;
+  42:Core/Src/RH_RF24.c ****   }
+  43:Core/Src/RH_RF24.c **** 
+  44:Core/Src/RH_RF24.c ****   uint8_t power_ctrl[] = {0x18, power, 0x00 };
+  45:Core/Src/RH_RF24.c ****   set_properties(Si446x_PROP_PA_MODE, power_ctrl, sizeof(power_ctrl));
+  46:Core/Src/RH_RF24.c **** }
+  47:Core/Src/RH_RF24.c **** 
+  48:Core/Src/RH_RF24.c **** 
+  49:Core/Src/RH_RF24.c **** uint16_t radio_get_id(void)
+  50:Core/Src/RH_RF24.c **** {
+  51:Core/Src/RH_RF24.c ****   si446x_ctrl_send_cmd(Si446x_CMD_PART_INFO);
+  52:Core/Src/RH_RF24.c **** 
+  53:Core/Src/RH_RF24.c ****   uint8_t part_info[4] = {0};
+  54:Core/Src/RH_RF24.c ****   if (si446x_ctrl_get_response(part_info, sizeof(part_info)))
+  55:Core/Src/RH_RF24.c ****   {
+  56:Core/Src/RH_RF24.c ****     return (part_info[2] << 8) + part_info[3];
+  57:Core/Src/RH_RF24.c ****   }
+  58:Core/Src/RH_RF24.c **** 
+  59:Core/Src/RH_RF24.c ****   return 0;
+  60:Core/Src/RH_RF24.c **** }
+  61:Core/Src/RH_RF24.c **** 
+  62:Core/Src/RH_RF24.c **** void radio_set_state(radio_state_t s)
+  63:Core/Src/RH_RF24.c **** {
+  64:Core/Src/RH_RF24.c ****   const uint8_t cmd = (uint8_t)s;
+  65:Core/Src/RH_RF24.c ****   si446x_ctrl_send_cmd_stream(Si446x_CMD_CHANGE_STATE, &cmd, 1);
+  66:Core/Src/RH_RF24.c ****   si446x_ctrl_wait_cts();
+  67:Core/Src/RH_RF24.c **** }
+  68:Core/Src/RH_RF24.c **** 
+  69:Core/Src/RH_RF24.c **** 
+  70:Core/Src/RH_RF24.c **** bool setFrequency(float centre, float afcPullInRange)
+  71:Core/Src/RH_RF24.c **** {
+  72:Core/Src/RH_RF24.c ****     // See Si446x Data Sheet section 5.3.1
+  73:Core/Src/RH_RF24.c ****     // Also the Si446x PLL Synthesizer / VCO_CNT Calculator Rev 0.4
+  74:Core/Src/RH_RF24.c ****     uint8_t outdiv;
+  75:Core/Src/RH_RF24.c ****     uint8_t band;
+  76:Core/Src/RH_RF24.c ****     
+  77:Core/Src/RH_RF24.c ****     // Non-continuous frequency bands
+  78:Core/Src/RH_RF24.c ****     if (centre <= 1050.0 && centre >= 850.0)
+  79:Core/Src/RH_RF24.c ****         outdiv = 4, band = 0;
+  80:Core/Src/RH_RF24.c ****     else if (centre <= 525.0 && centre >= 425.0)
+  81:Core/Src/RH_RF24.c ****         outdiv = 8, band = 2;
+  82:Core/Src/RH_RF24.c ****     else if (centre <= 350.0 && centre >= 284.0)
+  83:Core/Src/RH_RF24.c ****         outdiv = 12, band = 3;
+  84:Core/Src/RH_RF24.c ****     else if (centre <= 175.0 && centre >= 142.0)
+  85:Core/Src/RH_RF24.c ****         outdiv = 24, band = 5;
+  86:Core/Src/RH_RF24.c ****     else 
+  87:Core/Src/RH_RF24.c ****         return false;
+ARM GAS  /tmp/cckjdso8.s 			page 3
+
+
+  88:Core/Src/RH_RF24.c **** 
+  89:Core/Src/RH_RF24.c ****     
+  90:Core/Src/RH_RF24.c ****     // Set the MODEM_CLKGEN_BAND (not documented)
+  91:Core/Src/RH_RF24.c ****     uint8_t modem_clkgen[] = { band+8 };
+  92:Core/Src/RH_RF24.c ****     if (!set_properties(Si446x_PROP_MODEM_CLKGEN_BAND, modem_clkgen, sizeof(modem_clkgen)))
+  93:Core/Src/RH_RF24.c **** 	return false;
+  94:Core/Src/RH_RF24.c **** 
+  95:Core/Src/RH_RF24.c ****     centre *= 1000000.0; // Convert to Hz
+  96:Core/Src/RH_RF24.c **** 
+  97:Core/Src/RH_RF24.c ****     // Need the Xtal/XO freq from the radio_config file:
+  98:Core/Src/RH_RF24.c ****     uint32_t xtal_frequency[1] = {30000000};
+  99:Core/Src/RH_RF24.c ****     unsigned long f_pfd = 2 * xtal_frequency[0] / outdiv;
+ 100:Core/Src/RH_RF24.c ****     unsigned int n = ((unsigned int)(centre / f_pfd)) - 1;
+ 101:Core/Src/RH_RF24.c ****     float ratio = centre / (float)f_pfd;
+ 102:Core/Src/RH_RF24.c ****     float rest  = ratio - (float)n;
+ 103:Core/Src/RH_RF24.c ****     unsigned long m = (unsigned long)(rest * 524288UL); 
+ 104:Core/Src/RH_RF24.c ****     unsigned int m2 = m / 0x10000;
+ 105:Core/Src/RH_RF24.c ****     unsigned int m1 = (m - m2 * 0x10000) / 0x100;
+ 106:Core/Src/RH_RF24.c ****     unsigned int m0 = (m - m2 * 0x10000 - m1 * 0x100); 
+ 107:Core/Src/RH_RF24.c **** 
+ 108:Core/Src/RH_RF24.c ****     // PROP_FREQ_CONTROL_GROUP
+ 109:Core/Src/RH_RF24.c ****     uint8_t freq_control[] = { n, m2, m1, m0 };
+ 110:Core/Src/RH_RF24.c ****     return set_properties(Si446x_PROP_FREQ_CONTROL_INTE, freq_control, sizeof(freq_control));
+ 111:Core/Src/RH_RF24.c **** }
+ 112:Core/Src/RH_RF24.c **** 
+ 113:Core/Src/RH_RF24.c **** 
+ 114:Core/Src/RH_RF24.c **** bool radio_init(void)
+ 115:Core/Src/RH_RF24.c **** {
+ 116:Core/Src/RH_RF24.c ****   radio_reset();
+ 117:Core/Src/RH_RF24.c ****   const uint8_t cmd[] = {0x01, 0x00, 0x01, 0xC9, 0xC3, 0x80};
+ 118:Core/Src/RH_RF24.c ****   si446x_ctrl_send_cmd_stream(Si446x_CMD_POWER_UP, cmd, sizeof(cmd));
+ 119:Core/Src/RH_RF24.c ****   si446x_ctrl_wait_cts(); // May take longer to set the CTS bit
+ 120:Core/Src/RH_RF24.c **** 
+ 121:Core/Src/RH_RF24.c ****   set_properties(Si446x_PROP_GLOBAL_XO_TUNE, (const uint8_t[]){98}, 1);
+ 122:Core/Src/RH_RF24.c ****   radio_set_power(127);
+ 123:Core/Src/RH_RF24.c **** 
+ 124:Core/Src/RH_RF24.c ****    if (radio_get_id() != Si446x_CONF_ID)
+ 125:Core/Src/RH_RF24.c ****   {
+ 126:Core/Src/RH_RF24.c ****     // printf("%02x\n",radio_get_id());
+ 127:Core/Src/RH_RF24.c ****     return false;
+ 128:Core/Src/RH_RF24.c ****   }
+ 129:Core/Src/RH_RF24.c **** 
+ 130:Core/Src/RH_RF24.c ****   return true;
+ 131:Core/Src/RH_RF24.c **** 
+ 132:Core/Src/RH_RF24.c **** }
+ 133:Core/Src/RH_RF24.c **** 
+ 134:Core/Src/RH_RF24.c **** 
+ 135:Core/Src/RH_RF24.c **** 
+ 136:Core/Src/RH_RF24.c **** /*-----------radio control------------*/
+ 137:Core/Src/RH_RF24.c **** 
+ 138:Core/Src/RH_RF24.c **** 
+ 139:Core/Src/RH_RF24.c **** uint8_t si446x_ctrl_wait_cts(void)
+ 140:Core/Src/RH_RF24.c **** {
+ 141:Core/Src/RH_RF24.c ****   for(uint16_t i=0; i < Si446x_CONF_MAX_CTS_TRIES; i++)
+ 142:Core/Src/RH_RF24.c ****   {
+ 143:Core/Src/RH_RF24.c ****     si446x_hal_spi_nsel_low();
+ 144:Core/Src/RH_RF24.c ****     uint8_t cts = si446x_hal_spi_read_byte(Si446x_CMD_READ_CMD_BUFF);
+ARM GAS  /tmp/cckjdso8.s 			page 4
+
+
+ 145:Core/Src/RH_RF24.c ****     si446x_hal_spi_nsel_high();
+ 146:Core/Src/RH_RF24.c **** 
+ 147:Core/Src/RH_RF24.c ****     if(cts == Si446x_CTS_RESPONSE)
+ 148:Core/Src/RH_RF24.c ****     {
+ 149:Core/Src/RH_RF24.c ****       return 1;
+ 150:Core/Src/RH_RF24.c ****     }
+ 151:Core/Src/RH_RF24.c ****   }
+ 152:Core/Src/RH_RF24.c ****   return 0;
+ 153:Core/Src/RH_RF24.c **** }
+ 154:Core/Src/RH_RF24.c **** 
+ 155:Core/Src/RH_RF24.c **** 
+ 156:Core/Src/RH_RF24.c **** void si446x_ctrl_send_cmd(const uint8_t cmd)
+ 157:Core/Src/RH_RF24.c **** {
+ 158:Core/Src/RH_RF24.c ****   si446x_hal_spi_nsel_low();
+ 159:Core/Src/RH_RF24.c ****   si446x_hal_spi_write_byte(cmd);
+ 160:Core/Src/RH_RF24.c ****   si446x_hal_spi_nsel_high();
+ 161:Core/Src/RH_RF24.c ****   si446x_ctrl_wait_cts();
+ 162:Core/Src/RH_RF24.c **** }
+ 163:Core/Src/RH_RF24.c **** 
+ 164:Core/Src/RH_RF24.c **** void si446x_ctrl_send_cmd_stream(const uint8_t cmd, const uint8_t* buffer, const uint8_t len)
+ 165:Core/Src/RH_RF24.c **** {
+ 166:Core/Src/RH_RF24.c ****   si446x_hal_spi_nsel_low();
+ 167:Core/Src/RH_RF24.c ****   si446x_hal_spi_write_byte(cmd);
+ 168:Core/Src/RH_RF24.c ****   si446x_hal_spi_write(buffer, len);
+ 169:Core/Src/RH_RF24.c ****   si446x_hal_spi_nsel_high();
+ 170:Core/Src/RH_RF24.c ****   si446x_ctrl_wait_cts();
+ 171:Core/Src/RH_RF24.c **** }
+ 172:Core/Src/RH_RF24.c **** 
+ 173:Core/Src/RH_RF24.c **** 
+ 174:Core/Src/RH_RF24.c **** 
+ 175:Core/Src/RH_RF24.c **** uint8_t si446x_ctrl_get_response(uint8_t *buffer, const uint8_t len)
+ 176:Core/Src/RH_RF24.c **** {
+ 177:Core/Src/RH_RF24.c ****   if(si446x_ctrl_wait_cts())
+ 178:Core/Src/RH_RF24.c ****   {
+ 179:Core/Src/RH_RF24.c ****     si446x_hal_spi_nsel_low();
+ 180:Core/Src/RH_RF24.c ****     si446x_hal_spi_read_byte(Si446x_CMD_READ_CMD_BUFF);
+ 181:Core/Src/RH_RF24.c ****     si446x_hal_spi_read(buffer, len);
+ 182:Core/Src/RH_RF24.c ****     si446x_hal_spi_nsel_high();
+ 183:Core/Src/RH_RF24.c ****     return 1;
+ 184:Core/Src/RH_RF24.c ****   }
+ 185:Core/Src/RH_RF24.c ****   return 0;
+ 186:Core/Src/RH_RF24.c **** }
+ 187:Core/Src/RH_RF24.c **** 
+ 188:Core/Src/RH_RF24.c **** /*-----------radio control------------*/
+ 189:Core/Src/RH_RF24.c **** 
+ 190:Core/Src/RH_RF24.c **** 
+ 191:Core/Src/RH_RF24.c **** 
+ 192:Core/Src/RH_RF24.c **** 
+ 193:Core/Src/RH_RF24.c **** /*-----------low level-----------------------*/
+ 194:Core/Src/RH_RF24.c **** void si446x_hal_sdn_high(void)
+ 195:Core/Src/RH_RF24.c **** {
+  29              		.loc 1 195 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 08B5     		push	{r3, lr}
+  34              	.LCFI0:
+ARM GAS  /tmp/cckjdso8.s 			page 5
+
+
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 3, -8
+  37              		.cfi_offset 14, -4
+ 196:Core/Src/RH_RF24.c ****   HAL_GPIO_WritePin(RFM_SDN_GPIO_Port,RFM_SDN_Pin,SET);
+  38              		.loc 1 196 3 view .LVU1
+  39 0002 0122     		movs	r2, #1
+  40 0004 4FF40061 		mov	r1, #2048
+  41 0008 0148     		ldr	r0, .L3
+  42 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+  43              	.LVL0:
+ 197:Core/Src/RH_RF24.c **** }
+  44              		.loc 1 197 1 is_stmt 0 view .LVU2
+  45 000e 08BD     		pop	{r3, pc}
+  46              	.L4:
+  47              		.align	2
+  48              	.L3:
+  49 0010 00000240 		.word	1073872896
+  50              		.cfi_endproc
+  51              	.LFE145:
+  53              		.section	.text.si446x_hal_sdn_low,"ax",%progbits
+  54              		.align	1
+  55              		.global	si446x_hal_sdn_low
+  56              		.syntax unified
+  57              		.thumb
+  58              		.thumb_func
+  59              		.fpu fpv4-sp-d16
+  61              	si446x_hal_sdn_low:
+  62              	.LFB146:
+ 198:Core/Src/RH_RF24.c **** 
+ 199:Core/Src/RH_RF24.c **** void si446x_hal_sdn_low(void)
+ 200:Core/Src/RH_RF24.c **** {
+  63              		.loc 1 200 1 is_stmt 1 view -0
+  64              		.cfi_startproc
+  65              		@ args = 0, pretend = 0, frame = 0
+  66              		@ frame_needed = 0, uses_anonymous_args = 0
+  67 0000 08B5     		push	{r3, lr}
+  68              	.LCFI1:
+  69              		.cfi_def_cfa_offset 8
+  70              		.cfi_offset 3, -8
+  71              		.cfi_offset 14, -4
+ 201:Core/Src/RH_RF24.c ****   HAL_GPIO_WritePin(RFM_SDN_GPIO_Port,RFM_SDN_Pin,RESET);
+  72              		.loc 1 201 3 view .LVU4
+  73 0002 0022     		movs	r2, #0
+  74 0004 4FF40061 		mov	r1, #2048
+  75 0008 0148     		ldr	r0, .L7
+  76 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+  77              	.LVL1:
+ 202:Core/Src/RH_RF24.c **** }
+  78              		.loc 1 202 1 is_stmt 0 view .LVU5
+  79 000e 08BD     		pop	{r3, pc}
+  80              	.L8:
+  81              		.align	2
+  82              	.L7:
+  83 0010 00000240 		.word	1073872896
+  84              		.cfi_endproc
+  85              	.LFE146:
+  87              		.section	.text.radio_reset,"ax",%progbits
+ARM GAS  /tmp/cckjdso8.s 			page 6
+
+
+  88              		.align	1
+  89              		.global	radio_reset
+  90              		.syntax unified
+  91              		.thumb
+  92              		.thumb_func
+  93              		.fpu fpv4-sp-d16
+  95              	radio_reset:
+  96              	.LFB134:
+  12:Core/Src/RH_RF24.c ****   si446x_hal_sdn_high();
+  97              		.loc 1 12 1 is_stmt 1 view -0
+  98              		.cfi_startproc
+  99              		@ args = 0, pretend = 0, frame = 0
+ 100              		@ frame_needed = 0, uses_anonymous_args = 0
+ 101 0000 08B5     		push	{r3, lr}
+ 102              	.LCFI2:
+ 103              		.cfi_def_cfa_offset 8
+ 104              		.cfi_offset 3, -8
+ 105              		.cfi_offset 14, -4
+  13:Core/Src/RH_RF24.c ****   HAL_Delay(150);
+ 106              		.loc 1 13 3 view .LVU7
+ 107 0002 FFF7FEFF 		bl	si446x_hal_sdn_high
+ 108              	.LVL2:
+  14:Core/Src/RH_RF24.c ****   si446x_hal_sdn_low();
+ 109              		.loc 1 14 3 view .LVU8
+ 110 0006 9620     		movs	r0, #150
+ 111 0008 FFF7FEFF 		bl	HAL_Delay
+ 112              	.LVL3:
+  15:Core/Src/RH_RF24.c ****   HAL_Delay(150);
+ 113              		.loc 1 15 3 view .LVU9
+ 114 000c FFF7FEFF 		bl	si446x_hal_sdn_low
+ 115              	.LVL4:
+  16:Core/Src/RH_RF24.c **** }
+ 116              		.loc 1 16 3 view .LVU10
+ 117 0010 9620     		movs	r0, #150
+ 118 0012 FFF7FEFF 		bl	HAL_Delay
+ 119              	.LVL5:
+  17:Core/Src/RH_RF24.c **** 
+ 120              		.loc 1 17 1 is_stmt 0 view .LVU11
+ 121 0016 08BD     		pop	{r3, pc}
+ 122              		.cfi_endproc
+ 123              	.LFE134:
+ 125              		.section	.text.si446x_hal_spi_nsel_low,"ax",%progbits
+ 126              		.align	1
+ 127              		.global	si446x_hal_spi_nsel_low
+ 128              		.syntax unified
+ 129              		.thumb
+ 130              		.thumb_func
+ 131              		.fpu fpv4-sp-d16
+ 133              	si446x_hal_spi_nsel_low:
+ 134              	.LFB147:
+ 203:Core/Src/RH_RF24.c **** 
+ 204:Core/Src/RH_RF24.c **** void si446x_hal_spi_nsel_low(void)
+ 205:Core/Src/RH_RF24.c **** {
+ 135              		.loc 1 205 1 is_stmt 1 view -0
+ 136              		.cfi_startproc
+ 137              		@ args = 0, pretend = 0, frame = 0
+ 138              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/cckjdso8.s 			page 7
+
+
+ 139 0000 08B5     		push	{r3, lr}
+ 140              	.LCFI3:
+ 141              		.cfi_def_cfa_offset 8
+ 142              		.cfi_offset 3, -8
+ 143              		.cfi_offset 14, -4
+ 206:Core/Src/RH_RF24.c ****   HAL_GPIO_WritePin(RFM_CS_GPIO_Port,RFM_CS_Pin,RESET);
+ 144              		.loc 1 206 3 view .LVU13
+ 145 0002 0022     		movs	r2, #0
+ 146 0004 1021     		movs	r1, #16
+ 147 0006 0248     		ldr	r0, .L13
+ 148 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 149              	.LVL6:
+ 207:Core/Src/RH_RF24.c **** 
+ 208:Core/Src/RH_RF24.c **** }
+ 150              		.loc 1 208 1 is_stmt 0 view .LVU14
+ 151 000c 08BD     		pop	{r3, pc}
+ 152              	.L14:
+ 153 000e 00BF     		.align	2
+ 154              	.L13:
+ 155 0010 00000240 		.word	1073872896
+ 156              		.cfi_endproc
+ 157              	.LFE147:
+ 159              		.section	.text.si446x_hal_spi_nsel_high,"ax",%progbits
+ 160              		.align	1
+ 161              		.global	si446x_hal_spi_nsel_high
+ 162              		.syntax unified
+ 163              		.thumb
+ 164              		.thumb_func
+ 165              		.fpu fpv4-sp-d16
+ 167              	si446x_hal_spi_nsel_high:
+ 168              	.LFB148:
+ 209:Core/Src/RH_RF24.c **** 
+ 210:Core/Src/RH_RF24.c **** void si446x_hal_spi_nsel_high(void)
+ 211:Core/Src/RH_RF24.c **** {
+ 169              		.loc 1 211 1 is_stmt 1 view -0
+ 170              		.cfi_startproc
+ 171              		@ args = 0, pretend = 0, frame = 0
+ 172              		@ frame_needed = 0, uses_anonymous_args = 0
+ 173 0000 08B5     		push	{r3, lr}
+ 174              	.LCFI4:
+ 175              		.cfi_def_cfa_offset 8
+ 176              		.cfi_offset 3, -8
+ 177              		.cfi_offset 14, -4
+ 212:Core/Src/RH_RF24.c ****   HAL_GPIO_WritePin(RFM_CS_GPIO_Port,RFM_CS_Pin,SET);
+ 178              		.loc 1 212 3 view .LVU16
+ 179 0002 0122     		movs	r2, #1
+ 180 0004 1021     		movs	r1, #16
+ 181 0006 0248     		ldr	r0, .L17
+ 182 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 183              	.LVL7:
+ 213:Core/Src/RH_RF24.c **** 
+ 214:Core/Src/RH_RF24.c **** }
+ 184              		.loc 1 214 1 is_stmt 0 view .LVU17
+ 185 000c 08BD     		pop	{r3, pc}
+ 186              	.L18:
+ 187 000e 00BF     		.align	2
+ 188              	.L17:
+ARM GAS  /tmp/cckjdso8.s 			page 8
+
+
+ 189 0010 00000240 		.word	1073872896
+ 190              		.cfi_endproc
+ 191              	.LFE148:
+ 193              		.section	.text.si446x_hal_spi_write_byte,"ax",%progbits
+ 194              		.align	1
+ 195              		.global	si446x_hal_spi_write_byte
+ 196              		.syntax unified
+ 197              		.thumb
+ 198              		.thumb_func
+ 199              		.fpu fpv4-sp-d16
+ 201              	si446x_hal_spi_write_byte:
+ 202              	.LVL8:
+ 203              	.LFB149:
+ 215:Core/Src/RH_RF24.c **** 
+ 216:Core/Src/RH_RF24.c **** 
+ 217:Core/Src/RH_RF24.c **** void si446x_hal_spi_write_byte(const uint8_t cmd)
+ 218:Core/Src/RH_RF24.c **** {
+ 204              		.loc 1 218 1 is_stmt 1 view -0
+ 205              		.cfi_startproc
+ 206              		@ args = 0, pretend = 0, frame = 8
+ 207              		@ frame_needed = 0, uses_anonymous_args = 0
+ 208              		.loc 1 218 1 is_stmt 0 view .LVU19
+ 209 0000 00B5     		push	{lr}
+ 210              	.LCFI5:
+ 211              		.cfi_def_cfa_offset 4
+ 212              		.cfi_offset 14, -4
+ 213 0002 83B0     		sub	sp, sp, #12
+ 214              	.LCFI6:
+ 215              		.cfi_def_cfa_offset 16
+ 216 0004 8DF80700 		strb	r0, [sp, #7]
+ 219:Core/Src/RH_RF24.c ****     HAL_SPI_Transmit(&hspi1, (uint8_t *)&cmd, 1, HAL_MAX_DELAY);
+ 217              		.loc 1 219 5 is_stmt 1 view .LVU20
+ 218 0008 4FF0FF33 		mov	r3, #-1
+ 219 000c 0122     		movs	r2, #1
+ 220 000e 0DF10701 		add	r1, sp, #7
+ 221 0012 0348     		ldr	r0, .L21
+ 222              	.LVL9:
+ 223              		.loc 1 219 5 is_stmt 0 view .LVU21
+ 224 0014 FFF7FEFF 		bl	HAL_SPI_Transmit
+ 225              	.LVL10:
+ 220:Core/Src/RH_RF24.c **** }
+ 226              		.loc 1 220 1 view .LVU22
+ 227 0018 03B0     		add	sp, sp, #12
+ 228              	.LCFI7:
+ 229              		.cfi_def_cfa_offset 4
+ 230              		@ sp needed
+ 231 001a 5DF804FB 		ldr	pc, [sp], #4
+ 232              	.L22:
+ 233 001e 00BF     		.align	2
+ 234              	.L21:
+ 235 0020 00000000 		.word	hspi1
+ 236              		.cfi_endproc
+ 237              	.LFE149:
+ 239              		.section	.text.si446x_hal_spi_read_byte,"ax",%progbits
+ 240              		.align	1
+ 241              		.global	si446x_hal_spi_read_byte
+ 242              		.syntax unified
+ARM GAS  /tmp/cckjdso8.s 			page 9
+
+
+ 243              		.thumb
+ 244              		.thumb_func
+ 245              		.fpu fpv4-sp-d16
+ 247              	si446x_hal_spi_read_byte:
+ 248              	.LVL11:
+ 249              	.LFB150:
+ 221:Core/Src/RH_RF24.c **** 
+ 222:Core/Src/RH_RF24.c **** 
+ 223:Core/Src/RH_RF24.c **** uint8_t si446x_hal_spi_read_byte(const uint8_t cmd)
+ 224:Core/Src/RH_RF24.c **** {
+ 250              		.loc 1 224 1 is_stmt 1 view -0
+ 251              		.cfi_startproc
+ 252              		@ args = 0, pretend = 0, frame = 8
+ 253              		@ frame_needed = 0, uses_anonymous_args = 0
+ 254              		.loc 1 224 1 is_stmt 0 view .LVU24
+ 255 0000 00B5     		push	{lr}
+ 256              	.LCFI8:
+ 257              		.cfi_def_cfa_offset 4
+ 258              		.cfi_offset 14, -4
+ 259 0002 85B0     		sub	sp, sp, #20
+ 260              	.LCFI9:
+ 261              		.cfi_def_cfa_offset 24
+ 225:Core/Src/RH_RF24.c ****     uint8_t tx = cmd;
+ 262              		.loc 1 225 5 is_stmt 1 view .LVU25
+ 263              		.loc 1 225 13 is_stmt 0 view .LVU26
+ 264 0004 8DF80F00 		strb	r0, [sp, #15]
+ 226:Core/Src/RH_RF24.c ****     uint8_t rx = 0;
+ 265              		.loc 1 226 5 is_stmt 1 view .LVU27
+ 266              		.loc 1 226 13 is_stmt 0 view .LVU28
+ 267 0008 0023     		movs	r3, #0
+ 268 000a 8DF80E30 		strb	r3, [sp, #14]
+ 227:Core/Src/RH_RF24.c ****     HAL_SPI_TransmitReceive(&hspi1, &tx, &rx, 1, HAL_MAX_DELAY);
+ 269              		.loc 1 227 5 is_stmt 1 view .LVU29
+ 270 000e 4FF0FF33 		mov	r3, #-1
+ 271 0012 0093     		str	r3, [sp]
+ 272 0014 0123     		movs	r3, #1
+ 273 0016 0DF10E02 		add	r2, sp, #14
+ 274 001a 0DF10F01 		add	r1, sp, #15
+ 275 001e 0448     		ldr	r0, .L25
+ 276              	.LVL12:
+ 277              		.loc 1 227 5 is_stmt 0 view .LVU30
+ 278 0020 FFF7FEFF 		bl	HAL_SPI_TransmitReceive
+ 279              	.LVL13:
+ 228:Core/Src/RH_RF24.c ****     return rx;
+ 280              		.loc 1 228 5 is_stmt 1 view .LVU31
+ 229:Core/Src/RH_RF24.c **** }
+ 281              		.loc 1 229 1 is_stmt 0 view .LVU32
+ 282 0024 9DF80E00 		ldrb	r0, [sp, #14]	@ zero_extendqisi2
+ 283 0028 05B0     		add	sp, sp, #20
+ 284              	.LCFI10:
+ 285              		.cfi_def_cfa_offset 4
+ 286              		@ sp needed
+ 287 002a 5DF804FB 		ldr	pc, [sp], #4
+ 288              	.L26:
+ 289 002e 00BF     		.align	2
+ 290              	.L25:
+ 291 0030 00000000 		.word	hspi1
+ARM GAS  /tmp/cckjdso8.s 			page 10
+
+
+ 292              		.cfi_endproc
+ 293              	.LFE150:
+ 295              		.section	.text.si446x_ctrl_wait_cts,"ax",%progbits
+ 296              		.align	1
+ 297              		.global	si446x_ctrl_wait_cts
+ 298              		.syntax unified
+ 299              		.thumb
+ 300              		.thumb_func
+ 301              		.fpu fpv4-sp-d16
+ 303              	si446x_ctrl_wait_cts:
+ 304              	.LFB141:
+ 140:Core/Src/RH_RF24.c ****   for(uint16_t i=0; i < Si446x_CONF_MAX_CTS_TRIES; i++)
+ 305              		.loc 1 140 1 is_stmt 1 view -0
+ 306              		.cfi_startproc
+ 307              		@ args = 0, pretend = 0, frame = 0
+ 308              		@ frame_needed = 0, uses_anonymous_args = 0
+ 309 0000 38B5     		push	{r3, r4, r5, lr}
+ 310              	.LCFI11:
+ 311              		.cfi_def_cfa_offset 16
+ 312              		.cfi_offset 3, -16
+ 313              		.cfi_offset 4, -12
+ 314              		.cfi_offset 5, -8
+ 315              		.cfi_offset 14, -4
+ 141:Core/Src/RH_RF24.c ****   {
+ 316              		.loc 1 141 3 view .LVU34
+ 317              	.LBB2:
+ 141:Core/Src/RH_RF24.c ****   {
+ 318              		.loc 1 141 7 view .LVU35
+ 319              	.LVL14:
+ 141:Core/Src/RH_RF24.c ****   {
+ 320              		.loc 1 141 16 is_stmt 0 view .LVU36
+ 321 0002 0024     		movs	r4, #0
+ 322              	.LVL15:
+ 323              	.L28:
+ 141:Core/Src/RH_RF24.c ****   {
+ 324              		.loc 1 141 21 is_stmt 1 discriminator 1 view .LVU37
+ 141:Core/Src/RH_RF24.c ****   {
+ 325              		.loc 1 141 3 is_stmt 0 discriminator 1 view .LVU38
+ 326 0004 40F6C313 		movw	r3, #2499
+ 327 0008 9C42     		cmp	r4, r3
+ 328 000a 0CD8     		bhi	.L33
+ 329              	.LBB3:
+ 143:Core/Src/RH_RF24.c ****     uint8_t cts = si446x_hal_spi_read_byte(Si446x_CMD_READ_CMD_BUFF);
+ 330              		.loc 1 143 5 is_stmt 1 view .LVU39
+ 331 000c FFF7FEFF 		bl	si446x_hal_spi_nsel_low
+ 332              	.LVL16:
+ 144:Core/Src/RH_RF24.c ****     si446x_hal_spi_nsel_high();
+ 333              		.loc 1 144 5 view .LVU40
+ 144:Core/Src/RH_RF24.c ****     si446x_hal_spi_nsel_high();
+ 334              		.loc 1 144 19 is_stmt 0 view .LVU41
+ 335 0010 4420     		movs	r0, #68
+ 336 0012 FFF7FEFF 		bl	si446x_hal_spi_read_byte
+ 337              	.LVL17:
+ 338 0016 0546     		mov	r5, r0
+ 339              	.LVL18:
+ 145:Core/Src/RH_RF24.c **** 
+ 340              		.loc 1 145 5 is_stmt 1 view .LVU42
+ARM GAS  /tmp/cckjdso8.s 			page 11
+
+
+ 341 0018 FFF7FEFF 		bl	si446x_hal_spi_nsel_high
+ 342              	.LVL19:
+ 147:Core/Src/RH_RF24.c ****     {
+ 343              		.loc 1 147 5 view .LVU43
+ 147:Core/Src/RH_RF24.c ****     {
+ 344              		.loc 1 147 7 is_stmt 0 view .LVU44
+ 345 001c FF2D     		cmp	r5, #255
+ 346 001e 04D0     		beq	.L31
+ 347              	.LBE3:
+ 141:Core/Src/RH_RF24.c ****   {
+ 348              		.loc 1 141 52 is_stmt 1 discriminator 2 view .LVU45
+ 141:Core/Src/RH_RF24.c ****   {
+ 349              		.loc 1 141 53 is_stmt 0 discriminator 2 view .LVU46
+ 350 0020 0134     		adds	r4, r4, #1
+ 351              	.LVL20:
+ 141:Core/Src/RH_RF24.c ****   {
+ 352              		.loc 1 141 53 discriminator 2 view .LVU47
+ 353 0022 A4B2     		uxth	r4, r4
+ 354              	.LVL21:
+ 141:Core/Src/RH_RF24.c ****   {
+ 355              		.loc 1 141 53 discriminator 2 view .LVU48
+ 356 0024 EEE7     		b	.L28
+ 357              	.LVL22:
+ 358              	.L33:
+ 141:Core/Src/RH_RF24.c ****   {
+ 359              		.loc 1 141 53 discriminator 2 view .LVU49
+ 360              	.LBE2:
+ 152:Core/Src/RH_RF24.c **** }
+ 361              		.loc 1 152 10 view .LVU50
+ 362 0026 0020     		movs	r0, #0
+ 363              	.LBB5:
+ 364 0028 00E0     		b	.L29
+ 365              	.LVL23:
+ 366              	.L31:
+ 367              	.LBB4:
+ 149:Core/Src/RH_RF24.c ****     }
+ 368              		.loc 1 149 14 view .LVU51
+ 369 002a 0120     		movs	r0, #1
+ 370              	.LVL24:
+ 371              	.L29:
+ 149:Core/Src/RH_RF24.c ****     }
+ 372              		.loc 1 149 14 view .LVU52
+ 373              	.LBE4:
+ 374              	.LBE5:
+ 153:Core/Src/RH_RF24.c **** 
+ 375              		.loc 1 153 1 view .LVU53
+ 376 002c 38BD     		pop	{r3, r4, r5, pc}
+ 153:Core/Src/RH_RF24.c **** 
+ 377              		.loc 1 153 1 view .LVU54
+ 378              		.cfi_endproc
+ 379              	.LFE141:
+ 381              		.section	.text.si446x_ctrl_send_cmd,"ax",%progbits
+ 382              		.align	1
+ 383              		.global	si446x_ctrl_send_cmd
+ 384              		.syntax unified
+ 385              		.thumb
+ 386              		.thumb_func
+ARM GAS  /tmp/cckjdso8.s 			page 12
+
+
+ 387              		.fpu fpv4-sp-d16
+ 389              	si446x_ctrl_send_cmd:
+ 390              	.LVL25:
+ 391              	.LFB142:
+ 157:Core/Src/RH_RF24.c ****   si446x_hal_spi_nsel_low();
+ 392              		.loc 1 157 1 is_stmt 1 view -0
+ 393              		.cfi_startproc
+ 394              		@ args = 0, pretend = 0, frame = 0
+ 395              		@ frame_needed = 0, uses_anonymous_args = 0
+ 157:Core/Src/RH_RF24.c ****   si446x_hal_spi_nsel_low();
+ 396              		.loc 1 157 1 is_stmt 0 view .LVU56
+ 397 0000 10B5     		push	{r4, lr}
+ 398              	.LCFI12:
+ 399              		.cfi_def_cfa_offset 8
+ 400              		.cfi_offset 4, -8
+ 401              		.cfi_offset 14, -4
+ 402 0002 0446     		mov	r4, r0
+ 158:Core/Src/RH_RF24.c ****   si446x_hal_spi_write_byte(cmd);
+ 403              		.loc 1 158 3 is_stmt 1 view .LVU57
+ 404 0004 FFF7FEFF 		bl	si446x_hal_spi_nsel_low
+ 405              	.LVL26:
+ 159:Core/Src/RH_RF24.c ****   si446x_hal_spi_nsel_high();
+ 406              		.loc 1 159 3 view .LVU58
+ 407 0008 2046     		mov	r0, r4
+ 408 000a FFF7FEFF 		bl	si446x_hal_spi_write_byte
+ 409              	.LVL27:
+ 160:Core/Src/RH_RF24.c ****   si446x_ctrl_wait_cts();
+ 410              		.loc 1 160 3 view .LVU59
+ 411 000e FFF7FEFF 		bl	si446x_hal_spi_nsel_high
+ 412              	.LVL28:
+ 161:Core/Src/RH_RF24.c **** }
+ 413              		.loc 1 161 3 view .LVU60
+ 414 0012 FFF7FEFF 		bl	si446x_ctrl_wait_cts
+ 415              	.LVL29:
+ 162:Core/Src/RH_RF24.c **** 
+ 416              		.loc 1 162 1 is_stmt 0 view .LVU61
+ 417 0016 10BD     		pop	{r4, pc}
+ 418              		.cfi_endproc
+ 419              	.LFE142:
+ 421              		.section	.text.si446x_hal_spi_write,"ax",%progbits
+ 422              		.align	1
+ 423              		.global	si446x_hal_spi_write
+ 424              		.syntax unified
+ 425              		.thumb
+ 426              		.thumb_func
+ 427              		.fpu fpv4-sp-d16
+ 429              	si446x_hal_spi_write:
+ 430              	.LVL30:
+ 431              	.LFB151:
+ 230:Core/Src/RH_RF24.c **** 
+ 231:Core/Src/RH_RF24.c **** 
+ 232:Core/Src/RH_RF24.c **** void si446x_hal_spi_write(const uint8_t* buffer, const uint8_t len)
+ 233:Core/Src/RH_RF24.c **** {
+ 432              		.loc 1 233 1 is_stmt 1 view -0
+ 433              		.cfi_startproc
+ 434              		@ args = 0, pretend = 0, frame = 0
+ 435              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/cckjdso8.s 			page 13
+
+
+ 436              		.loc 1 233 1 is_stmt 0 view .LVU63
+ 437 0000 70B5     		push	{r4, r5, r6, lr}
+ 438              	.LCFI13:
+ 439              		.cfi_def_cfa_offset 16
+ 440              		.cfi_offset 4, -16
+ 441              		.cfi_offset 5, -12
+ 442              		.cfi_offset 6, -8
+ 443              		.cfi_offset 14, -4
+ 444 0002 0646     		mov	r6, r0
+ 445 0004 0D46     		mov	r5, r1
+ 234:Core/Src/RH_RF24.c ****   for(uint8_t i = 0; i < len; i++)
+ 446              		.loc 1 234 3 is_stmt 1 view .LVU64
+ 447              	.LBB6:
+ 448              		.loc 1 234 7 view .LVU65
+ 449              	.LVL31:
+ 450              		.loc 1 234 15 is_stmt 0 view .LVU66
+ 451 0006 0024     		movs	r4, #0
+ 452              		.loc 1 234 3 view .LVU67
+ 453 0008 04E0     		b	.L37
+ 454              	.LVL32:
+ 455              	.L38:
+ 235:Core/Src/RH_RF24.c ****   {
+ 236:Core/Src/RH_RF24.c ****     si446x_hal_spi_write_byte(buffer[i]);
+ 456              		.loc 1 236 5 is_stmt 1 discriminator 3 view .LVU68
+ 457 000a 305D     		ldrb	r0, [r6, r4]	@ zero_extendqisi2
+ 458 000c FFF7FEFF 		bl	si446x_hal_spi_write_byte
+ 459              	.LVL33:
+ 234:Core/Src/RH_RF24.c ****   for(uint8_t i = 0; i < len; i++)
+ 460              		.loc 1 234 31 discriminator 3 view .LVU69
+ 234:Core/Src/RH_RF24.c ****   for(uint8_t i = 0; i < len; i++)
+ 461              		.loc 1 234 32 is_stmt 0 discriminator 3 view .LVU70
+ 462 0010 0134     		adds	r4, r4, #1
+ 463              	.LVL34:
+ 234:Core/Src/RH_RF24.c ****   for(uint8_t i = 0; i < len; i++)
+ 464              		.loc 1 234 32 discriminator 3 view .LVU71
+ 465 0012 E4B2     		uxtb	r4, r4
+ 466              	.LVL35:
+ 467              	.L37:
+ 234:Core/Src/RH_RF24.c ****   for(uint8_t i = 0; i < len; i++)
+ 468              		.loc 1 234 22 is_stmt 1 discriminator 1 view .LVU72
+ 234:Core/Src/RH_RF24.c ****   for(uint8_t i = 0; i < len; i++)
+ 469              		.loc 1 234 3 is_stmt 0 discriminator 1 view .LVU73
+ 470 0014 AC42     		cmp	r4, r5
+ 471 0016 F8D3     		bcc	.L38
+ 472              	.LBE6:
+ 237:Core/Src/RH_RF24.c ****   }
+ 238:Core/Src/RH_RF24.c **** }
+ 473              		.loc 1 238 1 view .LVU74
+ 474 0018 70BD     		pop	{r4, r5, r6, pc}
+ 475              		.loc 1 238 1 view .LVU75
+ 476              		.cfi_endproc
+ 477              	.LFE151:
+ 479              		.section	.text.si446x_ctrl_send_cmd_stream,"ax",%progbits
+ 480              		.align	1
+ 481              		.global	si446x_ctrl_send_cmd_stream
+ 482              		.syntax unified
+ 483              		.thumb
+ARM GAS  /tmp/cckjdso8.s 			page 14
+
+
+ 484              		.thumb_func
+ 485              		.fpu fpv4-sp-d16
+ 487              	si446x_ctrl_send_cmd_stream:
+ 488              	.LVL36:
+ 489              	.LFB143:
+ 165:Core/Src/RH_RF24.c ****   si446x_hal_spi_nsel_low();
+ 490              		.loc 1 165 1 is_stmt 1 view -0
+ 491              		.cfi_startproc
+ 492              		@ args = 0, pretend = 0, frame = 0
+ 493              		@ frame_needed = 0, uses_anonymous_args = 0
+ 165:Core/Src/RH_RF24.c ****   si446x_hal_spi_nsel_low();
+ 494              		.loc 1 165 1 is_stmt 0 view .LVU77
+ 495 0000 70B5     		push	{r4, r5, r6, lr}
+ 496              	.LCFI14:
+ 497              		.cfi_def_cfa_offset 16
+ 498              		.cfi_offset 4, -16
+ 499              		.cfi_offset 5, -12
+ 500              		.cfi_offset 6, -8
+ 501              		.cfi_offset 14, -4
+ 502 0002 0646     		mov	r6, r0
+ 503 0004 0C46     		mov	r4, r1
+ 504 0006 1546     		mov	r5, r2
+ 166:Core/Src/RH_RF24.c ****   si446x_hal_spi_write_byte(cmd);
+ 505              		.loc 1 166 3 is_stmt 1 view .LVU78
+ 506 0008 FFF7FEFF 		bl	si446x_hal_spi_nsel_low
+ 507              	.LVL37:
+ 167:Core/Src/RH_RF24.c ****   si446x_hal_spi_write(buffer, len);
+ 508              		.loc 1 167 3 view .LVU79
+ 509 000c 3046     		mov	r0, r6
+ 510 000e FFF7FEFF 		bl	si446x_hal_spi_write_byte
+ 511              	.LVL38:
+ 168:Core/Src/RH_RF24.c ****   si446x_hal_spi_nsel_high();
+ 512              		.loc 1 168 3 view .LVU80
+ 513 0012 2946     		mov	r1, r5
+ 514 0014 2046     		mov	r0, r4
+ 515 0016 FFF7FEFF 		bl	si446x_hal_spi_write
+ 516              	.LVL39:
+ 169:Core/Src/RH_RF24.c ****   si446x_ctrl_wait_cts();
+ 517              		.loc 1 169 3 view .LVU81
+ 518 001a FFF7FEFF 		bl	si446x_hal_spi_nsel_high
+ 519              	.LVL40:
+ 170:Core/Src/RH_RF24.c **** }
+ 520              		.loc 1 170 3 view .LVU82
+ 521 001e FFF7FEFF 		bl	si446x_ctrl_wait_cts
+ 522              	.LVL41:
+ 171:Core/Src/RH_RF24.c **** 
+ 523              		.loc 1 171 1 is_stmt 0 view .LVU83
+ 524 0022 70BD     		pop	{r4, r5, r6, pc}
+ 171:Core/Src/RH_RF24.c **** 
+ 525              		.loc 1 171 1 view .LVU84
+ 526              		.cfi_endproc
+ 527              	.LFE143:
+ 529              		.section	.text.set_properties,"ax",%progbits
+ 530              		.align	1
+ 531              		.global	set_properties
+ 532              		.syntax unified
+ 533              		.thumb
+ARM GAS  /tmp/cckjdso8.s 			page 15
+
+
+ 534              		.thumb_func
+ 535              		.fpu fpv4-sp-d16
+ 537              	set_properties:
+ 538              	.LVL42:
+ 539              	.LFB135:
+  21:Core/Src/RH_RF24.c ****   uint8_t cmd[15] = {0};
+ 540              		.loc 1 21 1 is_stmt 1 view -0
+ 541              		.cfi_startproc
+ 542              		@ args = 0, pretend = 0, frame = 16
+ 543              		@ frame_needed = 0, uses_anonymous_args = 0
+  21:Core/Src/RH_RF24.c ****   uint8_t cmd[15] = {0};
+ 544              		.loc 1 21 1 is_stmt 0 view .LVU86
+ 545 0000 00B5     		push	{lr}
+ 546              	.LCFI15:
+ 547              		.cfi_def_cfa_offset 4
+ 548              		.cfi_offset 14, -4
+ 549 0002 85B0     		sub	sp, sp, #20
+ 550              	.LCFI16:
+ 551              		.cfi_def_cfa_offset 24
+  22:Core/Src/RH_RF24.c ****   cmd[0] = id >> 8;
+ 552              		.loc 1 22 3 is_stmt 1 view .LVU87
+  22:Core/Src/RH_RF24.c ****   cmd[0] = id >> 8;
+ 553              		.loc 1 22 11 is_stmt 0 view .LVU88
+ 554 0004 0023     		movs	r3, #0
+ 555 0006 0093     		str	r3, [sp]
+ 556 0008 0193     		str	r3, [sp, #4]
+ 557 000a 0293     		str	r3, [sp, #8]
+ 558 000c CDF80B30 		str	r3, [sp, #11]	@ unaligned
+  23:Core/Src/RH_RF24.c ****   cmd[1] = len;
+ 559              		.loc 1 23 3 is_stmt 1 view .LVU89
+  23:Core/Src/RH_RF24.c ****   cmd[1] = len;
+ 560              		.loc 1 23 10 is_stmt 0 view .LVU90
+ 561 0010 4FEA102C 		lsr	ip, r0, #8
+ 562 0014 8DF800C0 		strb	ip, [sp]
+  24:Core/Src/RH_RF24.c ****   cmd[2] = id & 0xff;
+ 563              		.loc 1 24 3 is_stmt 1 view .LVU91
+  24:Core/Src/RH_RF24.c ****   cmd[2] = id & 0xff;
+ 564              		.loc 1 24 10 is_stmt 0 view .LVU92
+ 565 0018 8DF80120 		strb	r2, [sp, #1]
+  25:Core/Src/RH_RF24.c **** 
+ 566              		.loc 1 25 3 is_stmt 1 view .LVU93
+  25:Core/Src/RH_RF24.c **** 
+ 567              		.loc 1 25 10 is_stmt 0 view .LVU94
+ 568 001c 8DF80200 		strb	r0, [sp, #2]
+  27:Core/Src/RH_RF24.c ****   {
+ 569              		.loc 1 27 3 is_stmt 1 view .LVU95
+ 570              	.LBB7:
+  27:Core/Src/RH_RF24.c ****   {
+ 571              		.loc 1 27 8 view .LVU96
+ 572              	.LVL43:
+  27:Core/Src/RH_RF24.c ****   {
+ 573              		.loc 1 27 3 is_stmt 0 view .LVU97
+ 574 0020 08E0     		b	.L43
+ 575              	.LVL44:
+ 576              	.L44:
+  29:Core/Src/RH_RF24.c ****   }
+ 577              		.loc 1 29 5 is_stmt 1 discriminator 3 view .LVU98
+ARM GAS  /tmp/cckjdso8.s 			page 16
+
+
+  29:Core/Src/RH_RF24.c ****   }
+ 578              		.loc 1 29 22 is_stmt 0 discriminator 3 view .LVU99
+ 579 0022 11F803C0 		ldrb	ip, [r1, r3]	@ zero_extendqisi2
+  29:Core/Src/RH_RF24.c ****   }
+ 580              		.loc 1 29 16 discriminator 3 view .LVU100
+ 581 0026 03F11300 		add	r0, r3, #19
+ 582 002a 6844     		add	r0, sp, r0
+ 583 002c 00F810CC 		strb	ip, [r0, #-16]
+  27:Core/Src/RH_RF24.c ****   {
+ 584              		.loc 1 27 32 is_stmt 1 discriminator 3 view .LVU101
+  27:Core/Src/RH_RF24.c ****   {
+ 585              		.loc 1 27 33 is_stmt 0 discriminator 3 view .LVU102
+ 586 0030 0133     		adds	r3, r3, #1
+ 587              	.LVL45:
+  27:Core/Src/RH_RF24.c ****   {
+ 588              		.loc 1 27 33 discriminator 3 view .LVU103
+ 589 0032 DBB2     		uxtb	r3, r3
+ 590              	.LVL46:
+ 591              	.L43:
+  27:Core/Src/RH_RF24.c ****   {
+ 592              		.loc 1 27 23 is_stmt 1 discriminator 1 view .LVU104
+  27:Core/Src/RH_RF24.c ****   {
+ 593              		.loc 1 27 3 is_stmt 0 discriminator 1 view .LVU105
+ 594 0034 9342     		cmp	r3, r2
+ 595 0036 F4D3     		bcc	.L44
+ 596              	.LBE7:
+  32:Core/Src/RH_RF24.c ****   return si446x_ctrl_wait_cts();
+ 597              		.loc 1 32 3 is_stmt 1 view .LVU106
+ 598 0038 0332     		adds	r2, r2, #3
+ 599              	.LVL47:
+  32:Core/Src/RH_RF24.c ****   return si446x_ctrl_wait_cts();
+ 600              		.loc 1 32 3 is_stmt 0 view .LVU107
+ 601 003a D2B2     		uxtb	r2, r2
+ 602 003c 6946     		mov	r1, sp
+ 603              	.LVL48:
+  32:Core/Src/RH_RF24.c ****   return si446x_ctrl_wait_cts();
+ 604              		.loc 1 32 3 view .LVU108
+ 605 003e 1120     		movs	r0, #17
+ 606 0040 FFF7FEFF 		bl	si446x_ctrl_send_cmd_stream
+ 607              	.LVL49:
+  33:Core/Src/RH_RF24.c **** }
+ 608              		.loc 1 33 3 is_stmt 1 view .LVU109
+  33:Core/Src/RH_RF24.c **** }
+ 609              		.loc 1 33 10 is_stmt 0 view .LVU110
+ 610 0044 FFF7FEFF 		bl	si446x_ctrl_wait_cts
+ 611              	.LVL50:
+  34:Core/Src/RH_RF24.c **** 
+ 612              		.loc 1 34 1 view .LVU111
+ 613 0048 05B0     		add	sp, sp, #20
+ 614              	.LCFI17:
+ 615              		.cfi_def_cfa_offset 4
+ 616              		@ sp needed
+ 617 004a 5DF804FB 		ldr	pc, [sp], #4
+ 618              		.cfi_endproc
+ 619              	.LFE135:
+ 621              		.section	.text.radio_set_power,"ax",%progbits
+ 622              		.align	1
+ARM GAS  /tmp/cckjdso8.s 			page 17
+
+
+ 623              		.global	radio_set_power
+ 624              		.syntax unified
+ 625              		.thumb
+ 626              		.thumb_func
+ 627              		.fpu fpv4-sp-d16
+ 629              	radio_set_power:
+ 630              	.LVL51:
+ 631              	.LFB136:
+  38:Core/Src/RH_RF24.c ****   if (power > 0x7F)
+ 632              		.loc 1 38 1 is_stmt 1 view -0
+ 633              		.cfi_startproc
+ 634              		@ args = 0, pretend = 0, frame = 8
+ 635              		@ frame_needed = 0, uses_anonymous_args = 0
+  38:Core/Src/RH_RF24.c ****   if (power > 0x7F)
+ 636              		.loc 1 38 1 is_stmt 0 view .LVU113
+ 637 0000 00B5     		push	{lr}
+ 638              	.LCFI18:
+ 639              		.cfi_def_cfa_offset 4
+ 640              		.cfi_offset 14, -4
+ 641 0002 83B0     		sub	sp, sp, #12
+ 642              	.LCFI19:
+ 643              		.cfi_def_cfa_offset 16
+  39:Core/Src/RH_RF24.c ****   {
+ 644              		.loc 1 39 3 is_stmt 1 view .LVU114
+  39:Core/Src/RH_RF24.c ****   {
+ 645              		.loc 1 39 6 is_stmt 0 view .LVU115
+ 646 0004 10F0800F 		tst	r0, #128
+ 647 0008 10D1     		bne	.L50
+ 648              	.LVL52:
+ 649              	.L47:
+  44:Core/Src/RH_RF24.c ****   set_properties(Si446x_PROP_PA_MODE, power_ctrl, sizeof(power_ctrl));
+ 650              		.loc 1 44 3 is_stmt 1 view .LVU116
+  44:Core/Src/RH_RF24.c ****   set_properties(Si446x_PROP_PA_MODE, power_ctrl, sizeof(power_ctrl));
+ 651              		.loc 1 44 11 is_stmt 0 view .LVU117
+ 652 000a 1823     		movs	r3, #24
+ 653 000c 8DF80430 		strb	r3, [sp, #4]
+ 654 0010 8DF80500 		strb	r0, [sp, #5]
+ 655 0014 0023     		movs	r3, #0
+ 656 0016 8DF80630 		strb	r3, [sp, #6]
+  45:Core/Src/RH_RF24.c **** }
+ 657              		.loc 1 45 3 is_stmt 1 view .LVU118
+ 658 001a 0322     		movs	r2, #3
+ 659 001c 01A9     		add	r1, sp, #4
+ 660 001e 4FF40850 		mov	r0, #8704
+ 661              	.LVL53:
+  45:Core/Src/RH_RF24.c **** }
+ 662              		.loc 1 45 3 is_stmt 0 view .LVU119
+ 663 0022 FFF7FEFF 		bl	set_properties
+ 664              	.LVL54:
+  46:Core/Src/RH_RF24.c **** 
+ 665              		.loc 1 46 1 view .LVU120
+ 666 0026 03B0     		add	sp, sp, #12
+ 667              	.LCFI20:
+ 668              		.cfi_remember_state
+ 669              		.cfi_def_cfa_offset 4
+ 670              		@ sp needed
+ 671 0028 5DF804FB 		ldr	pc, [sp], #4
+ARM GAS  /tmp/cckjdso8.s 			page 18
+
+
+ 672              	.LVL55:
+ 673              	.L50:
+ 674              	.LCFI21:
+ 675              		.cfi_restore_state
+  41:Core/Src/RH_RF24.c ****   }
+ 676              		.loc 1 41 11 view .LVU121
+ 677 002c 7F20     		movs	r0, #127
+ 678              	.LVL56:
+  41:Core/Src/RH_RF24.c ****   }
+ 679              		.loc 1 41 11 view .LVU122
+ 680 002e ECE7     		b	.L47
+ 681              		.cfi_endproc
+ 682              	.LFE136:
+ 684              		.section	.text.setFrequency,"ax",%progbits
+ 685              		.align	1
+ 686              		.global	setFrequency
+ 687              		.syntax unified
+ 688              		.thumb
+ 689              		.thumb_func
+ 690              		.fpu fpv4-sp-d16
+ 692              	setFrequency:
+ 693              	.LVL57:
+ 694              	.LFB139:
+  71:Core/Src/RH_RF24.c ****     // See Si446x Data Sheet section 5.3.1
+ 695              		.loc 1 71 1 is_stmt 1 view -0
+ 696              		.cfi_startproc
+ 697              		@ args = 0, pretend = 0, frame = 8
+ 698              		@ frame_needed = 0, uses_anonymous_args = 0
+  71:Core/Src/RH_RF24.c ****     // See Si446x Data Sheet section 5.3.1
+ 699              		.loc 1 71 1 is_stmt 0 view .LVU124
+ 700 0000 10B5     		push	{r4, lr}
+ 701              	.LCFI22:
+ 702              		.cfi_def_cfa_offset 8
+ 703              		.cfi_offset 4, -8
+ 704              		.cfi_offset 14, -4
+ 705 0002 2DED028B 		vpush.64	{d8}
+ 706              	.LCFI23:
+ 707              		.cfi_def_cfa_offset 16
+ 708              		.cfi_offset 80, -16
+ 709              		.cfi_offset 81, -12
+ 710 0006 82B0     		sub	sp, sp, #8
+ 711              	.LCFI24:
+ 712              		.cfi_def_cfa_offset 24
+ 713 0008 B0EE408A 		vmov.f32	s16, s0
+  74:Core/Src/RH_RF24.c ****     uint8_t band;
+ 714              		.loc 1 74 5 is_stmt 1 view .LVU125
+  75:Core/Src/RH_RF24.c ****     
+ 715              		.loc 1 75 5 view .LVU126
+  78:Core/Src/RH_RF24.c ****         outdiv = 4, band = 0;
+ 716              		.loc 1 78 5 view .LVU127
+  78:Core/Src/RH_RF24.c ****         outdiv = 4, band = 0;
+ 717              		.loc 1 78 8 is_stmt 0 view .LVU128
+ 718 000c DFED457A 		vldr.32	s15, .L77
+ 719 0010 B4EEE70A 		vcmpe.f32	s0, s15
+ 720 0014 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 721 0018 06D8     		bhi	.L52
+  78:Core/Src/RH_RF24.c ****         outdiv = 4, band = 0;
+ARM GAS  /tmp/cckjdso8.s 			page 19
+
+
+ 722              		.loc 1 78 26 discriminator 1 view .LVU129
+ 723 001a DFED437A 		vldr.32	s15, .L77+4
+ 724 001e B4EEE70A 		vcmpe.f32	s0, s15
+ 725 0022 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 726 0026 2CDA     		bge	.L62
+ 727              	.L52:
+  80:Core/Src/RH_RF24.c ****         outdiv = 8, band = 2;
+ 728              		.loc 1 80 10 is_stmt 1 view .LVU130
+  80:Core/Src/RH_RF24.c ****         outdiv = 8, band = 2;
+ 729              		.loc 1 80 13 is_stmt 0 view .LVU131
+ 730 0028 DFED407A 		vldr.32	s15, .L77+8
+ 731 002c B4EEE78A 		vcmpe.f32	s16, s15
+ 732 0030 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 733 0034 06D8     		bhi	.L55
+  80:Core/Src/RH_RF24.c ****         outdiv = 8, band = 2;
+ 734              		.loc 1 80 30 discriminator 1 view .LVU132
+ 735 0036 DFED3E7A 		vldr.32	s15, .L77+12
+ 736 003a B4EEE78A 		vcmpe.f32	s16, s15
+ 737 003e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 738 0042 2FDA     		bge	.L63
+ 739              	.L55:
+  82:Core/Src/RH_RF24.c ****         outdiv = 12, band = 3;
+ 740              		.loc 1 82 10 is_stmt 1 view .LVU133
+  82:Core/Src/RH_RF24.c ****         outdiv = 12, band = 3;
+ 741              		.loc 1 82 13 is_stmt 0 view .LVU134
+ 742 0044 DFED3B7A 		vldr.32	s15, .L77+16
+ 743 0048 B4EEE78A 		vcmpe.f32	s16, s15
+ 744 004c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 745 0050 06D8     		bhi	.L57
+  82:Core/Src/RH_RF24.c ****         outdiv = 12, band = 3;
+ 746              		.loc 1 82 30 discriminator 1 view .LVU135
+ 747 0052 DFED397A 		vldr.32	s15, .L77+20
+ 748 0056 B4EEE78A 		vcmpe.f32	s16, s15
+ 749 005a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 750 005e 24DA     		bge	.L64
+ 751              	.L57:
+  84:Core/Src/RH_RF24.c ****         outdiv = 24, band = 5;
+ 752              		.loc 1 84 10 is_stmt 1 view .LVU136
+  84:Core/Src/RH_RF24.c ****         outdiv = 24, band = 5;
+ 753              		.loc 1 84 13 is_stmt 0 view .LVU137
+ 754 0060 DFED367A 		vldr.32	s15, .L77+24
+ 755 0064 B4EEE78A 		vcmpe.f32	s16, s15
+ 756 0068 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 757 006c 55D8     		bhi	.L73
+  84:Core/Src/RH_RF24.c ****         outdiv = 24, band = 5;
+ 758              		.loc 1 84 30 discriminator 1 view .LVU138
+ 759 006e DFED347A 		vldr.32	s15, .L77+28
+ 760 0072 B4EEE78A 		vcmpe.f32	s16, s15
+ 761 0076 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 762 007a 50DB     		blt	.L74
+  85:Core/Src/RH_RF24.c ****     else 
+ 763              		.loc 1 85 27 view .LVU139
+ 764 007c 0523     		movs	r3, #5
+  85:Core/Src/RH_RF24.c ****     else 
+ 765              		.loc 1 85 16 view .LVU140
+ 766 007e 1824     		movs	r4, #24
+ 767 0080 01E0     		b	.L54
+ARM GAS  /tmp/cckjdso8.s 			page 20
+
+
+ 768              	.L62:
+  79:Core/Src/RH_RF24.c ****     else if (centre <= 525.0 && centre >= 425.0)
+ 769              		.loc 1 79 26 view .LVU141
+ 770 0082 0023     		movs	r3, #0
+  79:Core/Src/RH_RF24.c ****     else if (centre <= 525.0 && centre >= 425.0)
+ 771              		.loc 1 79 16 view .LVU142
+ 772 0084 0424     		movs	r4, #4
+ 773              	.L54:
+ 774              	.LVL58:
+  91:Core/Src/RH_RF24.c ****     if (!set_properties(Si446x_PROP_MODEM_CLKGEN_BAND, modem_clkgen, sizeof(modem_clkgen)))
+ 775              		.loc 1 91 5 is_stmt 1 view .LVU143
+  91:Core/Src/RH_RF24.c ****     if (!set_properties(Si446x_PROP_MODEM_CLKGEN_BAND, modem_clkgen, sizeof(modem_clkgen)))
+ 776              		.loc 1 91 36 is_stmt 0 view .LVU144
+ 777 0086 0833     		adds	r3, r3, #8
+ 778              	.LVL59:
+  91:Core/Src/RH_RF24.c ****     if (!set_properties(Si446x_PROP_MODEM_CLKGEN_BAND, modem_clkgen, sizeof(modem_clkgen)))
+ 779              		.loc 1 91 13 view .LVU145
+ 780 0088 8DF80430 		strb	r3, [sp, #4]
+  92:Core/Src/RH_RF24.c **** 	return false;
+ 781              		.loc 1 92 5 is_stmt 1 view .LVU146
+  92:Core/Src/RH_RF24.c **** 	return false;
+ 782              		.loc 1 92 10 is_stmt 0 view .LVU147
+ 783 008c 0122     		movs	r2, #1
+ 784 008e 01A9     		add	r1, sp, #4
+ 785 0090 42F25100 		movw	r0, #8273
+ 786 0094 FFF7FEFF 		bl	set_properties
+ 787              	.LVL60:
+  92:Core/Src/RH_RF24.c **** 	return false;
+ 788              		.loc 1 92 8 view .LVU148
+ 789 0098 50B9     		cbnz	r0, .L76
+  93:Core/Src/RH_RF24.c **** 
+ 790              		.loc 1 93 9 view .LVU149
+ 791 009a 0020     		movs	r0, #0
+ 792              	.LVL61:
+ 793              	.L59:
+ 111:Core/Src/RH_RF24.c **** 
+ 794              		.loc 1 111 1 view .LVU150
+ 795 009c 02B0     		add	sp, sp, #8
+ 796              	.LCFI25:
+ 797              		.cfi_remember_state
+ 798              		.cfi_def_cfa_offset 16
+ 799              		@ sp needed
+ 800 009e BDEC028B 		vldm	sp!, {d8}
+ 801              	.LCFI26:
+ 802              		.cfi_restore 80
+ 803              		.cfi_restore 81
+ 804              		.cfi_def_cfa_offset 8
+ 805              	.LVL62:
+ 111:Core/Src/RH_RF24.c **** 
+ 806              		.loc 1 111 1 view .LVU151
+ 807 00a2 10BD     		pop	{r4, pc}
+ 808              	.LVL63:
+ 809              	.L63:
+ 810              	.LCFI27:
+ 811              		.cfi_restore_state
+  81:Core/Src/RH_RF24.c ****     else if (centre <= 350.0 && centre >= 284.0)
+ 812              		.loc 1 81 26 view .LVU152
+ARM GAS  /tmp/cckjdso8.s 			page 21
+
+
+ 813 00a4 0223     		movs	r3, #2
+  81:Core/Src/RH_RF24.c ****     else if (centre <= 350.0 && centre >= 284.0)
+ 814              		.loc 1 81 16 view .LVU153
+ 815 00a6 0824     		movs	r4, #8
+ 816 00a8 EDE7     		b	.L54
+ 817              	.L64:
+  83:Core/Src/RH_RF24.c ****     else if (centre <= 175.0 && centre >= 142.0)
+ 818              		.loc 1 83 27 view .LVU154
+ 819 00aa 0323     		movs	r3, #3
+  83:Core/Src/RH_RF24.c ****     else if (centre <= 175.0 && centre >= 142.0)
+ 820              		.loc 1 83 16 view .LVU155
+ 821 00ac 0C24     		movs	r4, #12
+ 822 00ae EAE7     		b	.L54
+ 823              	.LVL64:
+ 824              	.L76:
+  95:Core/Src/RH_RF24.c **** 
+ 825              		.loc 1 95 5 is_stmt 1 view .LVU156
+  95:Core/Src/RH_RF24.c **** 
+ 826              		.loc 1 95 12 is_stmt 0 view .LVU157
+ 827 00b0 9FED240A 		vldr.32	s0, .L77+32
+ 828 00b4 28EE008A 		vmul.f32	s16, s16, s0
+ 829              	.LVL65:
+  98:Core/Src/RH_RF24.c ****     unsigned long f_pfd = 2 * xtal_frequency[0] / outdiv;
+ 830              		.loc 1 98 5 is_stmt 1 view .LVU158
+  99:Core/Src/RH_RF24.c ****     unsigned int n = ((unsigned int)(centre / f_pfd)) - 1;
+ 831              		.loc 1 99 5 view .LVU159
+  99:Core/Src/RH_RF24.c ****     unsigned int n = ((unsigned int)(centre / f_pfd)) - 1;
+ 832              		.loc 1 99 19 is_stmt 0 view .LVU160
+ 833 00b8 234B     		ldr	r3, .L77+36
+ 834 00ba B3FBF4F3 		udiv	r3, r3, r4
+ 835              	.LVL66:
+ 100:Core/Src/RH_RF24.c ****     float ratio = centre / (float)f_pfd;
+ 836              		.loc 1 100 5 is_stmt 1 view .LVU161
+ 100:Core/Src/RH_RF24.c ****     float ratio = centre / (float)f_pfd;
+ 837              		.loc 1 100 45 is_stmt 0 view .LVU162
+ 838 00be 07EE903A 		vmov	s15, r3	@ int
+ 839 00c2 B8EE677A 		vcvt.f32.u32	s14, s15
+ 840 00c6 C8EE077A 		vdiv.f32	s15, s16, s14
+ 100:Core/Src/RH_RF24.c ****     float ratio = centre / (float)f_pfd;
+ 841              		.loc 1 100 23 view .LVU163
+ 842 00ca BCEEE77A 		vcvt.u32.f32	s14, s15
+ 843 00ce 17EE102A 		vmov	r2, s14	@ int
+ 100:Core/Src/RH_RF24.c ****     float ratio = centre / (float)f_pfd;
+ 844              		.loc 1 100 18 view .LVU164
+ 845 00d2 013A     		subs	r2, r2, #1
+ 846              	.LVL67:
+ 101:Core/Src/RH_RF24.c ****     float rest  = ratio - (float)n;
+ 847              		.loc 1 101 5 is_stmt 1 view .LVU165
+ 102:Core/Src/RH_RF24.c ****     unsigned long m = (unsigned long)(rest * 524288UL); 
+ 848              		.loc 1 102 5 view .LVU166
+ 102:Core/Src/RH_RF24.c ****     unsigned long m = (unsigned long)(rest * 524288UL); 
+ 849              		.loc 1 102 27 is_stmt 0 view .LVU167
+ 850 00d4 07EE102A 		vmov	s14, r2	@ int
+ 851 00d8 B8EE477A 		vcvt.f32.u32	s14, s14
+ 102:Core/Src/RH_RF24.c ****     unsigned long m = (unsigned long)(rest * 524288UL); 
+ 852              		.loc 1 102 11 view .LVU168
+ 853 00dc 77EEC77A 		vsub.f32	s15, s15, s14
+ARM GAS  /tmp/cckjdso8.s 			page 22
+
+
+ 854              	.LVL68:
+ 103:Core/Src/RH_RF24.c ****     unsigned int m2 = m / 0x10000;
+ 855              		.loc 1 103 5 is_stmt 1 view .LVU169
+ 103:Core/Src/RH_RF24.c ****     unsigned int m2 = m / 0x10000;
+ 856              		.loc 1 103 44 is_stmt 0 view .LVU170
+ 857 00e0 9FED1A7A 		vldr.32	s14, .L77+40
+ 858 00e4 67EE877A 		vmul.f32	s15, s15, s14
+ 859              	.LVL69:
+ 103:Core/Src/RH_RF24.c ****     unsigned int m2 = m / 0x10000;
+ 860              		.loc 1 103 19 view .LVU171
+ 861 00e8 FCEEE77A 		vcvt.u32.f32	s15, s15
+ 862 00ec 17EE903A 		vmov	r3, s15	@ int
+ 863              	.LVL70:
+ 104:Core/Src/RH_RF24.c ****     unsigned int m1 = (m - m2 * 0x10000) / 0x100;
+ 864              		.loc 1 104 5 is_stmt 1 view .LVU172
+ 104:Core/Src/RH_RF24.c ****     unsigned int m1 = (m - m2 * 0x10000) / 0x100;
+ 865              		.loc 1 104 18 is_stmt 0 view .LVU173
+ 866 00f0 180C     		lsrs	r0, r3, #16
+ 867              	.LVL71:
+ 105:Core/Src/RH_RF24.c ****     unsigned int m0 = (m - m2 * 0x10000 - m1 * 0x100); 
+ 868              		.loc 1 105 5 is_stmt 1 view .LVU174
+ 105:Core/Src/RH_RF24.c ****     unsigned int m0 = (m - m2 * 0x10000 - m1 * 0x100); 
+ 869              		.loc 1 105 18 is_stmt 0 view .LVU175
+ 870 00f2 C3F30721 		ubfx	r1, r3, #8, #8
+ 871              	.LVL72:
+ 106:Core/Src/RH_RF24.c **** 
+ 872              		.loc 1 106 5 is_stmt 1 view .LVU176
+ 109:Core/Src/RH_RF24.c ****     return set_properties(Si446x_PROP_FREQ_CONTROL_INTE, freq_control, sizeof(freq_control));
+ 873              		.loc 1 109 5 view .LVU177
+ 109:Core/Src/RH_RF24.c ****     return set_properties(Si446x_PROP_FREQ_CONTROL_INTE, freq_control, sizeof(freq_control));
+ 874              		.loc 1 109 13 is_stmt 0 view .LVU178
+ 875 00f6 8DF80020 		strb	r2, [sp]
+ 876 00fa 8DF80100 		strb	r0, [sp, #1]
+ 877 00fe 8DF80210 		strb	r1, [sp, #2]
+ 878 0102 8DF80330 		strb	r3, [sp, #3]
+ 110:Core/Src/RH_RF24.c **** }
+ 879              		.loc 1 110 5 is_stmt 1 view .LVU179
+ 110:Core/Src/RH_RF24.c **** }
+ 880              		.loc 1 110 12 is_stmt 0 view .LVU180
+ 881 0106 0422     		movs	r2, #4
+ 882              	.LVL73:
+ 110:Core/Src/RH_RF24.c **** }
+ 883              		.loc 1 110 12 view .LVU181
+ 884 0108 6946     		mov	r1, sp
+ 885              	.LVL74:
+ 110:Core/Src/RH_RF24.c **** }
+ 886              		.loc 1 110 12 view .LVU182
+ 887 010a 4FF48040 		mov	r0, #16384
+ 888              	.LVL75:
+ 110:Core/Src/RH_RF24.c **** }
+ 889              		.loc 1 110 12 view .LVU183
+ 890 010e FFF7FEFF 		bl	set_properties
+ 891              	.LVL76:
+ 110:Core/Src/RH_RF24.c **** }
+ 892              		.loc 1 110 12 view .LVU184
+ 893 0112 0038     		subs	r0, r0, #0
+ 894 0114 18BF     		it	ne
+ARM GAS  /tmp/cckjdso8.s 			page 23
+
+
+ 895 0116 0120     		movne	r0, #1
+ 896 0118 C0E7     		b	.L59
+ 897              	.LVL77:
+ 898              	.L73:
+  87:Core/Src/RH_RF24.c **** 
+ 899              		.loc 1 87 16 view .LVU185
+ 900 011a 0020     		movs	r0, #0
+ 901 011c BEE7     		b	.L59
+ 902              	.L74:
+ 903 011e 0020     		movs	r0, #0
+ 904 0120 BCE7     		b	.L59
+ 905              	.L78:
+ 906 0122 00BF     		.align	2
+ 907              	.L77:
+ 908 0124 00408344 		.word	1149452288
+ 909 0128 00805444 		.word	1146388480
+ 910 012c 00400344 		.word	1141063680
+ 911 0130 0080D443 		.word	1137999872
+ 912 0134 0000AF43 		.word	1135542272
+ 913 0138 00008E43 		.word	1133379584
+ 914 013c 00002F43 		.word	1127153664
+ 915 0140 00000E43 		.word	1124990976
+ 916 0144 00247449 		.word	1232348160
+ 917 0148 00879303 		.word	60000000
+ 918 014c 00000049 		.word	1224736768
+ 919              		.cfi_endproc
+ 920              	.LFE139:
+ 922              		.section	.text.radio_set_state,"ax",%progbits
+ 923              		.align	1
+ 924              		.global	radio_set_state
+ 925              		.syntax unified
+ 926              		.thumb
+ 927              		.thumb_func
+ 928              		.fpu fpv4-sp-d16
+ 930              	radio_set_state:
+ 931              	.LVL78:
+ 932              	.LFB138:
+  63:Core/Src/RH_RF24.c ****   const uint8_t cmd = (uint8_t)s;
+ 933              		.loc 1 63 1 is_stmt 1 view -0
+ 934              		.cfi_startproc
+ 935              		@ args = 0, pretend = 0, frame = 8
+ 936              		@ frame_needed = 0, uses_anonymous_args = 0
+  63:Core/Src/RH_RF24.c ****   const uint8_t cmd = (uint8_t)s;
+ 937              		.loc 1 63 1 is_stmt 0 view .LVU187
+ 938 0000 00B5     		push	{lr}
+ 939              	.LCFI28:
+ 940              		.cfi_def_cfa_offset 4
+ 941              		.cfi_offset 14, -4
+ 942 0002 83B0     		sub	sp, sp, #12
+ 943              	.LCFI29:
+ 944              		.cfi_def_cfa_offset 16
+  64:Core/Src/RH_RF24.c ****   si446x_ctrl_send_cmd_stream(Si446x_CMD_CHANGE_STATE, &cmd, 1);
+ 945              		.loc 1 64 3 is_stmt 1 view .LVU188
+  64:Core/Src/RH_RF24.c ****   si446x_ctrl_send_cmd_stream(Si446x_CMD_CHANGE_STATE, &cmd, 1);
+ 946              		.loc 1 64 17 is_stmt 0 view .LVU189
+ 947 0004 8DF80700 		strb	r0, [sp, #7]
+  65:Core/Src/RH_RF24.c ****   si446x_ctrl_wait_cts();
+ARM GAS  /tmp/cckjdso8.s 			page 24
+
+
+ 948              		.loc 1 65 3 is_stmt 1 view .LVU190
+ 949 0008 0122     		movs	r2, #1
+ 950 000a 0DF10701 		add	r1, sp, #7
+ 951 000e 3420     		movs	r0, #52
+ 952              	.LVL79:
+  65:Core/Src/RH_RF24.c ****   si446x_ctrl_wait_cts();
+ 953              		.loc 1 65 3 is_stmt 0 view .LVU191
+ 954 0010 FFF7FEFF 		bl	si446x_ctrl_send_cmd_stream
+ 955              	.LVL80:
+  66:Core/Src/RH_RF24.c **** }
+ 956              		.loc 1 66 3 is_stmt 1 view .LVU192
+ 957 0014 FFF7FEFF 		bl	si446x_ctrl_wait_cts
+ 958              	.LVL81:
+  67:Core/Src/RH_RF24.c **** 
+ 959              		.loc 1 67 1 is_stmt 0 view .LVU193
+ 960 0018 03B0     		add	sp, sp, #12
+ 961              	.LCFI30:
+ 962              		.cfi_def_cfa_offset 4
+ 963              		@ sp needed
+ 964 001a 5DF804FB 		ldr	pc, [sp], #4
+ 965              		.cfi_endproc
+ 966              	.LFE138:
+ 968              		.section	.text.si446x_hal_spi_read,"ax",%progbits
+ 969              		.align	1
+ 970              		.global	si446x_hal_spi_read
+ 971              		.syntax unified
+ 972              		.thumb
+ 973              		.thumb_func
+ 974              		.fpu fpv4-sp-d16
+ 976              	si446x_hal_spi_read:
+ 977              	.LVL82:
+ 978              	.LFB152:
+ 239:Core/Src/RH_RF24.c **** 
+ 240:Core/Src/RH_RF24.c **** 
+ 241:Core/Src/RH_RF24.c **** void si446x_hal_spi_read(uint8_t* buffer, const uint8_t len)
+ 242:Core/Src/RH_RF24.c **** {
+ 979              		.loc 1 242 1 is_stmt 1 view -0
+ 980              		.cfi_startproc
+ 981              		@ args = 0, pretend = 0, frame = 0
+ 982              		@ frame_needed = 0, uses_anonymous_args = 0
+ 983              		.loc 1 242 1 is_stmt 0 view .LVU195
+ 984 0000 70B5     		push	{r4, r5, r6, lr}
+ 985              	.LCFI31:
+ 986              		.cfi_def_cfa_offset 16
+ 987              		.cfi_offset 4, -16
+ 988              		.cfi_offset 5, -12
+ 989              		.cfi_offset 6, -8
+ 990              		.cfi_offset 14, -4
+ 991 0002 0646     		mov	r6, r0
+ 992 0004 0D46     		mov	r5, r1
+ 243:Core/Src/RH_RF24.c ****   for(uint8_t i = 0; i < len; i++)
+ 993              		.loc 1 243 3 is_stmt 1 view .LVU196
+ 994              	.LBB8:
+ 995              		.loc 1 243 7 view .LVU197
+ 996              	.LVL83:
+ 997              		.loc 1 243 15 is_stmt 0 view .LVU198
+ 998 0006 0024     		movs	r4, #0
+ARM GAS  /tmp/cckjdso8.s 			page 25
+
+
+ 999              		.loc 1 243 3 view .LVU199
+ 1000 0008 05E0     		b	.L82
+ 1001              	.LVL84:
+ 1002              	.L83:
+ 244:Core/Src/RH_RF24.c ****   {
+ 245:Core/Src/RH_RF24.c ****     buffer[i] = si446x_hal_spi_read_byte(Si446x_CMD_NOP);
+ 1003              		.loc 1 245 5 is_stmt 1 discriminator 3 view .LVU200
+ 1004              		.loc 1 245 17 is_stmt 0 discriminator 3 view .LVU201
+ 1005 000a 0020     		movs	r0, #0
+ 1006 000c FFF7FEFF 		bl	si446x_hal_spi_read_byte
+ 1007              	.LVL85:
+ 1008              		.loc 1 245 15 discriminator 3 view .LVU202
+ 1009 0010 3055     		strb	r0, [r6, r4]
+ 243:Core/Src/RH_RF24.c ****   for(uint8_t i = 0; i < len; i++)
+ 1010              		.loc 1 243 31 is_stmt 1 discriminator 3 view .LVU203
+ 243:Core/Src/RH_RF24.c ****   for(uint8_t i = 0; i < len; i++)
+ 1011              		.loc 1 243 32 is_stmt 0 discriminator 3 view .LVU204
+ 1012 0012 0134     		adds	r4, r4, #1
+ 1013              	.LVL86:
+ 243:Core/Src/RH_RF24.c ****   for(uint8_t i = 0; i < len; i++)
+ 1014              		.loc 1 243 32 discriminator 3 view .LVU205
+ 1015 0014 E4B2     		uxtb	r4, r4
+ 1016              	.LVL87:
+ 1017              	.L82:
+ 243:Core/Src/RH_RF24.c ****   for(uint8_t i = 0; i < len; i++)
+ 1018              		.loc 1 243 22 is_stmt 1 discriminator 1 view .LVU206
+ 243:Core/Src/RH_RF24.c ****   for(uint8_t i = 0; i < len; i++)
+ 1019              		.loc 1 243 3 is_stmt 0 discriminator 1 view .LVU207
+ 1020 0016 AC42     		cmp	r4, r5
+ 1021 0018 F7D3     		bcc	.L83
+ 1022              	.LBE8:
+ 246:Core/Src/RH_RF24.c ****   }
+ 247:Core/Src/RH_RF24.c **** }
+ 1023              		.loc 1 247 1 view .LVU208
+ 1024 001a 70BD     		pop	{r4, r5, r6, pc}
+ 1025              		.loc 1 247 1 view .LVU209
+ 1026              		.cfi_endproc
+ 1027              	.LFE152:
+ 1029              		.section	.text.si446x_ctrl_get_response,"ax",%progbits
+ 1030              		.align	1
+ 1031              		.global	si446x_ctrl_get_response
+ 1032              		.syntax unified
+ 1033              		.thumb
+ 1034              		.thumb_func
+ 1035              		.fpu fpv4-sp-d16
+ 1037              	si446x_ctrl_get_response:
+ 1038              	.LVL88:
+ 1039              	.LFB144:
+ 176:Core/Src/RH_RF24.c ****   if(si446x_ctrl_wait_cts())
+ 1040              		.loc 1 176 1 is_stmt 1 view -0
+ 1041              		.cfi_startproc
+ 1042              		@ args = 0, pretend = 0, frame = 0
+ 1043              		@ frame_needed = 0, uses_anonymous_args = 0
+ 176:Core/Src/RH_RF24.c ****   if(si446x_ctrl_wait_cts())
+ 1044              		.loc 1 176 1 is_stmt 0 view .LVU211
+ 1045 0000 38B5     		push	{r3, r4, r5, lr}
+ 1046              	.LCFI32:
+ARM GAS  /tmp/cckjdso8.s 			page 26
+
+
+ 1047              		.cfi_def_cfa_offset 16
+ 1048              		.cfi_offset 3, -16
+ 1049              		.cfi_offset 4, -12
+ 1050              		.cfi_offset 5, -8
+ 1051              		.cfi_offset 14, -4
+ 1052 0002 0446     		mov	r4, r0
+ 1053 0004 0D46     		mov	r5, r1
+ 177:Core/Src/RH_RF24.c ****   {
+ 1054              		.loc 1 177 3 is_stmt 1 view .LVU212
+ 177:Core/Src/RH_RF24.c ****   {
+ 1055              		.loc 1 177 6 is_stmt 0 view .LVU213
+ 1056 0006 FFF7FEFF 		bl	si446x_ctrl_wait_cts
+ 1057              	.LVL89:
+ 177:Core/Src/RH_RF24.c ****   {
+ 1058              		.loc 1 177 5 view .LVU214
+ 1059 000a 00B9     		cbnz	r0, .L88
+ 1060              	.L86:
+ 186:Core/Src/RH_RF24.c **** 
+ 1061              		.loc 1 186 1 view .LVU215
+ 1062 000c 38BD     		pop	{r3, r4, r5, pc}
+ 1063              	.LVL90:
+ 1064              	.L88:
+ 179:Core/Src/RH_RF24.c ****     si446x_hal_spi_read_byte(Si446x_CMD_READ_CMD_BUFF);
+ 1065              		.loc 1 179 5 is_stmt 1 view .LVU216
+ 1066 000e FFF7FEFF 		bl	si446x_hal_spi_nsel_low
+ 1067              	.LVL91:
+ 180:Core/Src/RH_RF24.c ****     si446x_hal_spi_read(buffer, len);
+ 1068              		.loc 1 180 5 view .LVU217
+ 1069 0012 4420     		movs	r0, #68
+ 1070 0014 FFF7FEFF 		bl	si446x_hal_spi_read_byte
+ 1071              	.LVL92:
+ 181:Core/Src/RH_RF24.c ****     si446x_hal_spi_nsel_high();
+ 1072              		.loc 1 181 5 view .LVU218
+ 1073 0018 2946     		mov	r1, r5
+ 1074 001a 2046     		mov	r0, r4
+ 1075 001c FFF7FEFF 		bl	si446x_hal_spi_read
+ 1076              	.LVL93:
+ 182:Core/Src/RH_RF24.c ****     return 1;
+ 1077              		.loc 1 182 5 view .LVU219
+ 1078 0020 FFF7FEFF 		bl	si446x_hal_spi_nsel_high
+ 1079              	.LVL94:
+ 183:Core/Src/RH_RF24.c ****   }
+ 1080              		.loc 1 183 5 view .LVU220
+ 183:Core/Src/RH_RF24.c ****   }
+ 1081              		.loc 1 183 12 is_stmt 0 view .LVU221
+ 1082 0024 0120     		movs	r0, #1
+ 1083 0026 F1E7     		b	.L86
+ 1084              		.cfi_endproc
+ 1085              	.LFE144:
+ 1087              		.section	.text.radio_get_id,"ax",%progbits
+ 1088              		.align	1
+ 1089              		.global	radio_get_id
+ 1090              		.syntax unified
+ 1091              		.thumb
+ 1092              		.thumb_func
+ 1093              		.fpu fpv4-sp-d16
+ 1095              	radio_get_id:
+ARM GAS  /tmp/cckjdso8.s 			page 27
+
+
+ 1096              	.LFB137:
+  50:Core/Src/RH_RF24.c ****   si446x_ctrl_send_cmd(Si446x_CMD_PART_INFO);
+ 1097              		.loc 1 50 1 is_stmt 1 view -0
+ 1098              		.cfi_startproc
+ 1099              		@ args = 0, pretend = 0, frame = 8
+ 1100              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1101 0000 00B5     		push	{lr}
+ 1102              	.LCFI33:
+ 1103              		.cfi_def_cfa_offset 4
+ 1104              		.cfi_offset 14, -4
+ 1105 0002 83B0     		sub	sp, sp, #12
+ 1106              	.LCFI34:
+ 1107              		.cfi_def_cfa_offset 16
+  51:Core/Src/RH_RF24.c **** 
+ 1108              		.loc 1 51 3 view .LVU223
+ 1109 0004 0120     		movs	r0, #1
+ 1110 0006 FFF7FEFF 		bl	si446x_ctrl_send_cmd
+ 1111              	.LVL95:
+  53:Core/Src/RH_RF24.c ****   if (si446x_ctrl_get_response(part_info, sizeof(part_info)))
+ 1112              		.loc 1 53 3 view .LVU224
+  53:Core/Src/RH_RF24.c ****   if (si446x_ctrl_get_response(part_info, sizeof(part_info)))
+ 1113              		.loc 1 53 11 is_stmt 0 view .LVU225
+ 1114 000a 0023     		movs	r3, #0
+ 1115 000c 0193     		str	r3, [sp, #4]
+  54:Core/Src/RH_RF24.c ****   {
+ 1116              		.loc 1 54 3 is_stmt 1 view .LVU226
+  54:Core/Src/RH_RF24.c ****   {
+ 1117              		.loc 1 54 7 is_stmt 0 view .LVU227
+ 1118 000e 0421     		movs	r1, #4
+ 1119 0010 0DEB0100 		add	r0, sp, r1
+ 1120 0014 FFF7FEFF 		bl	si446x_ctrl_get_response
+ 1121              	.LVL96:
+  54:Core/Src/RH_RF24.c ****   {
+ 1122              		.loc 1 54 6 view .LVU228
+ 1123 0018 18B9     		cbnz	r0, .L93
+  59:Core/Src/RH_RF24.c **** }
+ 1124              		.loc 1 59 10 view .LVU229
+ 1125 001a 0020     		movs	r0, #0
+ 1126              	.L90:
+  60:Core/Src/RH_RF24.c **** 
+ 1127              		.loc 1 60 1 view .LVU230
+ 1128 001c 03B0     		add	sp, sp, #12
+ 1129              	.LCFI35:
+ 1130              		.cfi_remember_state
+ 1131              		.cfi_def_cfa_offset 4
+ 1132              		@ sp needed
+ 1133 001e 5DF804FB 		ldr	pc, [sp], #4
+ 1134              	.L93:
+ 1135              	.LCFI36:
+ 1136              		.cfi_restore_state
+  56:Core/Src/RH_RF24.c ****   }
+ 1137              		.loc 1 56 5 is_stmt 1 view .LVU231
+  56:Core/Src/RH_RF24.c ****   }
+ 1138              		.loc 1 56 22 is_stmt 0 view .LVU232
+ 1139 0022 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+  56:Core/Src/RH_RF24.c ****   }
+ 1140              		.loc 1 56 43 view .LVU233
+ARM GAS  /tmp/cckjdso8.s 			page 28
+
+
+ 1141 0026 9DF80700 		ldrb	r0, [sp, #7]	@ zero_extendqisi2
+  56:Core/Src/RH_RF24.c ****   }
+ 1142              		.loc 1 56 32 view .LVU234
+ 1143 002a 00EB0320 		add	r0, r0, r3, lsl #8
+ 1144 002e 80B2     		uxth	r0, r0
+ 1145 0030 F4E7     		b	.L90
+ 1146              		.cfi_endproc
+ 1147              	.LFE137:
+ 1149              		.section	.text.radio_init,"ax",%progbits
+ 1150              		.align	1
+ 1151              		.global	radio_init
+ 1152              		.syntax unified
+ 1153              		.thumb
+ 1154              		.thumb_func
+ 1155              		.fpu fpv4-sp-d16
+ 1157              	radio_init:
+ 1158              	.LFB140:
+ 115:Core/Src/RH_RF24.c ****   radio_reset();
+ 1159              		.loc 1 115 1 is_stmt 1 view -0
+ 1160              		.cfi_startproc
+ 1161              		@ args = 0, pretend = 0, frame = 16
+ 1162              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1163 0000 00B5     		push	{lr}
+ 1164              	.LCFI37:
+ 1165              		.cfi_def_cfa_offset 4
+ 1166              		.cfi_offset 14, -4
+ 1167 0002 85B0     		sub	sp, sp, #20
+ 1168              	.LCFI38:
+ 1169              		.cfi_def_cfa_offset 24
+ 116:Core/Src/RH_RF24.c ****   const uint8_t cmd[] = {0x01, 0x00, 0x01, 0xC9, 0xC3, 0x80};
+ 1170              		.loc 1 116 3 view .LVU236
+ 1171 0004 FFF7FEFF 		bl	radio_reset
+ 1172              	.LVL97:
+ 117:Core/Src/RH_RF24.c ****   si446x_ctrl_send_cmd_stream(Si446x_CMD_POWER_UP, cmd, sizeof(cmd));
+ 1173              		.loc 1 117 3 view .LVU237
+ 117:Core/Src/RH_RF24.c ****   si446x_ctrl_send_cmd_stream(Si446x_CMD_POWER_UP, cmd, sizeof(cmd));
+ 1174              		.loc 1 117 17 is_stmt 0 view .LVU238
+ 1175 0008 114B     		ldr	r3, .L98
+ 1176 000a 93E80300 		ldm	r3, {r0, r1}
+ 1177 000e 0190     		str	r0, [sp, #4]
+ 1178 0010 ADF80810 		strh	r1, [sp, #8]	@ movhi
+ 118:Core/Src/RH_RF24.c ****   si446x_ctrl_wait_cts(); // May take longer to set the CTS bit
+ 1179              		.loc 1 118 3 is_stmt 1 view .LVU239
+ 1180 0014 0622     		movs	r2, #6
+ 1181 0016 01A9     		add	r1, sp, #4
+ 1182 0018 0220     		movs	r0, #2
+ 1183 001a FFF7FEFF 		bl	si446x_ctrl_send_cmd_stream
+ 1184              	.LVL98:
+ 119:Core/Src/RH_RF24.c **** 
+ 1185              		.loc 1 119 3 view .LVU240
+ 1186 001e FFF7FEFF 		bl	si446x_ctrl_wait_cts
+ 1187              	.LVL99:
+ 121:Core/Src/RH_RF24.c ****   radio_set_power(127);
+ 1188              		.loc 1 121 3 view .LVU241
+ 121:Core/Src/RH_RF24.c ****   radio_set_power(127);
+ 1189              		.loc 1 121 63 is_stmt 0 view .LVU242
+ 1190 0022 6223     		movs	r3, #98
+ARM GAS  /tmp/cckjdso8.s 			page 29
+
+
+ 1191 0024 8DF80C30 		strb	r3, [sp, #12]
+ 121:Core/Src/RH_RF24.c ****   radio_set_power(127);
+ 1192              		.loc 1 121 3 view .LVU243
+ 1193 0028 0122     		movs	r2, #1
+ 1194 002a 03A9     		add	r1, sp, #12
+ 1195 002c 0020     		movs	r0, #0
+ 1196 002e FFF7FEFF 		bl	set_properties
+ 1197              	.LVL100:
+ 122:Core/Src/RH_RF24.c **** 
+ 1198              		.loc 1 122 3 is_stmt 1 view .LVU244
+ 1199 0032 7F20     		movs	r0, #127
+ 1200 0034 FFF7FEFF 		bl	radio_set_power
+ 1201              	.LVL101:
+ 124:Core/Src/RH_RF24.c ****   {
+ 1202              		.loc 1 124 4 view .LVU245
+ 124:Core/Src/RH_RF24.c ****   {
+ 1203              		.loc 1 124 8 is_stmt 0 view .LVU246
+ 1204 0038 FFF7FEFF 		bl	radio_get_id
+ 1205              	.LVL102:
+ 124:Core/Src/RH_RF24.c ****   {
+ 1206              		.loc 1 124 7 view .LVU247
+ 1207 003c 44F26343 		movw	r3, #17507
+ 1208 0040 9842     		cmp	r0, r3
+ 1209 0042 03D1     		bne	.L96
+ 130:Core/Src/RH_RF24.c **** 
+ 1210              		.loc 1 130 10 view .LVU248
+ 1211 0044 0120     		movs	r0, #1
+ 1212              	.L95:
+ 132:Core/Src/RH_RF24.c **** 
+ 1213              		.loc 1 132 1 view .LVU249
+ 1214 0046 05B0     		add	sp, sp, #20
+ 1215              	.LCFI39:
+ 1216              		.cfi_remember_state
+ 1217              		.cfi_def_cfa_offset 4
+ 1218              		@ sp needed
+ 1219 0048 5DF804FB 		ldr	pc, [sp], #4
+ 1220              	.L96:
+ 1221              	.LCFI40:
+ 1222              		.cfi_restore_state
+ 127:Core/Src/RH_RF24.c ****   }
+ 1223              		.loc 1 127 12 view .LVU250
+ 1224 004c 0020     		movs	r0, #0
+ 1225 004e FAE7     		b	.L95
+ 1226              	.L99:
+ 1227              		.align	2
+ 1228              	.L98:
+ 1229 0050 00000000 		.word	.LANCHOR0
+ 1230              		.cfi_endproc
+ 1231              	.LFE140:
+ 1233              		.section	.rodata
+ 1234              		.align	2
+ 1235              		.set	.LANCHOR0,. + 0
+ 1236              	.LC0:
+ 1237 0000 010001C9 		.ascii	"\001\000\001\311\303\200"
+ 1237      C380
+ 1238              		.text
+ 1239              	.Letext0:
+ARM GAS  /tmp/cckjdso8.s 			page 30
+
+
+ 1240              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 1241              		.file 3 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 1242              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 1243              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 1244              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 1245              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h"
+ 1246              		.file 8 "Core/Inc/RH_RF24.h"
+ 1247              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 1248              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ARM GAS  /tmp/cckjdso8.s 			page 31
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 RH_RF24.c
+     /tmp/cckjdso8.s:18     .text.si446x_hal_sdn_high:0000000000000000 $t
+     /tmp/cckjdso8.s:26     .text.si446x_hal_sdn_high:0000000000000000 si446x_hal_sdn_high
+     /tmp/cckjdso8.s:49     .text.si446x_hal_sdn_high:0000000000000010 $d
+     /tmp/cckjdso8.s:54     .text.si446x_hal_sdn_low:0000000000000000 $t
+     /tmp/cckjdso8.s:61     .text.si446x_hal_sdn_low:0000000000000000 si446x_hal_sdn_low
+     /tmp/cckjdso8.s:83     .text.si446x_hal_sdn_low:0000000000000010 $d
+     /tmp/cckjdso8.s:88     .text.radio_reset:0000000000000000 $t
+     /tmp/cckjdso8.s:95     .text.radio_reset:0000000000000000 radio_reset
+     /tmp/cckjdso8.s:126    .text.si446x_hal_spi_nsel_low:0000000000000000 $t
+     /tmp/cckjdso8.s:133    .text.si446x_hal_spi_nsel_low:0000000000000000 si446x_hal_spi_nsel_low
+     /tmp/cckjdso8.s:155    .text.si446x_hal_spi_nsel_low:0000000000000010 $d
+     /tmp/cckjdso8.s:160    .text.si446x_hal_spi_nsel_high:0000000000000000 $t
+     /tmp/cckjdso8.s:167    .text.si446x_hal_spi_nsel_high:0000000000000000 si446x_hal_spi_nsel_high
+     /tmp/cckjdso8.s:189    .text.si446x_hal_spi_nsel_high:0000000000000010 $d
+     /tmp/cckjdso8.s:194    .text.si446x_hal_spi_write_byte:0000000000000000 $t
+     /tmp/cckjdso8.s:201    .text.si446x_hal_spi_write_byte:0000000000000000 si446x_hal_spi_write_byte
+     /tmp/cckjdso8.s:235    .text.si446x_hal_spi_write_byte:0000000000000020 $d
+     /tmp/cckjdso8.s:240    .text.si446x_hal_spi_read_byte:0000000000000000 $t
+     /tmp/cckjdso8.s:247    .text.si446x_hal_spi_read_byte:0000000000000000 si446x_hal_spi_read_byte
+     /tmp/cckjdso8.s:291    .text.si446x_hal_spi_read_byte:0000000000000030 $d
+     /tmp/cckjdso8.s:296    .text.si446x_ctrl_wait_cts:0000000000000000 $t
+     /tmp/cckjdso8.s:303    .text.si446x_ctrl_wait_cts:0000000000000000 si446x_ctrl_wait_cts
+     /tmp/cckjdso8.s:382    .text.si446x_ctrl_send_cmd:0000000000000000 $t
+     /tmp/cckjdso8.s:389    .text.si446x_ctrl_send_cmd:0000000000000000 si446x_ctrl_send_cmd
+     /tmp/cckjdso8.s:422    .text.si446x_hal_spi_write:0000000000000000 $t
+     /tmp/cckjdso8.s:429    .text.si446x_hal_spi_write:0000000000000000 si446x_hal_spi_write
+     /tmp/cckjdso8.s:480    .text.si446x_ctrl_send_cmd_stream:0000000000000000 $t
+     /tmp/cckjdso8.s:487    .text.si446x_ctrl_send_cmd_stream:0000000000000000 si446x_ctrl_send_cmd_stream
+     /tmp/cckjdso8.s:530    .text.set_properties:0000000000000000 $t
+     /tmp/cckjdso8.s:537    .text.set_properties:0000000000000000 set_properties
+     /tmp/cckjdso8.s:622    .text.radio_set_power:0000000000000000 $t
+     /tmp/cckjdso8.s:629    .text.radio_set_power:0000000000000000 radio_set_power
+     /tmp/cckjdso8.s:685    .text.setFrequency:0000000000000000 $t
+     /tmp/cckjdso8.s:692    .text.setFrequency:0000000000000000 setFrequency
+     /tmp/cckjdso8.s:908    .text.setFrequency:0000000000000124 $d
+     /tmp/cckjdso8.s:923    .text.radio_set_state:0000000000000000 $t
+     /tmp/cckjdso8.s:930    .text.radio_set_state:0000000000000000 radio_set_state
+     /tmp/cckjdso8.s:969    .text.si446x_hal_spi_read:0000000000000000 $t
+     /tmp/cckjdso8.s:976    .text.si446x_hal_spi_read:0000000000000000 si446x_hal_spi_read
+     /tmp/cckjdso8.s:1030   .text.si446x_ctrl_get_response:0000000000000000 $t
+     /tmp/cckjdso8.s:1037   .text.si446x_ctrl_get_response:0000000000000000 si446x_ctrl_get_response
+     /tmp/cckjdso8.s:1088   .text.radio_get_id:0000000000000000 $t
+     /tmp/cckjdso8.s:1095   .text.radio_get_id:0000000000000000 radio_get_id
+     /tmp/cckjdso8.s:1150   .text.radio_init:0000000000000000 $t
+     /tmp/cckjdso8.s:1157   .text.radio_init:0000000000000000 radio_init
+     /tmp/cckjdso8.s:1229   .text.radio_init:0000000000000050 $d
+     /tmp/cckjdso8.s:1234   .rodata:0000000000000000 $d
 
-NO UNDEFINED SYMBOLS
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_Delay
+HAL_SPI_Transmit
+hspi1
+HAL_SPI_TransmitReceive
